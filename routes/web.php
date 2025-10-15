@@ -17,6 +17,9 @@ use App\Http\Controllers\Admin\TrashLocationController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/homepage', function () {
+    return view('homepage');
+});
 
 Route::get('/admin/waste_payment', function () {
     return view('admin.dashboard');
