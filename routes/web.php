@@ -20,6 +20,12 @@ Route::get('/', function () {
 Route::get('/homepage', function () {
     return view('homepage');
 });
+Route::get('/register', function () {
+    return view('register');
+});
+Route::get('/user/emergency', function () {
+    return view('user.emergencypage');
+});
 
 Route::get('/admin/waste_payment', function () {
     return view('admin.dashboard');

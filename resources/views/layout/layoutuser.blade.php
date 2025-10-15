@@ -35,7 +35,7 @@
                         <img src="../img/menuuser/login.png" alt="login" class="img-fluid btn-hover-effect">
                     </a>
                     {{-- ปุ่มสมัครสมาชิก --}}
-                    <a href="#" class="text-center">
+                    <a href="register" class="text-center">
                         <img src="../img/menuuser/register.png" alt="login" class="img-fluid btn-hover-effect" height="46.13px">
                     </a>
                 </div>
