@@ -11,7 +11,7 @@ class TrashLocationController extends Controller
         $locations = TrashLocation::all();
 
         // เปลี่ยนชื่อ Blade เป็น caninstall
-        return view('caninstall', compact('locations'));
+        return view('admin.caninstall', compact('locations'));
     }
 
     public function show($id)
@@ -19,7 +19,7 @@ class TrashLocationController extends Controller
         // ดึงข้อมูลจาก DB ตาม ID
         $location = TrashLocation::findOrFail($id);
 
-        return view('detail', compact('location'));
+        return view('admin.detail', compact('location'));
     }
 
     public function confirmPayment(Request $request, $id)

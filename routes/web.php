@@ -19,11 +19,11 @@ Route::get('/', function () {
 });
 
 Route::get('/admin/waste_payment', function () {
-    return view('dashboard');
+    return view('admin.dashboard');
 });
 
 Route::get('/admin/showdata', function () {
-    return view('showdata');
+    return view('admin.showdata');
 });
 
 Route::get('/admin/trash_can_installation', [TrashLocationController::class, 'index']);
@@ -31,7 +31,7 @@ Route::get('/admin/detail/{id}', [TrashLocationController::class, 'show']);
 Route::post('/admin/trash_can_installation/{id}/confirm-payment', [TrashLocationController::class, 'confirmPayment']);
 
 Route::get('/admin/trash_installer', function () {
-    return view('trashinstaller');
+    return view('admin.trashinstaller');
 });
 
 Route::fallback(function(){
