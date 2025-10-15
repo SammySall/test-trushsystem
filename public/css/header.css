@@ -33,7 +33,11 @@
     transition: all 0.3s ease;
     cursor: pointer;
     max-width: 168px;
-    max-height: 48px;
+    max-height: 46px;
+}
+
+.btn-hover-effect:hover {
+    transform: scale(1.1);
 }
 
 .footer-bg {
@@ -41,6 +45,8 @@
     background-size: cover;
     background-position: center;
     min-height: 90px;
+    position: relative;
+    z-index: 5;
 }
 
 .title-footer {
@@ -72,19 +78,38 @@
     min-height: 68vh;
 }
 
+@font-face {
+    font-family: 'DBHelvethaicaX';
+    src: url('../fonts/DBHelvethaicaXv3.2.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'DBHelvethaicaX', sans-serif;
+}
+
+
 /* Media Queries สำหรับมือถือและแท็บเล็ต */
 @media (max-width: 1200px) {
     .title-header {
         font-size: 40px;
     }
+
     .sub-title-header {
         font-size: 24px;
     }
+
     .logo-img {
         max-width: 150px;
     }
+
     .btn-hover-effect {
         max-width: 140px;
+    }
+
+    .title-footer {
+        font-size: 32px;
     }
 }
 
@@ -92,18 +117,26 @@
     .title-header {
         font-size: 32px;
     }
+
     .sub-title-header {
         font-size: 20px;
     }
+
     .logo-img {
         max-width: 120px;
     }
+
     .btn-hover-effect {
         max-width: 120px;
     }
+
     .footer-location {
         font-size: 14px;
         padding: 0.2rem 0.7rem 0.2rem 2rem;
+    }
+
+    .title-footer {
+        font-size: 24px;
     }
 }
 
@@ -111,17 +144,25 @@
     .title-header {
         font-size: 24px;
     }
+
     .sub-title-header {
         font-size: 16px;
     }
+
     .logo-img {
         max-width: 100px;
     }
+
     .btn-hover-effect {
         max-width: 100px;
     }
+
     .footer-location {
         font-size: 12px;
         padding: 0.2rem 0.5rem 0.2rem 1.5rem;
+    }
+
+    .title-footer {
+        font-size: 16px;
     }
 }

@@ -1,0 +1,96 @@
+.image-stack {
+    position: relative;
+    width: fit-content;
+}
+
+.image-stack img {
+    display: block;
+}
+
+.image-stack img {
+    display: block;
+}
+
+.bottom-img {
+    position: relative;
+    top: 15%;
+    margin-bottom: 10%;
+}
+
+.bottom-img a {
+    position: relative;
+}
+
+.top-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all 0.3s ease;
+}
+
+.top-phone-img {
+    position: absolute;
+    top: 45%;
+    left: 21%;
+    width: 130px;
+    transition: all 0.3s ease;
+}
+
+.phone-bg {
+    background-image: url("../img/homepage/Phone.png");
+    background-size: cover;
+    background-position: center;
+    height: 465px;
+}
+
+.emergency-bg {
+    background-image: url("../img/homepage//Banner.png");
+    background-size: cover;
+    background-position: center;
+    width: auto;
+    height: 280px;
+    padding-bottom: 13%;
+}
+
+.btn-hover-effect {
+    transition: all 0.3s ease;
+}
+
+.btn-hover-effect:hover {
+    transform: scale(1.1);
+}
+
+.btn-emergency {
+    width: 75px;
+    transition: all 0.3s ease;
+}
+
+.btn-emergency:hover {
+    transform: scale(1.1);
+}
+
+.btn-receive {
+    width: 350px;
+    transition: all 0.3s ease;
+}
+
+.btn-receive:hover {
+    transform: scale(1.1);
+}
+
+.btn-phone {
+    width: 200px;
+    transition: all 0.3s ease;
+}
+
+.btn-phone:hover {
+    transform: scale(1.1);
+}
+
+.top-phone-img:hover {
+    transform: scale(1.1);
+}
+
+.top-img:hover{
+    transform: scale(1.1);
+}
