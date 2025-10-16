@@ -3,44 +3,39 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        // ตรวจสอบว่าตาราง trash_locations มีอยู่ก่อน
-        if (!Schema::hasTable('trash_locations')) {
-            // สร้างตาราง trash_locations ตัวอย่าง (ปรับตามจริง)
-            Schema::create('trash_locations', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
-                $table->string('status')->default('active');
-                $table->timestamps();
-            });
-        }
-
-        // สร้างตาราง bills
         Schema::create('bills', function (Blueprint $table) {
-            $table->id(); // id สำหรับลำดับ
+            $table->id();
             $table->foreignId('trash_location_id')
-                  ->constrained('trash_locations')
-                  ->onDelete('cascade'); // เชื่อมกับ trash_locations
-
-            $table->decimal('amount', 10, 2); // จำนวนเงิน
-            $table->enum('status', ['ยังไม่ชำระ','รอการตรวจสอบ', 'ชำระแล้ว'])->default('ยังไม่ชำระ'); // สถานะ
-            $table->date('due_date'); // วันที่ครบกำหนด
-            $table->date('paid_date')->nullable(); // วันที่ชำระ เป็น NULL ได้
-
-            $table->timestamps(); // created_at, updated_at
+                ->constrained('trash_locations')
+                ->onDelete('cascade');
+            $table->decimal('amount', 10, 2);
+            $table->enum('status', ['ยังไม่ชำระ', 'รอการตรวจสอบ', 'ชำระแล้ว'])->default('ยังไม่ชำระ');
+            $table->date('due_date');
+            $table->date('paid_date')->nullable();
+            $table->timestamps();
         });
+
+        // ✅ ใส่ข้อมูลตัวอย่างตาม laravel_bills.sql
+        DB::table('bills')->insert([
+            [
+                'id' => 1,
+                'trash_location_id' => 1,
+                'amount' => 2000.00,
+                'status' => 'ยังไม่ชำระ',
+                'due_date' => '2025-10-28',
+                'paid_date' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        ]);
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('bills');

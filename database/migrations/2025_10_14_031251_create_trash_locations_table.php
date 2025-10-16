@@ -7,51 +7,60 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        // ตรวจสอบว่าตาราง trash_locations มีอยู่หรือไม่
-        if (Schema::hasTable('trash_locations')) {
-            // ตารางมีอยู่แล้ว: เพิ่มคอลัมน์ tel ถ้าไม่มี
-            if (!Schema::hasColumn('trash_locations', 'tel')) {
-                Schema::table('trash_locations', function (Blueprint $table) {
-                    $table->string('tel')->nullable()->after('status');
-                });
-            }
+        Schema::create('trash_locations', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('address');
+            $table->enum('status', ['เสร็จสิ้น', 'รออนุมัติเรียกชำระเงิน']);
+            $table->string('tel', 10)->default('0634461165');
+            $table->timestamps();
+        });
 
-            // อัปเดตค่า tel ของทุกแถว
-            DB::table('trash_locations')->update([
-                'tel' => '0634461165'
-            ]);
-
-            // เปลี่ยนเป็น NOT NULL
-            Schema::table('trash_locations', function (Blueprint $table) {
-                $table->string('tel')->nullable(false)->change();
-            });
-        } else {
-            // ตารางไม่มีอยู่: สร้างตารางใหม่
-            Schema::create('trash_locations', function (Blueprint $table) {
-                $table->id();
-                $table->string('name'); // ตัวอย่าง column อื่น ๆ ปรับตามจริง
-                $table->string('status')->default('active');
-                $table->string('tel')->default('0634461165'); // ใส่ค่าเริ่มต้น
-                $table->timestamps();
-            });
-        }
+        // ✅ ใส่ข้อมูลตัวอย่างตาม laravel_trash_locations.sql
+        DB::table('trash_locations')->insert([
+            [
+                'id' => 1,
+                'name' => 'ทดสอบบบ',
+                'address' => 'ที่อยู่ ุ66 หมู่ที่ 5 ต.แสนภูดาษ อ.บ้านโพธิ จ.ฉะเชิงเทรา',
+                'status' => 'เสร็จสิ้น',
+                'tel' => '0634461165',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 2,
+                'name' => 'ทอสอบๅๅ',
+                'address' => 'ที่อยู่ กถถ หมู่ที่ 5 ต.แสนภูดาษ อ.บ้านโพธิ จ.ฉะเชิงเทรา',
+                'status' => 'รออนุมัติเรียกชำระเงิน',
+                'tel' => '0634461165',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 3,
+                'name' => 'TEST',
+                'address' => 'ที่อยู่ กถถ หมู่ที่ 5 ต.แสนภูดาษ อ.บ้านโพธิ จ.ฉะเชิงเทรา',
+                'status' => 'รออนุมัติเรียกชำระเงิน',
+                'tel' => '0634461165',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 4,
+                'name' => 'TESTT',
+                'address' => 'ที่อยู่ กถถ หมู่ที่ 777 ต.แสนภูดาษ อ.บ้านโพธิ จ.ฉะเชิงเทรา',
+                'status' => 'เสร็จสิ้น',
+                'tel' => '0634461165',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        // ลบคอลัมน์ tel ถ้าตารางมีอยู่
-        if (Schema::hasTable('trash_locations') && Schema::hasColumn('trash_locations', 'tel')) {
-            Schema::table('trash_locations', function (Blueprint $table) {
-                $table->dropColumn('tel');
-            });
-        }
+        Schema::dropIfExists('trash_locations');
     }
 };
