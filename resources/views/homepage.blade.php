@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-7">
                         <div class="justify-content-center align-content-center">
-                            <a href="#">
+                            <a href="user/garbage">
                                 <img src="../img/homepage/Button-2.png" alt="E-Service" class="img-fluid btn-receive">
                             </a>
                         </div>

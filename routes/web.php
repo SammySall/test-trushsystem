@@ -21,10 +21,22 @@ Route::get('/homepage', function () {
     return view('homepage');
 });
 Route::get('/register', function () {
-    return view('register');
+    return view('auth.register');
 });
 Route::get('/user/emergency', function () {
     return view('user.emergencypage');
+});
+Route::get('/user/waste_payment', function () {
+    return view('user.garbage');
+});
+Route::get('/user/waste_payment/trash-toxic', function () {
+    return view('user.trash-toxic');
+});
+Route::get('/user/waste_payment/check-payment', function () {
+    return view('user.check-payment-page');
+});
+Route::get('/user/waste_payment/status-trash', function () {
+    return view('user.status-trash-page');
 });
 
 Route::get('/admin/waste_payment', function () {

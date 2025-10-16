@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     <link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/garbage.css') }}">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -35,8 +36,9 @@
                         <img src="../img/menuuser/login.png" alt="login" class="img-fluid btn-hover-effect">
                     </a>
                     {{-- ปุ่มสมัครสมาชิก --}}
-                    <a href="register" class="text-center">
-                        <img src="../img/menuuser/register.png" alt="login" class="img-fluid btn-hover-effect" height="46.13px">
+                    <a href="/register" class="text-center">
+                        <img src="../img/menuuser/register.png" alt="login" class="img-fluid btn-hover-effect"
+                            height="46.13px">
                     </a>
                 </div>
                 <div class="text-warn mt-2 text-center">
@@ -49,7 +51,7 @@
 
     {{-- content --}}
     <main>
-        <div class="body-bg p-2 rounded-3">
+        <div class="@yield('body-class', 'body-bg') p-2 rounded-3">
             @yield('content')
         </div>
     </main>
