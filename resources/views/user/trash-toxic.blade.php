@@ -1,4 +1,4 @@
-@extends('layout.layoutuser')
+@extends('layout.layout-user')
 @section('title', 'Trash Toxic Page')
 @section('body-class', 'body-garbage-bg')
 
@@ -25,7 +25,7 @@
 
                     <!-- คอลัมน์ขวา: ลูกศร -->
                     <div class="col-3 d-flex justify-content-center align-items-center">
-                        <img src="../img/ToxicTrash/Arrow.png" alt="ลูกศร" class="trash-arrow">
+                        <img src="../../img/GarbageCarStatus/Arrow.png" alt="ลูกศร" class="trash-arrow">
                     </div>
                 </div>
             </div>

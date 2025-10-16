@@ -1,4 +1,4 @@
-@extends('layout.layoutadmin')
+@extends('layout.layout-admin')
 @section('title','Dashboard')
 @section('content')
     <h3 class="text-center px-2">แบบคำขอรับการประเมินค่าธรรมเนียมการกำจัดสิ่งปฏิกูลและมูลฝอย และ

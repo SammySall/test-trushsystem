@@ -1,4 +1,4 @@
-@extends('layout.layoutuser')
+@extends('layout.layout-user')
 @section('title', 'Status Trash Page')
 @section('body-class', 'body-garbage-bg')
 

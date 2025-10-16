@@ -1,4 +1,4 @@
-@extends('layout.layoutuser')
+@extends('layout.layout-user')
 @section('title', 'Home Page')
 @section('content')
     <div class="container">
@@ -42,27 +42,27 @@
                     </div>
                     <div class="col-7">
                         <div class="justify-content-center align-content-center">
-                            <a href="user/garbage">
+                            <a href="user/waste_payment">
                                 <img src="../img/homepage/Button-2.png" alt="E-Service" class="img-fluid btn-receive">
                             </a>
                         </div>
                         <div class="d-flex emergency-bg justify-content-center align-items-end gap-3">
-                            <a href="#" class="btn-emergency">
-                                <img src="../img/homepage/Button-3.png" alt="Banner" class="img-fluid">
+                            <a href="user/emergency" class="btn-emergency">
+                                <img src="../img/homepage/Button-3.png" alt="แจ้งเหตุฉุกเฉิน" class="img-fluid">
                             </a>
                             <a href="#" class="btn-emergency">
-                                <img src="../img/homepage/Button-4.png" alt="Banner" class="img-fluid">
+                                <img src="../img/homepage/Button-4.png" alt="แจ้งไฟไหม้" class="img-fluid">
                             </a>
                             <a href="#" class="btn-emergency">
-                                <img src="../img/homepage/Button-5.png" alt="Banner" class="img-fluid">
+                                <img src="../img/homepage/Button-5.png" alt="แจ้งต้นไม้ล้ม" class="img-fluid">
                             </a>
                         </div>
                         <div class="d-flex flex-column justify-content-center align-items-center">
                             <a href="#" class="btn-hover-effect">
-                                <img src="../img/homepage/Button-6.png" alt="Banner" class="img-fluid" width="180px">
+                                <img src="../img/homepage/Button-6.png" alt="ถนนเสีย" class="img-fluid" width="180px">
                             </a>
                             <a href="#" class="mt-2 btn-hover-effect">
-                                <img src="../img/homepage/Button-7.png" alt="Banner" class="img-fluid" width="150px">
+                                <img src="../img/homepage/Button-7.png" alt="ไฟเสีย" class="img-fluid" width="150px">
                             </a>
                         </div>
 
@@ -75,6 +75,5 @@
         </div>
 
 
-    </div>
     </div>
 @endsection

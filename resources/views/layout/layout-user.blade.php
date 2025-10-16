@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     <link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
     <link rel="stylesheet" href="{{ asset('css/garbage.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/emergency.css') }}">
+
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -51,7 +53,7 @@
 
     {{-- content --}}
     <main>
-        <div class="@yield('body-class', 'body-bg') p-2 rounded-3">
+        <div class="@yield('body-class', 'body-bg') p-2">
             @yield('content')
         </div>
     </main>
