@@ -123,7 +123,7 @@
                             </button>
                         </div>
                         <div class="d-flex justify-content-center">
-                            มีบัญชีแล้วหรอ? <a href="homepage" class="text-danger text-decoration-none">เข้าสู่ระบบ</a>
+                            มีบัญชีแล้วหรอ? <a href="/login" class="text-danger text-decoration-none">เข้าสู่ระบบ</a>
                         </div>
                     </div>
 

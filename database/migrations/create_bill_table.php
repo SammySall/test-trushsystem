@@ -9,6 +9,8 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::dropIfExists('bills');
+
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
             $table->foreignId('trash_location_id')
@@ -21,7 +23,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // ✅ ใส่ข้อมูลตัวอย่างตาม laravel_bills.sql
         DB::table('bills')->insert([
             [
                 'id' => 1,

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
@@ -73,8 +74,7 @@
             </li>
 
             <li>
-                <a href="/admin/non_payment"
-                    class="nav-link {{ Str::contains($path, 'non_payment') ? 'active' : '' }}">
+                <a href="/admin/non_payment" class="nav-link {{ Str::contains($path, 'non_payment') ? 'active' : '' }}">
                     บิลที่รอการชำระเงิน
                 </a>
             </li>
@@ -89,9 +89,41 @@
                 <input type="search" class="search-menu" placeholder="Search..." aria-label="Search">
             </form>
 
-            <div class="avatar">
-                <i class="bi bi-person-circle"></i>
+            <div class="nav-item dropdown">
+                <a class="nav-link avatar" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="bi bi-person-circle"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    @if (session('token'))
+                        @php
+                            $tokenData = json_decode(
+                                \Illuminate\Support\Facades\Crypt::decryptString(session('token')),
+                                true,
+                            );
+                        @endphp
+                        <!-- บรรทัดแรก: รูป Avatar + ชื่อผู้ใช้งาน -->
+                        <li class="dropdown-item-text d-flex align-items-center gap-2">
+                            <i class="bi bi-person-circle"></i>
+                            <span>{{ $tokenData['name'] }}</span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <!-- บรรทัดสอง: Logout -->
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Logout</button>
+                            </form>
+                        </li>
+                    @else
+                        <li><a class="dropdown-item" href="/login">Login</a></li>
+                        <li><a class="dropdown-item" href="/register">Register</a></li>
+                    @endif
+                </ul>
             </div>
+
         </div>
 
         {{-- content --}}

@@ -4,7 +4,11 @@
 
 @section('content')
     <div class="container py-4">
-        <form class="row">
+        <form class="row" id="emergency-form" method="POST" action="{{ route('emergency.submit') }}"
+            enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="lat" id="lat">
+            <input type="hidden" name="lng" id="lng">
 
             <div>
                 <a href="/homepage">
@@ -15,40 +19,40 @@
             <div class="d-flex align-items-center mb-3">
                 <label for="salutation" class="form-label me-2 mb-0 label-emergency">เลือกเหตุที่ต้องการแจ้ง</label>
                 <select class="form-select" id="salutation" name="salutation" required style="width: 200px;">
-                    <option value="อุบัติเหตุ" selected>อุบัติเหตุ</option>
-                    <option value="นาย">นาย</option>
-                    <option value="นาง">นาง</option>
-                    <option value="นางสาว">นางสาว</option>
+                    <option value="accident">อุบัติเหตุ</option>
+                    <option value="fire">ไฟไหม้</option>
+                    <option value="tree-fall">ต้นไม้ล้ม</option>
                 </select>
             </div>
+
             <!-- คอลัมน์ซ้าย -->
             <div class="col-md-5 bg-body-secondary emergency-form-bg text-black p-3">
                 <div class="mb-2">
                     <label for="picture-emergency" class="form-label">ตัวอย่างภาพสถานที่เกิดเหตุ</label>
-                    <input type="file" name="สถานที่เกิดเหตุ" id="picture-emergency" class="form-control">
+                    <input type="file" name="picture" id="picture-emergency" class="form-control">
                 </div>
 
                 <div class="mb-2">
                     <label for="name" class="form-label">ชื่อผู้แจ้งเหตุ</label>
-                    <input type="name" class="form-control" id="name">
+                    <input type="text" class="form-control" id="name" name="name">
                 </div>
 
                 <div class="mb-2">
                     <label for="tel" class="form-label">เบอร์โทรที่ติดต่อได้</label>
-                    <input type="tel" class="form-control" id="tel">
+                    <input type="tel" class="form-control" id="tel" name="tel">
                 </div>
 
                 <div class="mb-2">
                     <label for="description" class="form-label">รายละเอียด</label>
-                    <textarea class="form-control" id="description" rows="3"></textarea>
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                 </div>
 
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-danger rounded-pill px-4">คลิกเพื่อแจ้งเหตุ</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4" id="submit-btn">
+                        คลิกเพื่อแจ้งเหตุ
+                    </button>
                 </div>
             </div>
-
-
 
             <!-- คอลัมน์ขวา: แผนที่ -->
             <div class="col-md-7">
@@ -60,85 +64,146 @@
         </form>
     </div>
 
-
-    {{-- โหลด Leaflet --}}
+    {{-- โหลด Leaflet + SweetAlert2 --}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var map = L.map('map').setView([13.6840, 100.5500], 13);
+            const form = document.getElementById('emergency-form');
 
-            // พื้นหลังแผนที่
-            var baseMaps = {
-                "แผนที่": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19
-                }),
-                "ดาวเทียม": L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-                    maxZoom: 20,
-                    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-                })
-            };
-            baseMaps["แผนที่"].addTo(map);
-            L.control.layers(baseMaps).addTo(map);
+            // --- Leaflet Map ---
+            var map = L.map('map').setView([13.6840, 100.5500], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19
+            }).addTo(map);
 
             var userIcon = L.icon({
                 iconUrl: '../../img/ToxicTrash/Icon-2.png',
                 iconSize: [20, 32],
-                iconAnchor: [20, 40],
-                popupAnchor: [0, -40]
+                iconAnchor: [10, 32],
+                popupAnchor: [0, -32]
             });
 
-            var userMarker = null; // เก็บ Marker ที่เลือก
+            var userMarker = null;
 
-            // แสดงตำแหน่งปัจจุบัน
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var lat = position.coords.latitude;
                     var lng = position.coords.longitude;
-
                     userMarker = L.marker([lat, lng], {
                             icon: userIcon
                         })
                         .addTo(map)
-                        .bindPopup("คุณอยู่ที่นี่")
-                        .openPopup();
-
-                    // คลิกที่ Marker ปัจจุบันเพื่อลบ
-                    userMarker.on('click', function() {
-                        map.removeLayer(userMarker);
-                        userMarker = null;
-                    });
-
+                        .bindPopup("คุณอยู่ที่นี่").openPopup();
                     map.setView([lat, lng], 15);
+                    document.getElementById('lat').value = lat;
+                    document.getElementById('lng').value = lng;
                 });
             }
 
-            // คลิกเลือกตำแหน่งใหม่บนแผนที่
             map.on('click', function(e) {
-                var lat = e.latlng.lat;
-                var lng = e.latlng.lng;
-
-                // ลบ Marker เก่า
                 if (userMarker) map.removeLayer(userMarker);
-
-                // สร้าง Marker ใหม่
-                userMarker = L.marker([lat, lng], {
+                userMarker = L.marker([e.latlng.lat, e.latlng.lng], {
                         icon: userIcon
                     })
                     .addTo(map)
-                    .bindPopup("ตำแหน่งที่คุณเลือก")
-                    .openPopup();
+                    .bindPopup("ตำแหน่งที่คุณเลือก").openPopup();
+                document.getElementById('lat').value = e.latlng.lat;
+                document.getElementById('lng').value = e.latlng.lng;
+            });
 
-                // คลิก Marker เพื่อลบ
-                userMarker.on('click', function() {
-                    map.removeLayer(userMarker);
-                    userMarker = null;
+            // --- Submit form ---
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Validate
+                const fields = [{
+                        id: 'name',
+                        label: 'กรุณากรอกชื่อผู้แจ้งเหตุ'
+                    },
+                    {
+                        id: 'lat',
+                        label: 'กรุณาเลือกตำแหน่งบนแผนที่'
+                    },
+                    {
+                        id: 'picture-emergency',
+                        label: 'กรุณาอัพโหลดรูปภาพ'
+                    },
+                    {
+                        id: 'tel',
+                        label: 'กรุณากรอกเบอร์โทร'
+                    },
+                    {
+                        id: 'description',
+                        label: 'กรุณากรอกรายละเอียด'
+                    }
+                ];
+
+                for (let f of fields) {
+                    const el = document.getElementById(f.id);
+                    if (!el.value || el.value.trim() === '') {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: f.label,
+                            confirmButtonText: 'OK',
+                            allowOutsideClick: false
+                        });
+                        return;
+                    }
+                }
+
+                // Confirm submit
+                Swal.fire({
+                    title: 'คุณต้องการส่งข้อมูลใช่หรือไม่?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'ตกลง',
+                    cancelButtonText: 'ยกเลิก',
+                    allowOutsideClick: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // ส่งข้อมูลผ่าน AJAX
+                        let formData = new FormData(form);
+                        fetch(form.action, {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'ส่งไปยังหน่วยงานที่เกี่ยวข้องเรียบร้อยแล้ว',
+                                        confirmButtonText: 'OK',
+                                        allowOutsideClick: false
+                                    }).then(() => {
+                                        window.location.href = '/homepage';
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'เกิดข้อผิดพลาด',
+                                        text: data.message || 'กรุณาลองใหม่อีกครั้ง',
+                                        confirmButtonText: 'OK',
+                                        allowOutsideClick: false
+                                    });
+                                }
+                            })
+                            .catch(err => {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'เกิดข้อผิดพลาด',
+                                    text: 'กรุณาลองใหม่อีกครั้ง',
+                                    confirmButtonText: 'OK',
+                                    allowOutsideClick: false
+                                });
+                            });
+                    }
                 });
 
-                console.log("เลือกพิกัด:", lat, lng);
             });
         });
     </script>
-
 @endsection

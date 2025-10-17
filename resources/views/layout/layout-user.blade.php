@@ -33,22 +33,33 @@
             {{-- ปุ่มล็อกอินและสมัครสมาชิก --}}
             <div class="d-flex flex-column justify-content-center align-items-center mt-3 mt-lg-0">
                 <div class="d-flex justify-content-center align-items-center gap-2">
-                    {{-- ปุ่มล็อตอิน --}}
-                    <a href="#" class="text-center me-3">
-                        <img src="../img/menuuser/login.png" alt="login" class="img-fluid btn-hover-effect">
-                    </a>
-                    {{-- ปุ่มสมัครสมาชิก --}}
-                    <a href="/register" class="text-center">
-                        <img src="../img/menuuser/register.png" alt="login" class="img-fluid btn-hover-effect"
-                            height="46.13px">
-                    </a>
+                    @if (session('token'))
+                        {{-- Logout --}}
+                        <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
+                            @csrf
+                            <button type="submit" class="btn p-0 border-0 bg-transparent">
+                                <img src="../../img/menuuser/Logout-Button.png" alt="Logout"
+                                    class="img-fluid btn-hover-effect">
+                            </button>
+                        </form>
+                    @else
+                        {{-- Login / Register --}}
+                        <a href="/login" class="text-center me-3">
+                            <img src="../../img/menuuser/login.png" alt="login" class="img-fluid btn-hover-effect">
+                        </a>
+                        <a href="/register" class="text-center">
+                            <img src="../../img/menuuser/register.png" alt="register" class="img-fluid btn-hover-effect"
+                                height="46.13px">
+                        </a>
+                    @endif
                 </div>
-                <div class="text-warn mt-2 text-center">
-                    <strong>*คำแนะนำ*</strong>สมัครสมาชิกเพื่อติดตามสถานะการดำเนินการ
-                </div>
-
+                @if (!session('token'))
+                    <div class="text-warn mt-2 text-center">
+                        <strong>*คำแนะนำ*</strong>สมัครสมาชิกเพื่อติดตามสถานะการดำเนินการ
+                    </div>
+                @endif
             </div>
-        </div>
+
     </header>
 
     {{-- content --}}
@@ -65,12 +76,12 @@
             <div class="d-flex flex-column-reverse flex-md-row justify-content-center align-items-center gap-3 pt-2">
                 {{-- ที่อยู่ --}}
                 <div class="footer-location me-3">
-                    <img src="../img/menuuser/Map-icon.png" alt="home">
+                    <img src="../../img/menuuser/Map-icon.png" alt="home">
                     122 หมู่ 3 ตำบลท่าข้าม อำเภอบางประกง จังหวัดฉะเชิงเทรา 24130
                 </div>
                 {{-- เบอร์โทรติดต่อ --}}
                 <div class="footer-location">
-                    <img src="../img/menuuser/Call-icon.png" alt="phone">
+                    <img src="../../img/menuuser/Call-icon.png" alt="phone">
                     0-3857-3411-2 ต่อ 144
                 </div>
             </div>

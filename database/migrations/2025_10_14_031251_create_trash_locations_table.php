@@ -9,6 +9,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // ✅ ลบตารางเดิมถ้ามี
+        Schema::dropIfExists('trash_locations');
+
+        // ✅ สร้างตารางใหม่
         Schema::create('trash_locations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -18,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // ✅ ใส่ข้อมูลตัวอย่างตาม laravel_trash_locations.sql
+        // ✅ ใส่ข้อมูลตัวอย่าง
         DB::table('trash_locations')->insert([
             [
                 'id' => 1,

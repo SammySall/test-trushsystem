@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TrashLocationController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\EmergencyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +17,7 @@ use App\Http\Controllers\Admin\TrashLocationController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('homepage');
 });
 Route::get('/homepage', function () {
     return view('homepage');
@@ -23,9 +25,16 @@ Route::get('/homepage', function () {
 Route::get('/register', function () {
     return view('auth.register');
 });
-Route::get('/user/emergency', function () {
-    return view('user.emergency-page');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/user/emergency/{value}', function ($value) {
+    return view('user.emergency-page', ['value' => $value]);
 });
+Route::get('/user/emergency/{value}', [EmergencyController::class, 'show'])->name('emergency.show');
+Route::post('/user/emergency/submit', [EmergencyController::class, 'store'])->name('emergency.submit');
+
 Route::get('/user/waste_payment', function () {
     return view('user.garbage');
 });
