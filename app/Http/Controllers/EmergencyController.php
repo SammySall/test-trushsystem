@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Storage;
 
 class EmergencyController extends Controller
 {
-    public function show($value)
+    public function showForm($type = '')
     {
-        return view('user.emergency-page', ['currentType' => $value]);
+        return view('user.emergency', compact('type'));
     }
+
 
     public function store(Request $request)
     {

@@ -101,27 +101,26 @@
                                 'Content-Type': 'application/json'
                             }
                         })
-                        .then(res => {
-                            if (!res.ok) throw new Error('Network response was not ok');
-                            return res.json();
-                        })
+                        .then(res => res.json())
                         .then(data => {
                             if (data.success) {
                                 const row = button.closest('tr');
-                                // อัปเดตสถานะ
                                 row.querySelector('.status-cell').innerHTML =
                                     `<span class="text-success">${data.status_text}</span>`;
-                                // ซ่อนปุ่มเรียกชำระเงิน
                                 button.style.display = 'none';
                                 alert('อัปเดตสำเร็จ');
                             } else {
                                 alert('เกิดข้อผิดพลาด: ' + data.message);
                             }
                         })
-                        .catch(err => console.error('Error:', err));
+                        .catch(err => {
+                            console.error('Error:', err);
+                            alert('เกิดข้อผิดพลาด: ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+                        });
                 }
             });
         });
     </script>
+
 
 @endsection

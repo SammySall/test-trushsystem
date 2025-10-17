@@ -19,11 +19,19 @@
             <div class="d-flex align-items-center mb-3">
                 <label for="salutation" class="form-label me-2 mb-0 label-emergency">เลือกเหตุที่ต้องการแจ้ง</label>
                 <select class="form-select" id="salutation" name="salutation" required style="width: 200px;">
-                    <option value="accident">อุบัติเหตุ</option>
-                    <option value="fire">ไฟไหม้</option>
-                    <option value="tree-fall">ต้นไม้ล้ม</option>
+                    <option value="" disabled {{ empty($type) ? 'selected' : '' }}>
+                        {{ empty($type) ? '-- โปรดเลือกเหตุผล --' : '' }}
+                    </option>
+                    <option value="accident" {{ ($type ?? '') == 'accident' ? 'selected' : '' }}>อุบัติเหตุ</option>
+                    <option value="fire" {{ ($type ?? '') == 'fire' ? 'selected' : '' }}>ไฟไหม้</option>
+                    <option value="tree-fall" {{ ($type ?? '') == 'tree-fall' ? 'selected' : '' }}>ต้นไม้ล้ม</option>
+                    <option value="broken-road" {{ ($type ?? '') == 'broken-road' ? 'selected' : '' }}>ถนนเสีย</option>
+                    <option value="elec-broken" {{ ($type ?? '') == 'elec-broken' ? 'selected' : '' }}>ไฟเสีย</option>
                 </select>
+
+
             </div>
+
 
             <!-- คอลัมน์ซ้าย -->
             <div class="col-md-5 bg-body-secondary emergency-form-bg text-black p-3">
@@ -72,6 +80,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const form = document.getElementById('emergency-form');
+            const salutationSelect = document.getElementById('salutation');
 
             // --- Leaflet Map ---
             var map = L.map('map').setView([13.6840, 100.5500], 13);
@@ -112,6 +121,12 @@
                     .bindPopup("ตำแหน่งที่คุณเลือก").openPopup();
                 document.getElementById('lat').value = e.latlng.lat;
                 document.getElementById('lng').value = e.latlng.lng;
+            });
+
+            // --- ตรวจสอบค่า salutation ---
+            salutationSelect.addEventListener('change', function() {
+                const selectedValue = this.value;
+                console.log('ผู้ใช้เลือกเหตุผล:', selectedValue);
             });
 
             // --- Submit form ---
@@ -202,8 +217,8 @@
                             });
                     }
                 });
-
             });
         });
     </script>
+
 @endsection

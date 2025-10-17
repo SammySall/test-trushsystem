@@ -1,10 +1,9 @@
 @extends('layout.layout-admin')
 
-@section('title', 'Dashboard')
+@section('title', 'รายละเอียดบิล')
 @section('content')
-    <h3 class="text-center px-2">บิลที่รอการชำระเงิน : 106/01</h3>
+    <h3 class="text-center">บิลที่รอการชำระเงิน : {{ $location->name ?? '-' }}</h3>
 
-    {{-- ฟิลเตอร์ --}}
     <div id="data_table_wrapper">
         {{-- บรรทัดเดือนและปี --}}
         <div class="row mb-2">
@@ -36,13 +35,14 @@
             </div>
         </div>
 
-        {{-- ปุ่ม Export PDF อยู่บรรทัดใหม่ --}}
+        {{-- ปุ่ม Export PDF --}}
         <div class="row mb-2">
             <div class="col-sm-12 col-md-12">
-                <a href="#" class="btn btn-danger btn-sm">Export PDF</a>
+                <a href="{{ route('admin.non_payment.export', $location->id) }}" class="btn btn-danger btn-sm">
+                    Export PDF
+                </a>
             </div>
         </div>
-
         {{-- บรรทัดจำนวนรายการและช่องค้นหา --}}
         <div class="row mb-2">
             <div class="col-sm-12 col-md-6">
@@ -68,58 +68,65 @@
             </div>
         </div>
 
-        {{-- ตารางข้อมูล --}}
+        {{-- ตารางบิล --}}
         <div class="row">
             <div class="col-sm-12">
-                <table class="table table-bordered table-striped dataTable no-footer" id="data_table"
-                    aria-describedby="data_table_info">
-                    <thead class="text-center">
+                <table class="table table-bordered table-striped text-center">
+                    <thead>
                         <tr>
                             <th>#</th>
-                            <th>ที่อยู่</th>
-                            <th>เบอร์โทร</th>
                             <th>จำนวนเงิน</th>
                             <th>สถานะ</th>
-                            <th>วันครบกำหนด</th> {{-- เพิ่มคอลัมน์ใหม่ --}}
-                            <th>รายละเอียด</th>
+                            <th>วันครบกำหนด</th>
+                            <th>วันที่ชำระ</th>
+                            <th>ACTION</th>
                         </tr>
                     </thead>
-
-                    {{-- ข้อมูลรายการ --}}
-                    <tbody class="text-center">
-                        <tr>
-                            <td>1</td>
-                            <td>123/45</td>
-                            <td>-</td>
-                            <td>500</td>
-                            <td><span class="text-warning">รอแนบบิล</span></td>
-                            <td>15/06/2568</td> {{-- ใส่วันครบกำหนด --}}
-                            <td><a href="#" class="btn btn-primary btn-sm"><i class="bi bi-archive"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>123/45</td>
-                            <td>-</td>
-                            <td>300</td>
-                            <td><span class="text-warning">รอแนบบิล</span></td>
-                            <td>16/06/2568</td> {{-- ใส่วันครบกำหนด --}}
-                            <td><a href="#" class="btn btn-primary btn-sm"><i class="bi bi-archive"></i></a></td>
-                        </tr>
+                    <tbody>
+                        @forelse ($location->bills as $index => $bill)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ number_format($bill->amount, 2) }} บาท</td>
+                                <td>
+                                    @if ($bill->status == 'ชำระแล้ว')
+                                        <span class="badge bg-success">{{ $bill->status }}</span>
+                                    @elseif ($bill->status == 'รอการตรวจสอบ')
+                                        <span class="badge bg-warning">{{ $bill->status }}</span>
+                                    @else
+                                        <span class="badge bg-danger">{{ $bill->status }}</span>
+                                    @endif
+                                </td>
+                                <td>{{ $bill->due_date ? \Carbon\Carbon::parse($bill->due_date)->format('d/m/Y') : '-' }}
+                                </td>
+                                <td>{{ $bill->paid_date ? \Carbon\Carbon::parse($bill->paid_date)->format('d/m/Y') : '-' }}
+                                </td>
+                                <td>
+                                    @if ($bill->status != 'ชำระแล้ว')
+                                        <button class="btn btn-primary btn-sm pay-btn"
+                                            data-amount="{{ number_format($bill->amount, 2) }}"
+                                            data-id="{{ $bill->id }}">
+                                            จ่ายบิล
+                                        </button>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6">ไม่มีข้อมูล</td>
+                            </tr>
+                        @endforelse
                     </tbody>
-
-                    {{-- แถวสรุปยอดรวม --}}
-                    <tbody class="text-center">
-                        <tr class="table-light">
-                            <td colspan="4" class="text-center fw-bold border-0">ยอดรวมค้างชำระทั้งหมด</td>
-                            <td class="fw-bold border-0 text-center">800 บาท</td>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="fw-bold text-center">ยอดรวมค้างชำระทั้งหมด</td>
+                            <td colspan="2" class="fw-bold text-center">{{ number_format($totalPending, 2) }} บาท</td>
                         </tr>
-                    </tbody>
+                    </tfoot>
                 </table>
-
             </div>
         </div>
-
-        {{-- ส่วนท้ายของตาราง --}}
         <div class="row mt-2">
             <div class="col-sm-12 col-md-5">
                 <div>แสดง 1 ถึง 2 จาก 2 รายการ</div>
@@ -137,4 +144,101 @@
             </div>
         </div>
     </div>
+
+    {{-- SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll(".pay-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                const billId = btn.dataset.id;
+                const amount = btn.dataset.amount;
+
+                const htmlContent = `
+            <div style="text-align:left; font-size:16px; width:100%;">
+                <p>ยอดที่ต้องชำระ: <b>${amount}</b> บาท</p>
+                <label for='slipFile'>อัปโหลดสลิปการชำระเงิน:</label>
+                <input type="file" id="slipFile" accept="image/*" style="width:100%; padding:5px; margin-bottom:10px;">
+                <img id="slipPreview" style="width:100%; display:none; border:1px solid #ccc; padding:5px;">
+                <div class="d-flex justify-content-end mt-3">
+                    <button id="sendSlip" class="btn btn-primary me-2">ยืนยันการชำระเงิน</button>
+                    <button id="closeSlip" class="btn btn-secondary">ปิด</button>
+                </div>
+            </div>
+        `;
+
+                Swal.fire({
+                    title: 'ชำระเงิน',
+                    html: htmlContent,
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    width: '700px',
+                    customClass: {
+                        title: 'text-start'
+                    },
+                    didOpen: () => {
+                        const input = Swal.getPopup().querySelector('#slipFile');
+                        const preview = Swal.getPopup().querySelector('#slipPreview');
+
+                        input.addEventListener('change', () => {
+                            const file = input.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = e => {
+                                    preview.src = e.target.result;
+                                    preview.style.display = 'block';
+                                };
+                                reader.readAsDataURL(file);
+                            } else {
+                                preview.style.display = 'none';
+                                preview.src = '';
+                            }
+                        });
+
+                        document.getElementById('closeSlip').addEventListener('click', () =>
+                            Swal.close());
+
+                        document.getElementById('sendSlip').addEventListener('click',
+                            async () => {
+                                if (!input.files[0]) {
+                                    Swal.showValidationMessage(
+                                        'กรุณาเลือกไฟล์รูปสลิปก่อน');
+                                    return;
+                                }
+
+                                const formData = new FormData();
+                                formData.append('slip', input.files[0]);
+                                formData.append('bill_id', billId);
+                                formData.append('_token', '{{ csrf_token() }}');
+
+                                try {
+                                    const res = await fetch(
+                                        '{{ route('admin.non_payment.upload_slip') }}', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Accept': 'application/json'
+                                            },
+                                            body: formData
+                                        });
+
+                                    const data = await res.json();
+
+                                    if (res.ok && data.success) {
+                                        Swal.fire('สำเร็จ', data.message, 'success')
+                                            .then(() => location.reload());
+                                    } else {
+                                        Swal.fire('ผิดพลาด', data.message ||
+                                            'ไม่สามารถบันทึกสลิปได้', 'error');
+                                    }
+                                } catch (err) {
+                                    Swal.fire('ผิดพลาด', 'เกิดข้อผิดพลาดในการเชื่อมต่อ',
+                                        'error');
+                                }
+                            });
+                    }
+                });
+            });
+        });
+    </script>
+
+
 @endsection

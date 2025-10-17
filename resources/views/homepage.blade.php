@@ -58,10 +58,10 @@
                             </a>
                         </div>
                         <div class="d-flex flex-column justify-content-center align-items-center">
-                            <a href="https://eservice.demo.sosmartsolution.com/FormeService/id/1" class="btn-hover-effect">
+                            <a href="/user/emergency/broken-road" class="btn-hover-effect">
                                 <img src="../img/homepage/Button-6.png" alt="ถนนเสีย" class="img-fluid" width="180px">
                             </a>
-                            <a href="https://eservice.demo.sosmartsolution.com/FormeService/id/1" class="mt-2 btn-hover-effect">
+                            <a href="/user/emergency/elec-broken" class="mt-2 btn-hover-effect">
                                 <img src="../img/homepage/Button-7.png" alt="ไฟเสีย" class="img-fluid" width="150px">
                             </a>
                         </div>
