@@ -18,7 +18,7 @@ class TrashLocationController extends Controller
         // Eager load bills เพื่อลดจำนวน query
         $locations = TrashLocation::with('bills')->get();
 
-        return view('admin.trash_can_installation.can-install', compact('locations'));
+        return view('admin_trash.trash_can_installation.can-install', compact('locations'));
     }
 
     /**
@@ -28,7 +28,7 @@ class TrashLocationController extends Controller
     {
         $location = TrashLocation::with('bills')->findOrFail($id);
 
-        return view('admin.trash_can_installation.can-install-detail', compact('location'));
+        return view('admin_trash.trash_can_installation.can-install-detail', compact('location'));
     }
 
     /**
@@ -38,7 +38,7 @@ class TrashLocationController extends Controller
     {
         $location = TrashLocation::with('bills')->findOrFail($id);
 
-        return view('admin.trash_installer.trash-installer-detail', compact('location'));
+        return view('admin_trash.trash_installer.trash-installer-detail', compact('location'));
     }
 
     /**
@@ -73,7 +73,7 @@ class TrashLocationController extends Controller
             ->where('status', 'เสร็จสิ้น')
             ->get();
 
-        return view('admin.trash_installer.trash-installer', compact('locations'));
+        return view('admin_trash.trash_installer.trash-installer', compact('locations'));
     }
 
     public function nonPaymentList(Request $request)
@@ -96,7 +96,7 @@ class TrashLocationController extends Controller
             }
         }])->get();
 
-        return view('admin.non_payment.non-payment', compact('locations'));
+        return view('admin_trash.non_payment.non-payment', compact('locations'));
     }
 
     public function nonPaymentDetail(int $trashLocationId)
@@ -108,7 +108,7 @@ class TrashLocationController extends Controller
         // คำนวณยอดรวมค้างชำระ
         $totalPending = $location->bills->sum('amount');
 
-        return view('admin.non_payment.non-payment-detail', compact('location', 'totalPending'));
+        return view('admin_trash.non_payment.non-payment-detail', compact('location', 'totalPending'));
     }
 
 
@@ -125,7 +125,7 @@ class TrashLocationController extends Controller
             'isRemoteEnabled' => true,
             'defaultFont' => 'THSarabunNew'
         ])
-        ->loadView('admin.non_payment.pdf', compact('location', 'totalPending'))
+        ->loadView('admin_trash.non_payment.pdf', compact('location', 'totalPending'))
         ->setPaper('a4', 'portrait');
 
 
@@ -177,7 +177,7 @@ class TrashLocationController extends Controller
             }
         }])->paginate(10); // pagination 10 รายการต่อหน้า
 
-        return view('admin.payment_history.payment-history', compact('locations', 'month', 'year'));
+        return view('admin_trash.payment_history.payment-history', compact('locations', 'month', 'year'));
     }
 
     public function paymentHistoryDetail(int $trashLocationId, Request $request)
@@ -199,7 +199,7 @@ class TrashLocationController extends Controller
 
         $bills = $billsQuery->paginate(10);
 
-        return view('admin.payment_history.payment-history-detail', compact('location', 'bills'));
+        return view('admin_trash.payment_history.payment-history-detail', compact('location', 'bills'));
     }
 
     public function verifyPaymentsList(Request $request)
@@ -213,7 +213,7 @@ class TrashLocationController extends Controller
             }])
             ->paginate(10);
 
-        return view('admin.verify_payment.check-payment', compact('locations'));
+        return view('admin_trash.verify_payment.check-payment', compact('locations'));
     }
 
     public function dashboard()
@@ -223,7 +223,7 @@ class TrashLocationController extends Controller
         $unpaidCount = Bill::where('status', 'ยังไม่ชำระ')->count();
         $pendingCount = Bill::where('status', 'รอการตรวจสอบ')->count();
 
-        return view('admin.dashboard', compact('paidCount', 'unpaidCount', 'pendingCount'));
+        return view('admin_trash.dashboard', compact('paidCount', 'unpaidCount', 'pendingCount'));
     }
 
     public function approveBill(Request $request)
@@ -249,4 +249,5 @@ class TrashLocationController extends Controller
         }
     }
 
+    
 }

@@ -37,17 +37,20 @@
             <div class="col-md-5 bg-body-secondary emergency-form-bg text-black p-3">
                 <div class="mb-2">
                     <label for="picture-emergency" class="form-label">ตัวอย่างภาพสถานที่เกิดเหตุ</label>
-                    <input type="file" name="picture" id="picture-emergency" class="form-control">
+                    <input type="file" name="picture" id="picture-emergency" class="form-control" accept="image/*">
                 </div>
 
                 <div class="mb-2">
                     <label for="name" class="form-label">ชื่อผู้แจ้งเหตุ</label>
-                    <input type="text" class="form-control" id="name" name="name">
+                    <input type="text" class="form-control" id="name" name="name"
+                        placeholder="กรอกชื่อ-นามสกุลของผู้แจ้งเหคุ">
                 </div>
 
                 <div class="mb-2">
                     <label for="tel" class="form-label">เบอร์โทรที่ติดต่อได้</label>
-                    <input type="tel" class="form-control" id="tel" name="tel">
+                    <input type="tel" class="form-control" id="tel" name="tel" pattern="\d{10}" maxlength="10"
+                        placeholder="กรอกตัวเลข 10 หลัก" required>
+                    <small class="form-text text-muted">กรอกตัวเลข 10 หลัก เช่น 0812345678</small>
                 </div>
 
                 <div class="mb-2">

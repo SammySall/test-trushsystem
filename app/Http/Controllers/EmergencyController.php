@@ -46,4 +46,44 @@ class EmergencyController extends Controller
             'message' => 'ส่งไปยังหน่วยงานที่เกี่ยวข้องเรียบร้อยแล้ว'
         ]);
     }
+
+    public function emergencyList($type)
+    {
+        $emergencyNames = [
+            'accident' => 'อุบัติเหตุ',
+            'fire' => 'ไฟไหม้',
+            'tree-fall' => 'ต้นไม้ล้ม',
+            'broken-road' => 'ถนนเสีย',
+            'elec-broken' => 'ไฟเสีย',
+        ];
+
+        $title = $emergencyNames[$type] ?? ucfirst($type);
+
+        // ใช้ paginate แทน get() หรือ all()
+        $emergencies = Emergency::where('type', $type)
+                        ->orderBy('created_at', 'desc')
+                        ->paginate(10); // กำหนดจำนวนต่อหน้า
+
+        return view('admin_emergency.emergency-list', compact('title', 'type', 'emergencies'));
+    }
+
+    public function showDetail($id)
+    {
+        $location = Emergency::findOrFail($id); // ดึงข้อมูลตาม id
+        return view('admin_emergency.emergency-detail', compact('location'));
+    }
+
+    public function emergencyDashboard()
+    {
+        // ดึงข้อมูล Emergency ทั้งหมด หรือกรองตาม type ถ้าต้องการ
+        $emergencies = Emergency::all();
+
+        // สร้างสรุปจำนวนแต่ละประเภท
+        $summary = $emergencies->groupBy('type')->map(function($items) {
+            return $items->count();
+        });
+
+        return view('admin_emergency.dashboard', compact('summary'));
+    }
+
 }

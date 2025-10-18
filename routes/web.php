@@ -27,6 +27,21 @@ Route::get('/homepage', function () {
 Route::get('/register', function () {
     return view('auth.register');
 });
+
+Route::get('/user/request/general', function () {
+    return view('user.form_request.general');
+});
+Route::get('/user/request/trash_request', function () {
+    return view('user.form_request.trash-request');
+});
+
+Route::get('/admin/emergency/dashboard', [EmergencyController::class, 'emergencyDashboard'])->name('admin.emergency.dashboard');
+Route::get('/admin/emergency/{type}', [EmergencyController::class, 'emergencyList'])
+    ->name('admin.emergency-list');
+Route::get('/admin/emergency/{id}/detail', [EmergencyController::class, 'showDetail'])
+    ->name('admin.emergency.detail');
+
+
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -56,10 +71,10 @@ Route::get('/user/waste_payment/status-trash', function () {
 });
 
 Route::get('/admin/waste_payment', [TrashLocationController::class, 'dashboard'])
-    ->name('admin.dashboard');
+    ->name('admin_trash.dashboard');
 
 Route::get('/admin/showdata', function () {
-    return view('admin.showdata');
+    return view('admin_trash.showdata');
 });
 
 Route::get('/admin/trash_can_installation', [TrashLocationController::class, 'index']);
@@ -68,7 +83,6 @@ Route::post('/admin/trash_can_installation/{id}/confirm-payment', [TrashLocation
 
 Route::get('/admin/trash_installer', [TrashLocationController::class, 'installerTrash']);
 Route::get('/admin/trash_installer/detail/{id}', [TrashLocationController::class, 'showInstallerDetail']);
-
 
 Route::get('/admin/verify_payment', [TrashLocationController::class, 'verifyPaymentsList'])
     ->name('admin.verify_payment');
@@ -79,7 +93,6 @@ Route::get('/admin/payment_history', [TrashLocationController::class, 'paymentHi
     ->name('admin.payment_history');
 Route::get('/admin/payment_history/detail/{id}', [TrashLocationController::class, 'paymentHistoryDetail'])
     ->name('admin.payment_history.detail');
-
 
 Route::get('/admin/non_payment', [TrashLocationController::class, 'nonPaymentList'])->name('admin.non_payment');
 Route::get('/admin/non_payment/detail/{location}', [TrashLocationController::class, 'nonPaymentDetail'])

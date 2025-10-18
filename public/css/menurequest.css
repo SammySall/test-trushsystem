@@ -1,0 +1,164 @@
+/* ===== เมนูด้านข้าง ===== */
+.menu-bar {
+    width: 280px;
+    background: #fff;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.menu-header {
+    text-align: center;
+    padding: 25px 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.menu-header h2 {
+    font-size: 18px;
+    margin: 10px 0 5px;
+}
+
+.menu-header p {
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+.menu-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+/* ===== เมนูหลัก ===== */
+.menu-list {
+    flex: 1;
+    overflow-y: auto;
+        background: #fff;
+
+}
+
+.menu-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.menu-item>a {
+    display: block;
+    padding: 14px 20px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    background: linear-gradient(90deg, #134e9e 0%, #082149 100%);
+    transition: all 0.3s;
+    font-size: 18px;
+}
+
+.menu-item>a:hover,
+.menu-item.active>a {
+    filter: brightness(1.15);
+}
+
+/* ===== เมนูย่อย ===== */
+.submenu {
+    display: block;
+    background: #f9f9f9;
+}
+
+.submenu li a {
+    padding: 10px 35px;
+    display: block;
+    color: #000;
+    text-decoration: none;
+    font-size: 15px;
+    transition: background 0.3s;
+}
+
+.submenu li a:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* ===== พื้นหลังเนื้อหา ===== */
+.request-content {
+    background: linear-gradient(to right, #029A94 0%, #004C57 100%);
+    color: #fff;
+    min-height: 100vh;
+}
+
+.ing-banner-request {
+    max-width: 100%;
+}
+
+.form-content {
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 8px;
+}
+
+.header-form-name {
+    display: inline-block;
+    /* ทำให้ขนาดพอดีกับข้อความ */
+    position: relative;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 30px;
+    background: none;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.header-form-name::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 30px;
+    padding: 2px;
+    background: linear-gradient(to right, #029A94, #004C57);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* จัด header-form-name ตรงกลาง */
+.form-content > div:first-child {
+    text-align: center;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 992px) {
+    .box-eservice {
+        flex-direction: column;
+    }
+
+    .menu-bar {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .menu-header {
+        text-align: center;
+    }
+
+    .menu-list {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .menu-item>a {
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+
+    .submenu li a {
+        padding: 10px 25px;
+    }
+}

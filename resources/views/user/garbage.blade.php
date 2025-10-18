@@ -24,7 +24,7 @@
                     </a>
                 </div>
                 <div class="col-6 col-md-3">
-                    <a href="#">
+                    <a href="/user/request/trash_request">
                         <img src="../img/Garbage/Button-4.png" alt="ขอใช้บริการถังขยะ" class="img-fluid link-garbage-btn">
                     </a>
                 </div>
