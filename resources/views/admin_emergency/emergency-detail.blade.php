@@ -6,7 +6,7 @@
 
     <div class="mb-3"><strong>ชื่อ :</strong> {{ $location->name ?? '-' }}</div>
     <div class="mb-3"><strong>เบอร์โทรศัพท์ :</strong> {{ $location->tel ?? '-' }}</div>
-    <div class="mb-3"><strong>รายละเอียด :</strong> {{ $location->address ?? '-' }}</div>
+    <div class="mb-3"><strong>รายละเอียด :</strong> {{ $location->description ?? '-' }}</div>
 
     {{-- ลิงก์ไปยังรูปเหตุฉุกเฉิน --}}
     <div class="mb-3">

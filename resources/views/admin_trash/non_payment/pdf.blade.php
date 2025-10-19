@@ -7,21 +7,14 @@
     <style>
         @font-face {
             font-family: 'THSarabunNew';
-            src: url("file://{{ public_path('fonts/THSarabunNew.ttf') }}") format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-
-        @font-face {
-            font-family: 'THSarabunNew';
-            src: url("file://{{ public_path('fonts/THSarabunNew-Bold.ttf') }}") format('truetype');
-            font-weight: bold;
-            font-style: normal;
+            src: url("{{ public_path('fonts/THSarabunNew.ttf') }}") format('truetype');
         }
 
         body {
-            font-family: "DejaVu Sans", "THSarabunNew", sans-serif;
+            font-family: 'THSarabunNew';
+            font-size: 20px;
+            line-height: 1.3;
+            margin: 40px;
         }
 
         table {

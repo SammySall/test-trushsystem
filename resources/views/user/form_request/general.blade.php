@@ -1,5 +1,6 @@
 @extends('layout.layout-request')
 @section('title', 'คำร้องขอทั่วไป')
+@section('request-header-img','general')
 @section('request-header', 'คำร้องขอทั่วไป')
 @section('request-content')
     <div class="list-group">

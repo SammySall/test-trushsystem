@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\TrashLocationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\EmergencyController;
 use App\Http\Controllers\GarbageController;
+use App\Http\Controllers\TrashRequestController;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 /*
@@ -73,9 +75,17 @@ Route::get('/user/waste_payment/status-trash', function () {
 Route::get('/admin/waste_payment', [TrashLocationController::class, 'dashboard'])
     ->name('admin_trash.dashboard');
 
-Route::get('/admin/showdata', function () {
-    return view('admin_trash.showdata');
-});
+// Route::get('/admin/showdata', function () {
+//     return view('admin_trash.showdata');
+// });
+
+Route::get('/admin/showdata', [TrashRequestController::class, 'showData'])->name('admin.showdata');
+Route::post('/admin_trash/reply', [TrashRequestController::class, 'reply'])->name('admin_trash.reply');
+Route::post('/admin/reply/{id}', [TrashRequestController::class, 'reply'])->name('admin.trash.reply');
+Route::post('/trash-request/store', [TrashRequestController::class, 'store'])->name('trash-request.store');
+Route::post('/admin/trash/accept', [TrashRequestController::class, 'accept'])->name('admin_trash.accept');
+Route::get('/admin/trash/pdf/{id}', [TrashRequestController::class, 'showPdf'])->name('admin_trash.show_pdf');
+
 
 Route::get('/admin/trash_can_installation', [TrashLocationController::class, 'index']);
 Route::get('/admin/trash_can_installation/detail/{id}', [TrashLocationController::class, 'showCanInstallDetail']);

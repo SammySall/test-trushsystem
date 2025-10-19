@@ -35,6 +35,7 @@ class LoginController extends Controller
 
             // ข้อมูล token
             $tokenData = [
+                'userId' => $user->id,
                 'name' => $user->name,
                 'role' => $user->role,
                 'address' => $user->address,

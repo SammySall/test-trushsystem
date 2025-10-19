@@ -12,7 +12,7 @@
             {{-- คอลัมน์เมนู (ซ้าย) --}}
             <nav class="menu-list col-md-3 col-lg-3">
                 <ul>
-                    <li class="menu-item has-sub">
+                    {{-- <li class="menu-item has-sub">
                         <a href="#">สำนักปลัด</a>
                         <ul class="submenu">
                             <li><a href="#">คำร้องทั่วไป</a></li>
@@ -25,17 +25,18 @@
                             <li><a href="#">คําขอตรวจค้นเอกสาร/รับรองสําเนาเอกสาร/ใบแทน</a></li>
                             <li><a href="#">หนังสือมอบอำนาจ</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
 
                     <li class="menu-item has-sub">
                         <a href="#">กองช่าง</a>
                         <ul class="submenu">
-                            <li><a href="#">คำร้องทั่วไป (ซ่อมไฟฟ้าสาธารณะ , ซ่อมแซมถนน)</a></li>
+                            <li><a href="#">คำขอต่ออายุใบอนุญาต (ก่อสร้าง , ดัดแปลง , รื้อถอน , เคลื่อนย้ายอาคาร)</a>
+                            </li>
                             <li><a href="#">ใบแจ้งการขุดดินหรือถมดิน</a></li>
                         </ul>
                     </li>
 
-                    <li class="menu-item has-sub">
+                    {{-- <li class="menu-item has-sub">
                         <a href="#">กองการศึกษา</a>
                         <ul class="submenu">
                             <li><a href="#">ใบสมัครเรียน ศพด.บ้านท่าข้าม</a></li>
@@ -49,30 +50,35 @@
                         <ul class="submenu">
                             <li><a href="#">คำร้องขอข้อมูลข่าวสาร</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
 
                     <li class="menu-item has-sub">
                         <a href="#">กองสาธารณสุขฯ</a>
                         <ul class="submenu">
-                            <li><a href="#">คำร้องขอถังขยะ</a></li>
+                            <li><a href="/user/request/trash_request">คำร้องขออนุญาตลงถังขยะ</a></li>
+                            <li><a href="#">คำขอรับใบอนุญาตจัดตั้งตลาด</a></li>
+                            <li><a href="#">คำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ</a></li>
+                            <li><a href="#">คำร้องขออนุญคำขอรับใบอนุญาตประกอบกิจการรับทำการเก็บ ขน
+                                    หรือกำจัดสิ่งปฏิกูลหรือมูลฝอย</a></li>
                         </ul>
                     </li>
 
-                    <li class="menu-item has-sub">
+                    {{-- <li class="menu-item has-sub">
                         <a href="#">กองสวัสดิการสังคม</a>
                         <ul class="submenu">
                             <li><a href="#">คำร้องทั่วไปขอรับการช่วยเหลือ</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
                 </ul>
             </nav>
 
             {{-- คอลัมน์เนื้อหา (ขวา) --}}
             <div class="col-md-8 col-lg-9 request-content px-5">
-                <img src="../../img/banner-request/trash-request.png" alt="banner-request" class="ing-banner-request mb-4">
+                <img src="{{ asset('img/banner-request/' . $__env->yieldContent('request-header-img') . '.png') }}"
+                    alt="banner-request" class="img-fluid">
                 <div class="form-content mb-3">
                     <div>
-                        <h4 class="header-form-name my-2">
+                        <h4 class="header-form-name my-2 mx-4">
                             ฟอร์ม@yield('request-header')
                         </h4>
                     </div>
