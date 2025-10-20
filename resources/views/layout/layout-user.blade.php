@@ -45,10 +45,10 @@
                     @else
                         {{-- Login / Register --}}
                         <a href="/login" class="text-center me-3">
-                            <img src="../../img/menuuser/login.png" alt="login" class="img-fluid btn-hover-effect">
+                            <img src="../../img/menuuser/Login.png" alt="login" class="img-fluid btn-hover-effect">
                         </a>
                         <a href="/register" class="text-center">
-                            <img src="../../img/menuuser/register.png" alt="register" class="img-fluid btn-hover-effect"
+                            <img src="../../img/menuuser/Register.png" alt="register" class="img-fluid btn-hover-effect"
                                 height="46.13px">
                         </a>
                     @endif

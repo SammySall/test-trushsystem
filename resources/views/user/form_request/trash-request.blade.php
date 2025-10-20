@@ -1,7 +1,7 @@
 @extends('layout.layout-request')
-@section('title', 'คำร้องขอรับถังขยะ')
+@section('title', 'คำร้องขออนุญาตลงถังขยะ')
 @section('request-header-img', 'trash-request')
-@section('request-header', 'แบบคำขอรับการประเมินค่าธรรมเนียมการกำจัดสิ่งปฏิกูลและมูลฝอย และ แบบขอรับถังขยะมูลฝอยทั่วไป')
+@section('request-header', 'คำร้องขออนุญาตลงถังขยะ')
 
 @section('request-content')
     <div class="list-group">
@@ -32,25 +32,22 @@
                     <input type="number" class="form-control" name="field_5" required>
                 </div>
             </div>
-
             <div class="row g-3 mt-3">
                 <div class="col-md-3">
                     <label class="form-label">สัญชาติ<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="field_6" required>
                 </div>
                 <div class="col-md-3">
-                    <label for="tel" class="form-label">เบอร์โทร<span class="text-danger">*</span></label>
-                    <input type="tel" class="form-control" name="field_3" id="tel" pattern="[0-9]{10}"
-                        maxlength="10" required>
-                </div>
-                <div class="col-md-3">
-                    <label for="fax" class="form-label">โทรสาร</label>
-                    <input type="tel" class="form-control" name="field_4" id="fax" pattern="[0-9]{10}"
-                        maxlength="10">
-                </div>
-                <div class="col-md-3">
                     <label class="form-label">บ้านเลขที่<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="field_7" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="alley" class="form-label">ตรอก/ซอย</label>
+                    <input type="text" class="form-control" name="field_14" id="alley">
+                </div>
+                <div class="col-md-3">
+                    <label for="road" class="form-label">ถนน</label>
+                    <input type="text" class="form-control" name="field_15" id="road" required>
                 </div>
             </div>
 
@@ -71,6 +68,16 @@
                     <label class="form-label">จังหวัด<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="field_11" required>
                 </div>
+                <div class="col-md-3">
+                    <label for="tel" class="form-label">เบอร์โทร<span class="text-danger">*</span></label>
+                    <input type="tel" class="form-control" name="field_3" id="tel" pattern="[0-9]{10}"
+                        maxlength="10" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="fax" class="form-label">โทรสาร</label>
+                    <input type="tel" class="form-control" name="field_4" id="fax" pattern="[0-9]{10}"
+                        maxlength="10">
+                </div>
             </div>
 
             <div class="mb-3 mt-3">
@@ -80,7 +87,8 @@
                     </label>
                     <div class="d-flex flex-wrap align-items-center">
                         <div class="form-check me-3">
-                            <input class="form-check-input" type="radio" name="optione" id="option1" value="1">
+                            <input class="form-check-input" type="radio" name="optione" id="option1"
+                                value="1">
                             <label class="form-check-label" for="option1">บ้านที่อยู่อาศัย</label>
                         </div>
                         <div class="form-check me-3">
@@ -117,12 +125,6 @@
 
             <input type="hidden" name="lat" id="lat">
             <input type="hidden" name="lng" id="lng">
-
-            <div class="mb-3">
-                <label class="form-label">พร้อมนี้ได้แนบเอกสารหลักฐานมาด้วย จำนวน</label>
-                <input type="number" name="field_13" class="form-control d-inline-block" style="width: 80px;"
-                    max="5"> ฉบับ
-            </div>
 
             <div class="mb-3">
                 <label class="form-label">ไฟล์แนบ</label>

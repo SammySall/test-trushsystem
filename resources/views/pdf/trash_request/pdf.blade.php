@@ -80,7 +80,7 @@
     <div class="box_text" style="text-align: right;">
         <span>ข้าพเจ้า</span>
         <span class="dotted-line" style="width: 40%; text-align: left;">
-            {{ $fields['field_1'] ?? '-' }} {{ $fields['field_2'] ?? '-' }}
+            {{ $fields['field_2'] ?? '-' }} {{ $fields['field_1'] ?? '-' }}
         </span>
         <span>อายุ</span>
         <span class="dotted-line" style="width: 15%; text-align: left;">{{ $fields['field_5'] ?? '-' }}</span>
@@ -94,15 +94,15 @@
         <span>หมู่ที่</span>
         <span class="dotted-line" style="width: 10%;">{{ $fields['field_8'] ?? '-' }}</span>
         <span>ตรอก/ซอย</span>
-        <span class="dotted-line" style="width: 23%;">{{ $fields['field_9'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 22%;">{{ $fields['field_9'] ?? '-' }}</span>
         <span>ถนน</span>
-        <span class="dotted-line" style="width: 25%;">{{ $fields['field_9'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 22%;">{{ $fields['field_9'] ?? '-' }}</span>
         <span>ตำบล/แขวง</span>
-        <span class="dotted-line" style="width: 25%;">{{ $fields['field_9'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 24%;">{{ $fields['field_9'] ?? '-' }}</span>
         <span>.อำเภอ/เขต</span>
-        <span class="dotted-line" style="width: 25%;">{{ $fields['field_10'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 24%;">{{ $fields['field_10'] ?? '-' }}</span>
         <span>จังหวัด</span>
-        <span class="dotted-line" style="width: 25%;">{{ $fields['field_11'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 24%;">{{ $fields['field_11'] ?? '-' }}</span>
         <span>เบอร์โทรศัพท์</span>
         <span class="dotted-line" style="width: 25%;">{{ $fields['field_3'] ?? '-' }}</span>
         <span>โทรสาร</span>
@@ -131,11 +131,11 @@
 
     <div class="box_text" style="text-align: center; margin-top:0.5rem; margin-bottom:1.5rem;">
         <span>ลงชื่อ</span>
-        <span class="dotted-line" style="width: 35%;">{{ $fields['field_2'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 35%;">{{ $fields['field_1'] ?? '-' }}</span>
         <span>ผู้ขออนุญาต</span>
         <div style="margin-left: -30px;">
             <span>(</span>
-            <span class="dotted-line" style="width: 35%;">{{ $fields['field_1'] ?? '-' }} {{ $fields['field_2'] ?? '-' }}</span>
+            <span class="dotted-line" style="width: 35%;">{{ $fields['field_2'] ?? '-' }} {{ $fields['field_1'] ?? '-' }}</span>
             <span>)</span>
         </div>
     </div>

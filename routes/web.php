@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\EmergencyController;
 use App\Http\Controllers\GarbageController;
 use App\Http\Controllers\TrashRequestController;
+use App\Http\Controllers\Auth\RegisterController;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
@@ -26,15 +27,21 @@ Route::get('/', function () {
 Route::get('/homepage', function () {
     return view('homepage');
 });
-Route::get('/register', function () {
-    return view('auth.register');
-});
+
+Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register.form');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.store');
 
 Route::get('/user/request/general', function () {
     return view('user.form_request.general');
 });
 Route::get('/user/request/trash_request', function () {
     return view('user.form_request.trash-request');
+});
+Route::get('/user/request/renew_license_engineer', function () {
+    return view('user.form_request.renew-license-engineer');
+});
+Route::get('/user/request/health_hazard_license', function () {
+    return view('user.form_request.health-hazard-license');
 });
 
 Route::get('/admin/emergency/dashboard', [EmergencyController::class, 'emergencyDashboard'])->name('admin.emergency.dashboard');
@@ -110,6 +117,13 @@ Route::get('/admin/non_payment/detail/{location}', [TrashLocationController::cla
 Route::get('/admin/non_payment/{trashLocationId}/export', [TrashLocationController::class, 'exportNonPaymentPdf'])
     ->name('admin.non_payment.export');
 Route::post('/admin/non-payment/upload-slip', [TrashLocationController::class, 'uploadSlip'])->name('admin.non_payment.upload_slip');
+
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/link-storage', function () {
+    Artisan::call('storage:link');
+    return 'Storage link created!';
+});
 
 Route::fallback(function(){
     return view('notfound');

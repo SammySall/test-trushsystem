@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('address');
-            $table->enum('role', ['admin-trash', 'admin-e-service', 'user'])->default('user');
+            $table->enum('role', ['admin-trash', 'admin-e-service','admin-emergency', 'user'])->default('user');
             $table->rememberToken();
             $table->timestamps();
             $table->text('api_token')->nullable();

@@ -10,13 +10,16 @@ return new class extends Migration {
         Schema::create('trash_requests', function (Blueprint $table) {
             $table->id();
             $table->string('prefix');
+            $table->string('type');
             $table->string('fullname');
-            $table->integer('age');
-            $table->string('nationality');
+            $table->integer('age')->nullable();
+            $table->string('nationality')->nullable();
             $table->string('tel');
             $table->string('fax')->nullable();
             $table->string('house_no');
             $table->string('village_no');
+            $table->string('alley');
+            $table->string('road');
             $table->string('subdistrict');
             $table->string('district');
             $table->string('province');

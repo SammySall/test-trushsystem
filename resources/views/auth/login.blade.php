@@ -19,7 +19,7 @@
 
             {{-- โลโก้--}}
             <div class="header-text mb-4">
-                <img src="{{ asset('../../img/login/Text.png') }}" alt="เข้าสู่ระบบ" class="img-fluid w-75">
+                <img src="{{ asset('../../img/Login/Text.png') }}" alt="เข้าสู่ระบบ" class="img-fluid w-75">
             </div>
             <form method="POST" action="{{ route('login') }}">
                 @csrf
@@ -52,7 +52,7 @@
                 {{-- ปุ่มล็อกอิน --}}
                 <div class="my-2">
                     <button type="submit" class="btn-login-img">
-                        <img src="{{ asset('../../img/login/Login-Button.png') }}" alt="ปุ่มเข้าสู่ระบบ"
+                        <img src="{{ asset('../../img/Login/Login-Button.png') }}" alt="ปุ่มเข้าสู่ระบบ"
                             class="img-fluid w-100">
                     </button>
                 </div>

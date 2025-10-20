@@ -25,6 +25,8 @@ class TrashRequestController extends Controller
             'field_9' => 'required|string',
             'field_10' => 'required|string',
             'field_11' => 'required|string',
+            'field_15' => 'required|string',
+            'field_14' => 'required|string',
             'picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -37,12 +39,15 @@ class TrashRequestController extends Controller
             'fax' => $request->field_4,
             'house_no' => $validated['field_7'],
             'village_no' => $validated['field_8'],
+            'alley' => $validated['field_14'],
+            'road' => $validated['field_15'],
             'subdistrict' => $validated['field_9'],
             'district' => $validated['field_10'],
             'province' => $validated['field_11'],
             'place_type' => $request->optione,
             'lat' => $request->lat,
             'lng' => $request->lng,
+            'type' => 'trash-request',
             'status' => 'pending',
             'receiver_id' => null,
             'received_at' => now(),
@@ -68,6 +73,7 @@ class TrashRequestController extends Controller
     {
         // ดึงข้อมูล trashRequests พร้อมกับชื่อผู้รับฟอร์มจาก user
         $trashRequests = TrashRequest::with('receiver:id,name')
+            ->where('type', 'trash-request')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -143,6 +149,8 @@ class TrashRequestController extends Controller
             'field_10' => $trashRequest->district ?? '-',
             'field_11' => $trashRequest->province ?? '-',
             'field_12' => $trashRequest->place_type ?? '-',
+            'field_13' => $trashRequest->alley ?? '-',
+            'field_14' => $trashRequest->road ?? '-',
         ];
 
         return Pdf::loadView('pdf.trash_request.pdf', compact('fields','day','month','year'))
