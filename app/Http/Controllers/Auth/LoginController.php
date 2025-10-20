@@ -55,6 +55,10 @@ class LoginController extends Controller
             // redirect ตาม role
             if ($user->role === 'admin-trash') {
                 return redirect('/admin/waste_payment');
+            } elseif ($user->role === 'admin-emergency') {
+                return redirect('/admin/emergency/dashboard');
+            } elseif ($user->role === 'admin-request') {
+                return redirect('/admin/request/list');
             } elseif ($user->role === 'user') {
                 return redirect('/homepage');
             } else {

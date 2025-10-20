@@ -1,8 +1,8 @@
-@extends('layout.layout-admin-trash')
-@section('title', 'ข้อมูลคำขอถังขยะ')
+@extends('layout.layout-admin-request')
+@section('title', 'กองสาธารณสุขฯ')
 
 @section('content')
-    <h3 class="text-center px-2">แบบคำขอรับการประเมินค่าธรรมเนียม และขอรับถังขยะมูลฝอยทั่วไป</h3>
+    <h3 class="text-center px-2">แบบคำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ</h3>
     <h4 class="text-center px-2">ตารางแสดงข้อมูลฟอร์มที่ส่งเข้ามา</h4>
 
     {{-- ฟิลเตอร์ --}}
@@ -98,7 +98,7 @@
     @php
         $userId = null;
         if (session('token')) {
-            $payload = json_decode(\Illuminate\Support\Facades\Crypt::decryptString(session('token')), true);
+            $payload = json_decode(Crypt::decryptString(session('token')), true);
             $userId = $payload['userId'] ?? null;
         }
     @endphp
@@ -168,41 +168,6 @@
                         window.open(`{{ route('admin_trash.show_pdf', '') }}/${rowData.id}`,
                             '_blank');
                     });
-
-
-                    if (isPending) {
-                        Swal.getPopup().querySelector('#acceptForm').addEventListener('click',
-                            () => {
-                                fetch("{{ route('admin_trash.accept') }}", {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                        },
-                                        body: JSON.stringify({
-                                            request_id: rowData.id,
-                                            user_id: userId
-                                        })
-                                    })
-                                    .then(res => res.json())
-                                    .then(data => {
-                                        if (data.success) {
-                                            Swal.fire('สำเร็จ!',
-                                                    'คุณได้กดรับแบบฟอร์มเรียบร้อยแล้ว',
-                                                    'success')
-                                                .then(() => location.reload());
-                                        } else {
-                                            Swal.fire('ผิดพลาด', 'ไม่สามารถอัปเดตข้อมูลได้',
-                                                'error');
-                                        }
-                                    })
-                                    .catch(err => {
-                                        console.error(err);
-                                        Swal.fire('ผิดพลาด', 'เกิดข้อผิดพลาดในการเชื่อมต่อ',
-                                            'error');
-                                    });
-                            });
-                    }
                 });
             });
 

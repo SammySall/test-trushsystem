@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('address');
-            $table->enum('role', ['admin-trash', 'admin-e-service','admin-emergency', 'user'])->default('user');
+            $table->enum('role', ['admin-trash', 'admin-e-service','admin-emergency', 'user','admin-request'])->default('user');
             $table->rememberToken();
             $table->timestamps();
             $table->text('api_token')->nullable();
@@ -41,6 +41,23 @@ return new class extends Migration
                 'password' => Hash::make('123456789'),
                 'address' => '67/78',
                 'role' => 'admin-e-service',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],[
+                'name' => 'Admin Emergency',
+                'email' => 'admin03@example.com',
+                'password' => Hash::make('123456789'),
+                'address' => '67/78',
+                'role' => 'admin-emergency',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Admin Request',
+                'email' => 'admin04@example.com',
+                'password' => Hash::make('123456789'),
+                'address' => '67/78',
+                'role' => 'admin-request',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

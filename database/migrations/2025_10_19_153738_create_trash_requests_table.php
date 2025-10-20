@@ -27,7 +27,8 @@ return new class extends Migration {
             $table->decimal('lat', 10, 7)->nullable();
             $table->decimal('lng', 10, 7)->nullable();
             $table->string('picture_path')->nullable(); // path ของรูป
-
+            $table->text('add-on')->nullable();
+            
             // ✅ เพิ่มฟิลด์ใหม่ตามที่คุณต้องการ
             $table->string('status')->default('pending');
             $table->foreignId('receiver_id')->nullable()->constrained('users')->nullOnDelete();

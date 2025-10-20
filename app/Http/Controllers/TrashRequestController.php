@@ -14,6 +14,7 @@ class TrashRequestController extends Controller
 {
     public function store(Request $request)
     {
+        // validate fields หลัก
         $validated = $request->validate([
             'field_1' => 'required|string',
             'field_2' => 'required|string',
@@ -27,7 +28,6 @@ class TrashRequestController extends Controller
             'field_11' => 'required|string',
             'field_15' => 'required|string',
             'field_14' => 'required|string',
-            'picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $requestData = [
@@ -36,38 +36,37 @@ class TrashRequestController extends Controller
             'age' => $validated['field_5'],
             'nationality' => $validated['field_6'],
             'tel' => $validated['field_3'],
-            'fax' => $request->field_4,
             'house_no' => $validated['field_7'],
             'village_no' => $validated['field_8'],
-            'alley' => $validated['field_14'],
-            'road' => $validated['field_15'],
             'subdistrict' => $validated['field_9'],
             'district' => $validated['field_10'],
             'province' => $validated['field_11'],
-            'place_type' => $request->optione,
-            'lat' => $request->lat,
-            'lng' => $request->lng,
-            'type' => 'trash-request',
+            'road' => $validated['field_15'],
+            'alley' => $validated['field_14'],
+            'type' => $request->type,
             'status' => 'pending',
-            'receiver_id' => null,
-            'received_at' => now(),
         ];
 
-        // ✅ จัดการไฟล์แนบ
+        // ✅ เก็บ add-on เป็น JSON (ถ้ามี)
+        if ($request->has('addon')) {
+            $requestData['addon'] = json_encode($request->addon);
+        }
+
+        // ✅ เก็บไฟล์แนบ
         if ($request->hasFile('files')) {
             $paths = [];
             foreach ($request->file('files') as $file) {
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $paths[] = $file->storeAs('trash_pictures', $filename, 'public');
             }
-            $requestData['picture_path'] = implode(',', $paths); // เก็บเป็น string คั่นด้วย comma
+            $requestData['picture_path'] = implode(',', $paths);
         }
-
 
         TrashRequest::create($requestData);
 
         return redirect()->back()->with('success', 'บันทึกคำขอเรียบร้อยแล้ว!');
     }
+
 
     public function showData()
     {
@@ -83,6 +82,19 @@ class TrashRequestController extends Controller
         return view('admin_trash.showdata', compact('trashRequests', 'histories'));
     }
 
+    public function showDataRequest()
+    {
+        // ดึงข้อมูล trashRequests พร้อมกับชื่อผู้รับฟอร์มจาก user
+        $trashRequests = TrashRequest::with('receiver:id,name')
+            ->where('type','health-hazard-license')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // ดึง histories พร้อมกับชื่อผู้ตอบกลับจาก user
+        $histories = TrashRequestHistory::with('responder:id,name')->get();
+
+        return view('admin_request.request-list', compact('trashRequests', 'histories'));
+    }
 
     public function reply(Request $request)
     {
@@ -91,15 +103,15 @@ class TrashRequestController extends Controller
             'message' => 'required|string',
         ]);
 
-        // สร้างประวัติ reply
         TrashRequestHistory::create([
             'trash_request_id' => $request->request_id,
-            'user_id' => auth()->id(), // ใช้ผู้ใช้งานปัจจุบัน
+            'user_id' => $request-> user_id = $user,
             'message' => $request->message,
         ]);
 
         return response()->json(['success' => true]);
     }
+
 
     public function accept(Request $request)
     {

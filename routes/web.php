@@ -31,6 +31,9 @@ Route::get('/homepage', function () {
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.store');
 
+Route::get('/admin/request/dashboard', function () {
+    return view('admin_request.dashboard');
+});
 Route::get('/user/request/general', function () {
     return view('user.form_request.general');
 });
@@ -92,6 +95,8 @@ Route::post('/admin/reply/{id}', [TrashRequestController::class, 'reply'])->name
 Route::post('/trash-request/store', [TrashRequestController::class, 'store'])->name('trash-request.store');
 Route::post('/admin/trash/accept', [TrashRequestController::class, 'accept'])->name('admin_trash.accept');
 Route::get('/admin/trash/pdf/{id}', [TrashRequestController::class, 'showPdf'])->name('admin_trash.show_pdf');
+
+Route::get('/admin/request/list', [TrashRequestController::class, 'showDataRequest'])->name('admin.request-list');
 
 
 Route::get('/admin/trash_can_installation', [TrashLocationController::class, 'index']);

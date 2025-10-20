@@ -12,7 +12,7 @@ class TrashRequest extends Model
     protected $fillable = [
     'prefix', 'fullname', 'age', 'nationality', 'tel', 'fax',
     'house_no', 'village_no','alley','road', 'subdistrict', 'district', 'province',
-    'place_type', 'lat', 'lng', 'type',
+    'place_type', 'lat', 'lng', 'type','add-on',
     'picture_path', 'status', 'receiver_id', 'received_at',
 ];
 

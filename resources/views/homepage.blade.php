@@ -7,7 +7,7 @@
                 <img src="../img/homepage/นายก.png" alt="nayok" class="img-fluid" width="350">
                 <div class="image-stack">
                     <img src="../img/homepage/Object.png" alt="Object" class="img-fluid bottom-img" width="350">
-                    <a href="/user/request/general">
+                    <a href="/user/request/health_hazard_license">
                         <img src="../img/homepage/Buton-1.png" alt="ขอใบอนุญาติประกอบกิจการ" class="img-fluid top-img"
                             width="350">
                     </a>

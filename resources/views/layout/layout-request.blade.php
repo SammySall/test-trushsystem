@@ -30,7 +30,7 @@
                     <li class="menu-item has-sub">
                         <a href="#">กองช่าง</a>
                         <ul class="submenu">
-                            <li><a href="/user/request/renew_license_engineer">คำขอต่ออายุใบอนุญาต (ก่อสร้าง , ดัดแปลง , รื้อถอน , เคลื่อนย้ายอาคาร)</a>
+                            <li><a href="#">คำขอต่ออายุใบอนุญาต (ก่อสร้าง , ดัดแปลง , รื้อถอน , เคลื่อนย้ายอาคาร)</a>
                             </li>
                         </ul>
                     </li>
@@ -78,7 +78,7 @@
                 <div class="form-content mb-3">
                     <div>
                         <h4 class="header-form-name my-2 mx-4">
-                            ฟอร์ม@yield('request-header')
+                            @yield('request-header')
                         </h4>
                     </div>
 

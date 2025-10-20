@@ -7,6 +7,10 @@
     <div class="list-group">
         <form action="{{ route('trash-request.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
+            <div class="col-md-3 " style="display: none">
+                <label class="form-label">ประเภท<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="type" value="trash-request" required>
+            </div>
 
             <div class="mb-3">
                 <label class="form-label">วันที่</label>
