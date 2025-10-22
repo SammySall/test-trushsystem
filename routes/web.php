@@ -161,6 +161,28 @@ Route::get('/admin/non_payment/{trashLocationId}/export', [TrashLocationControll
     ->name('admin.non_payment.export');
 Route::post('/admin/non-payment/upload-slip', [TrashLocationController::class, 'uploadSlip'])->name('admin.non_payment.upload_slip');
 
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/dev/reset', function () {
+    try {
+        // ล้างแคชทั้งหมด
+        Artisan::call('optimize:clear');
+
+        // รัน migrate refresh (รีเซ็ตฐานข้อมูลทั้งหมด)
+        Artisan::call('migrate:refresh', ['--seed' => true]); // ถ้ามี seeder ด้วย
+
+        return "<h3 style='color:green'>✅ Migrate & Optimize Clear สำเร็จ!</h3>
+                <p>คำสั่งที่รัน:</p>
+                <ul>
+                    <li>php artisan optimize:clear</li>
+                    <li>php artisan migrate:refresh --seed</li>
+                </ul>";
+    } catch (\Exception $e) {
+        return "<h3 style='color:red'>❌ Error:</h3><pre>{$e->getMessage()}</pre>";
+    }
+});
+
+
 Route::fallback(function(){
     return view('notfound');
 });
