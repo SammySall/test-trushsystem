@@ -38,7 +38,7 @@
                         <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
                             @csrf
                             <button type="submit" class="btn p-0 border-0 bg-transparent">
-                                <img src="../../img/menuuser/Logout-Button.png" alt="Logout"
+                                <img src="../../../../img/menuuser/Logout-Button.png" alt="Logout"
                                     class="img-fluid btn-hover-effect">
                             </button>
                         </form>

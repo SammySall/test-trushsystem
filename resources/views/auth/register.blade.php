@@ -19,9 +19,20 @@
             ลงทะเบียน
         </div>
         <div class="p-3 container">
-            <form method="POST" action="{{ route('register.store') }}" class="row g-3 mx-3 d-flex flex-column justify-content-center align-items-center">
+            <form method="POST" action="{{ route('register.store') }}"
+                class="row g-3 mx-3 d-flex flex-column justify-content-center align-items-center">
                 @csrf
                 <div class="form-bg col-md-10">
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger mt-3">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     <!-- แถวแรก -->
                     <div class="row">
@@ -40,7 +51,8 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="confirm" class="form-label">ยืนยันรหัสผ่าน</label>
-                            <input type="password" name="password_confirmation" id="confirm" class="form-control" required>
+                            <input type="password" name="password_confirmation" id="confirm" class="form-control"
+                                required>
                         </div>
                     </div>
 
@@ -69,7 +81,8 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="tel" class="form-label">เบอร์โทรศัพท์</label>
-                            <input type="tel" name="tel" id="tel" class="form-control" pattern="[0-9]{10}" maxlength="10" required>
+                            <input type="tel" name="tel" id="tel" class="form-control" pattern="[0-9]{10}"
+                                maxlength="10" required>
                         </div>
                     </div>
 
@@ -85,15 +98,18 @@
                     <div class="row mt-2">
                         <div class="col-12 col-md-4">
                             <label for="province" class="form-label">จังหวัด</label>
-                            <input type="text" class="form-control" id="province" name="province" placeholder="กรอกจังหวัด" required>
+                            <input type="text" class="form-control" id="province" name="province"
+                                placeholder="กรอกจังหวัด" required>
                         </div>
                         <div class="col-12 col-md-4">
                             <label for="district" class="form-label">อำเภอ</label>
-                            <input type="text" class="form-control" id="district" name="district" placeholder="กรอกอำเภอ" required>
+                            <input type="text" class="form-control" id="district" name="district"
+                                placeholder="กรอกอำเภอ" required>
                         </div>
                         <div class="col-12 col-md-4">
                             <label for="subdistrict" class="form-label">ตำบล</label>
-                            <input type="text" class="form-control" id="subdistrict" name="subdistrict" placeholder="กรอกตำบล" required>
+                            <input type="text" class="form-control" id="subdistrict" name="subdistrict"
+                                placeholder="กรอกตำบล" required>
                         </div>
                     </div>
 
@@ -115,18 +131,18 @@
     </div>
 
     <!-- SweetAlert2 Success -->
-    @if(session('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'สมัครสมาชิกสำเร็จ!',
-            text: '{{ session("success") }}',
-            confirmButtonText: 'เข้าสู่ระบบ',
-            confirmButtonColor: '#d33'
-        }).then(() => {
-            window.location.href = '/login';
-        });
-    </script>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'สมัครสมาชิกสำเร็จ!',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'เข้าสู่ระบบ',
+                confirmButtonColor: '#d33'
+            }).then(() => {
+                window.location.href = '/login';
+            });
+        </script>
     @endif
 </body>
 

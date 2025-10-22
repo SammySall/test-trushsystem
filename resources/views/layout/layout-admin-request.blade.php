@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/menurequestadmin.css') }}">
 </head>
 
 <body class="d-flex bg-body-secondary">
@@ -19,66 +20,183 @@
     @endphp
 
     <!-- Sidebar -->
-    <div class="d-flex flex-column flex-shrink-0 bg-white p-3" style="width: 250px; height: 100vh;">
-        <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none">
-            <span class="fs-4">
-                <i class="bi bi-database-fill me-2" style="color:#696cff;"></i>
-                ระบบใบคำร้อง
-            </span>
-        </div>
-        <hr>
-        <ul class="nav nav-pills flex-column mb-auto">
-            {{-- <li>
-                <a href="/admin/emergency/dashboard"
-                    class="nav-link {{ Str::contains($path, 'dashboard') ? 'active' : '' }}">
-                    <i class="bi bi-bar-chart-fill pe-2"></i> Dashboard
-                </a>
-            </li> --}}
 
-            {{-- <div class="mt-3 fw-bold">Manage</div>
+    <!-- Sidebar -->
+    <!-- Sidebar -->
+    <div class="flex-shrink-0 p-3 bg-white border-end" style="width: 280px; height: 100vh;">
+        @php
+            $path = request()->path();
 
-            <li>
-                <a href="/admin/showdata" class="nav-link {{ Str::contains($path, 'showdata') ? 'active' : '' }}">
-                    ข้อมูลฟอร์มที่ส่งเข้ามา
-                </a>
-            </li>
+            // ตรวจคำใน path
+            $isPublicHealth = str_contains($path, 'public-health');
+            $isEngineering = str_contains($path, 'engineering');
 
-            <li>
-                <a href="/admin/trash_can_installation"
-                    class="nav-link {{ Str::contains($path, 'trash_can_installation') ? 'active' : '' }}">
-                    ตำแหน่งที่ติดตั้งถังขยะ
-                </a>
-            </li>
+            // ตั้งชื่อหัวเรื่อง
+            $departmentName = 'ระบบใบคำร้อง';
+            if ($isPublicHealth) {
+                $departmentName = 'กองสาธารณสุขฯ';
+            } elseif ($isEngineering) {
+                $departmentName = 'กองช่าง';
+            }
+        @endphp
 
-            <li>
-                <a href="/admin/trash_installer"
-                    class="nav-link {{ Str::contains($path, 'trash_installer') ? 'active' : '' }}">
-                    ผู้ใช้บริการติดตั้งถังขยะ
-                </a>
-            </li> --}}
+        <!-- หัวข้อหลัก -->
+        <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+            <i class="bi bi-database-fill me-2 fs-4" style="color:#696cff;"></i>
+            <span class="fs-6 fw-semibold">{{ $departmentName }}</span>
+        </a>
 
-            <div class="mt-3 fw-bold">Report</div>
+        <ul class="list-unstyled ps-0">
+            {{-- ✅ ถ้าเป็นกองช่าง --}}
+            @if ($isEngineering)
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-start"
+                        data-bs-toggle="collapse" data-bs-target="#engineering-collapse" aria-expanded="false">
+                        คำขอต่ออายุใบอนุญาตก่อสร้างฯ
+                    </button>
+                    <div class="collapse" id="engineering-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#"
+                                    class="link-dark rounded">รับเรื่อง</a></li>
+                            <li><a href="#"
+                                    class="link-dark rounded">การนัดหมาย</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ออกสำรวจ</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ชำระเงิน</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ออกใบอนุญาต</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>
+                        </ul>
+                    </div>
+                </li>
 
-            <li>
-                <a href="#"
-                    class="nav-link {{ Str::contains($path, 'fire') ? 'active' : '' }}">
-                    คำขอรับใบอนุญาตจัดตั้งตลาด
-                </a>
-            </li>
+                {{-- ✅ ถ้าเป็นกองสาธารณสุข --}}
+            @elseif ($isPublicHealth)
+                {{-- <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-start"
+                        data-bs-toggle="collapse" data-bs-target="#trash-collapse" aria-expanded="false">
+                        คำร้องขออนุญาตลงถังขยะ
+                    </button>
+                    <div class="collapse" id="trash-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="/admin/request/public-health/showdata/trash-request"
+                                    class="link-dark rounded">รับเรื่อง</a></li>
+                            <li><a href="/admin/request/public-health/appointment/trash-request"
+                                    class="link-dark rounded">การนัดหมาย</a></li>
+                            <li><a href="/admin/request/public-health/explore/trash-request"
+                                    class="link-dark rounded">ออกสำรวจ</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ชำระเงิน</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ออกใบอนุญาต</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>
+                        </ul>
+                    </div>
+                </li> --}}
 
-            <li>
-                <a href="#" class="nav-link {{ Str::contains($path, 'tree-fall') ? 'active' : '' }}">
-                    คำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link {{ Str::contains($path, 'broken-road') ? 'active' : '' }}">
-                    คำร้องขออนุญคำขอรับใบอนุญาตประกอบกิจการรับทำการเก็บ ขน
-                                    หรือกำจัดสิ่งปฏิกูลหรือมูลฝอย
-                </a>
-            </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-start"
+                        data-bs-toggle="collapse" data-bs-target="#market-collapse" aria-expanded="false">
+                        คำขอรับใบอนุญาตจัดตั้งตลาด
+                    </button>
+                    <div class="collapse" id="market-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="/admin/request/public-health/showdata/market-establishment-license"
+                                    class="link-dark rounded">รับเรื่อง</a></li>
+                            <li><a href="/admin/request/public-health/appointment/market-establishment-license"
+                                    class="link-dark rounded">การนัดหมาย</a></li>
+                            <li><a href="/admin/request/public-health/explore/market-establishment-license"
+                                    class="link-dark rounded">ออกสำรวจ</a></li>
+                            <li><a href="/admin/request/public-health/confirm_payment/market-establishment-license"
+                                    class="link-dark rounded">ชำระเงิน</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ออกใบอนุญาต</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-start"
+                        data-bs-toggle="collapse" data-bs-target="#food-collapse" aria-expanded="false">
+                        คำขอรับใบอนุญาตสถานที่จำหน่ายอาหาร
+                    </button>
+                    <div class="collapse" id="food-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="/admin/request/public-health/showdata/food-sales-license"
+                                    class="link-dark rounded">รับเรื่อง</a></li>
+                            <li><a href="/admin/request/public-health/appointment/food-sales-license"
+                                    class="link-dark rounded">การนัดหมาย</a></li>
+                            <li><a href="/admin/request/public-health/explore/food-sales-license"
+                                    class="link-dark rounded">ออกสำรวจ</a></li>
+                            <li><a href="/admin/request/public-health/confirm_payment/food-sales-license"
+                                    class="link-dark rounded">ชำระเงิน</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ออกใบอนุญาต</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-start"
+                        data-bs-toggle="collapse" data-bs-target="#hazard-collapse" aria-expanded="false">
+                        คำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ
+                    </button>
+                    <div class="collapse" id="hazard-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="/admin/request/public-health/showdata/health-hazard-license"
+                                    class="link-dark rounded">รับเรื่อง</a></li>
+                            <li><a href="/admin/request/public-health/appointment/health-hazard-license"
+                                    class="link-dark rounded">การนัดหมาย</a></li>
+                            <li><a href="/admin/request/public-health/explore/health-hazard-license"
+                                    class="link-dark rounded">ออกสำรวจ</a></li>
+                            <li><a href="/admin/request/public-health/confirm_payment/health-hazard-license"
+                                    class="link-dark rounded">ชำระเงิน</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ออกใบอนุญาต</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-start"
+                        data-bs-toggle="collapse" data-bs-target="#waste-collapse" aria-expanded="false">
+                        คำขอรับใบอนุญาตประกอบกิจการเก็บ ขน หรือกำจัดสิ่งปฏิกูลฯ
+                    </button>
+                    <div class="collapse" id="waste-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="/admin/request/public-health/showdata/waste-disposal-business-license"
+                                    class="link-dark rounded">รับเรื่อง</a></li>
+                            <li><a href="/admin/request/public-health/appointment/waste-disposal-business-license"
+                                    class="link-dark rounded">การนัดหมาย</a></li>
+                            <li><a href="/admin/request/public-health/explore/waste-disposal-business-license"
+                                    class="link-dark rounded">ออกสำรวจ</a></li>
+                            <li><a href="/admin/request/public-health/confirm_payment/disposal-business-license"
+                                    class="link-dark rounded">ชำระเงิน</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ออกใบอนุญาต</a></li>
+                            <li><a href="/user/engineering/history/renew_license_engineer"
+                                    class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                {{-- ✅ ถ้าไม่เข้ากองใดเลย --}}
+            @else
+                <li class="text-muted text-center mt-3">ไม่พบหน่วยงานที่เกี่ยวข้อง</li>
+            @endif
         </ul>
     </div>
+
+
 
     <div class="p-4" style="flex:1;">
         {{-- search bar --}}
@@ -126,10 +244,32 @@
         </div>
 
         {{-- content --}}
-        <div class="bg-white p-2 rounded-3">
+        <div class="bg-white p-2 rounded-3 p-5">
             @yield('content')
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.has-sub-sub > a').forEach(menu => {
+                menu.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const submenu = this.nextElementSibling;
+
+                    // ปิด submenu อื่น ๆ
+                    document.querySelectorAll('.submenu-sub').forEach(s => {
+                        if (s !== submenu) s.style.maxHeight = null;
+                    });
+
+                    // toggle submenu ที่คลิก
+                    if (submenu.style.maxHeight) {
+                        submenu.style.maxHeight = null; // ปิด
+                    } else {
+                        submenu.style.maxHeight = submenu.scrollHeight + "px"; // เปิดสมูท
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 

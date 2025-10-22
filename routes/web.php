@@ -34,6 +34,7 @@ Route::post('/register', [RegisterController::class, 'register'])->name('registe
 Route::get('/admin/request/dashboard', function () {
     return view('admin_request.dashboard');
 });
+
 Route::get('/user/request/general', function () {
     return view('user.form_request.general');
 });
@@ -46,6 +47,20 @@ Route::get('/user/request/renew_license_engineer', function () {
 Route::get('/user/request/health_hazard_license', function () {
     return view('user.form_request.health-hazard-license');
 });
+Route::get('/user/request/market_establishment_license', function () {
+    return view('user.form_request.market-establishment-license');
+});
+Route::get('/user/request/food_sales_license', function () {
+    return view('user.form_request.food-sales-license');
+});
+Route::get('/user/request/waste_disposal_business_license', function () {
+    return view('user.form_request.waste-disposal-business-license');
+});
+
+Route::middleware('auth')->get('/user/request/history_request/{type}', [TrashRequestController::class, 'historyRequest'])
+    ->name('user.history-request');
+Route::middleware('auth')->get('/user/request/history_request/{type}/{id}', [TrashRequestController::class, 'showUserRequestDetail'])
+    ->name('user.history-request.detail');
 
 Route::get('/admin/emergency/dashboard', [EmergencyController::class, 'emergencyDashboard'])->name('admin.emergency.dashboard');
 Route::get('/admin/emergency/{type}', [EmergencyController::class, 'emergencyList'])
@@ -90,14 +105,37 @@ Route::get('/admin/waste_payment', [TrashLocationController::class, 'dashboard']
 // });
 
 Route::get('/admin/showdata', [TrashRequestController::class, 'showData'])->name('admin.showdata');
-Route::post('/admin_trash/reply', [TrashRequestController::class, 'reply'])->name('admin_trash.reply');
 Route::post('/admin/reply/{id}', [TrashRequestController::class, 'reply'])->name('admin.trash.reply');
-Route::post('/trash-request/store', [TrashRequestController::class, 'store'])->name('trash-request.store');
+Route::middleware('auth')->post('/trash-request/store', [TrashRequestController::class, 'store'])->name('trash-request.store');
 Route::post('/admin/trash/accept', [TrashRequestController::class, 'accept'])->name('admin_trash.accept');
 Route::get('/admin/trash/pdf/{id}', [TrashRequestController::class, 'showPdf'])->name('admin_trash.show_pdf');
+Route::get('/admin/request/public-health/appointment/{type}', [TrashRequestController::class, 'appointmentData'])
+    ->name('admin.public-health.appointment');
+Route::get('/admin/request/public-health/appointment/{type}/{id}', [TrashRequestController::class, 'appointmentDetail'])
+    ->name('admin.public-health.appointment.detail');
+Route::post('/admin/request/public-health/appointment/{id}', [TrashRequestController::class, 'appointmentStore'])
+    ->name('admin.public-health.appointment.store');
+Route::post('/user/history-request/confirm-appointment/{id}', [TrashRequestController::class, 'confirmAppointmentUser'])
+    ->name('user.history.confirm-appointment');
 
-Route::get('/admin/request/list', [TrashRequestController::class, 'showDataRequest'])->name('admin.request-list');
+Route::get('/admin/request/public-health/explore/{type}', [TrashRequestController::class, 'explore'])
+    ->name('admin.public-health.explore');
+Route::post('/admin/request/explore/{id}', [TrashRequestController::class, 'inspectionStore'])
+    ->name('admin.request.explore.store');
+Route::post('/user/history-request/upload-slip/{id}', [TrashRequestController::class, 'uploadSlipUser'])
+    ->name('user.history.upload_slip')
+    ->middleware('auth');
 
+Route::get('/admin/request/public-health/confirm_payment/{type}', 
+    [TrashRequestController::class, 'confirmPaymentRequest'])
+    ->name('admin.public-health.confirm_payment');
+Route::post('/admin/request/public-health/confirm_payment/{id}', 
+    [TrashRequestController::class, 'confirmPaymentRequestStore'])
+    ->name('admin.public-health.confirm_payment.store');
+
+Route::get('/admin/request/public-health/showdata/{type}', [TrashRequestController::class, 'showDataRequestHealth'])->name('admin.public-health.showdata');
+Route::get('/admin/request/public-health/showdata/{type}/{id}', [TrashRequestController::class, 'showDetail'])
+    ->name('admin_request.detail');
 
 Route::get('/admin/trash_can_installation', [TrashLocationController::class, 'index']);
 Route::get('/admin/trash_can_installation/detail/{id}', [TrashLocationController::class, 'showCanInstallDetail']);
@@ -122,13 +160,6 @@ Route::get('/admin/non_payment/detail/{location}', [TrashLocationController::cla
 Route::get('/admin/non_payment/{trashLocationId}/export', [TrashLocationController::class, 'exportNonPaymentPdf'])
     ->name('admin.non_payment.export');
 Route::post('/admin/non-payment/upload-slip', [TrashLocationController::class, 'uploadSlip'])->name('admin.non_payment.upload_slip');
-
-use Illuminate\Support\Facades\Artisan;
-
-Route::get('/link-storage', function () {
-    Artisan::call('storage:link');
-    return 'Storage link created!';
-});
 
 Route::fallback(function(){
     return view('notfound');

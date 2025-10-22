@@ -49,7 +49,7 @@
                             <td>
                                 @if ($item->status === 'done')
                                     <span style="font-size: 20px; color:blue;"><i class="bi bi-check-circle"></i></span>
-                                @elseif($item->status === 'pending')
+                                @elseif($item->status === 'รอรับเรื่อง')
                                     <span style="font-size: 20px; color:orange;"><i
                                             class="bi bi-hourglass-split"></i></span>
                                 @else
@@ -107,7 +107,6 @@
         document.addEventListener("DOMContentLoaded", function() {
             const pdfButtons = document.querySelectorAll(".btn.btn-danger.btn-sm");
             const replyButtons = document.querySelectorAll(".btn.btn-success.btn-sm");
-            const allHistories = @json($histories->groupBy('request_id'));
             const userId = @json($userId);
 
             // ปุ่ม PDF + กดรับแบบฟอร์ม
@@ -115,7 +114,7 @@
                 btn.addEventListener("click", function() {
                     const rowData = JSON.parse(btn.dataset.row);
                     const fileData = rowData.picture_path;
-                    const isPending = rowData.status === 'pending';
+                    const isPending = rowData.status === 'รอรับเรื่อง';
 
                     let filesArray = [];
                     if (Array.isArray(fileData)) {
@@ -212,7 +211,9 @@
                     const tr = btn.closest("tr");
                     const sender = tr.children[1]?.textContent || '';
                     const requestId = btn.dataset.id;
-                    const replies = allHistories[requestId] ?? [];
+                    const rowData = JSON.parse(tr.querySelector('.view-file').dataset
+                    .row); // หรือใช้ data-row ของปุ่ม PDF
+                    const replies = rowData.histories ?? [];
 
                     let tableRows = '';
                     if (replies.length === 0) {
@@ -221,40 +222,40 @@
                         replies.forEach(reply => {
                             tableRows += `
                         <tr>
-                            <td>${reply.responder_name}</td>
-                            <td>${reply.created_at}</td>
-                            <td>${reply.message}</td>
+                            <td style="text-align:center;">${reply.responder_name}</td>
+                            <td style="text-align:center;">${reply.created_at}</td>
+                            <td style="text-align:center;">${reply.message}</td>
                         </tr>
-                    `;
+                        `;
                         });
                     }
 
                     const htmlContent = `
-                <div style="text-align:left; font-size:16px; line-height:1.5;">
-                    <div style="margin-bottom:10px;">ชื่อผู้ส่งฟอร์ม: <strong>${sender}</strong></div>
-                    <div style="margin-bottom:10px;">ข้อความตอบกลับก่อนหน้า</div>
-                    <div style="margin-bottom:10px;">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">ผู้ตอบกลับ</th>
-                                    <th class="text-center">วันที่ตอบกลับ</th>
-                                    <th class="text-center">ข้อความที่ตอบกลับ</th>
-                                </tr>
-                            </thead>
-                            <tbody>${tableRows}</tbody>
-                        </table>
-                    </div>
-                    <div style="margin-top:10px;">
-                        <label for='reply'>ข้อความตอบกลับ:</label>
-                        <textarea id='reply' class="form-control" rows="3" placeholder="พิมพ์ข้อความตอบกลับ..."></textarea>
-                    </div>
-                    <div class="d-flex justify-content-end mt-3">
-                        <button id="closeReply" class="btn btn-secondary me-2">ปิด</button>
-                        <button id="sendReply" class="btn btn-primary">ส่งตอบกลับ</button>
-                    </div>
+            <div style="text-align:left; font-size:16px; line-height:1.5;">
+                <div style="margin-bottom:10px;">ชื่อผู้ส่งฟอร์ม: <strong>${sender}</strong></div>
+                <div style="margin-bottom:10px;">ข้อความตอบกลับก่อนหน้า</div>
+                <div style="margin-bottom:10px;">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">ผู้ตอบกลับ</th>
+                                <th class="text-center">วันที่ตอบกลับ</th>
+                                <th class="text-center">ข้อความที่ตอบกลับ</th>
+                            </tr>
+                        </thead>
+                        <tbody>${tableRows}</tbody>
+                    </table>
                 </div>
-            `;
+                <div style="margin-top:10px;">
+                    <label for='reply'>ข้อความตอบกลับ:</label>
+                    <textarea id='reply' class="form-control" rows="3" placeholder="พิมพ์ข้อความตอบกลับ..."></textarea>
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <button id="closeReply" class="btn btn-secondary me-2">ปิด</button>
+                    <button id="sendReply" class="btn btn-primary">ส่งตอบกลับ</button>
+                </div>
+            </div>
+        `;
 
                     Swal.fire({
                         title: 'ตอบกลับฟอร์ม',
@@ -274,7 +275,7 @@
                             return;
                         }
 
-                        fetch("{{ route('admin_trash.reply') }}", {
+                        fetch(`/admin/reply/${requestId}`, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -286,7 +287,6 @@
                                     message: message
                                 })
                             })
-
                             .then(res => res.json())
                             .then(data => {
                                 if (data.success) {
@@ -294,6 +294,9 @@
                                     Swal.fire('สำเร็จ!',
                                             'ส่งข้อความตอบกลับเรียบร้อยแล้ว', 'success')
                                         .then(() => location.reload());
+                                } else {
+                                    Swal.fire('ผิดพลาด!', data.message ||
+                                        'ไม่สามารถส่งข้อความได้', 'error');
                                 }
                             })
                             .catch(err => {
@@ -301,9 +304,16 @@
                                     'เกิดข้อผิดพลาด กรุณาลองใหม่');
                                 console.error(err);
                             });
+
                     });
                 });
             });
+
         });
     </script>
+    <script>
+        const allHistories = @json($trashRequests);
+        console.log(allHistories); // จะเห็นข้อมูลใน console
+    </script>
+
 @endsection

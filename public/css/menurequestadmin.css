@@ -1,0 +1,19 @@
+.btn-toggle {
+    background: transparent;
+    font-weight: 500;
+    color: #333;
+    padding: 0.5rem 0;
+}
+.btn-toggle:hover {
+    color: #696cff;
+}
+.btn-toggle-nav a {
+    display: block;
+    padding: 0.2rem 0 0.2rem 1.5rem;
+    color: #555;
+    text-decoration: none;
+}
+.btn-toggle-nav a:hover {
+    color: #696cff;
+    background-color: #f8f9fa;
+}

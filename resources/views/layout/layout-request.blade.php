@@ -2,91 +2,137 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/menurequest.css') }}">
+
     <div class="container mt-3">
         <div>
-            <a href="/user/waste_payment">
-                <img src="../../img/ToxicTrash/Back-Button.png" alt="ปุ่มกลับ" class="back-garbage-btn mb-4">
+            <a href="@yield('back-button', '/')">
+                <img src="../../../../img/ToxicTrash/Back-Button.png" alt="ปุ่มกลับ" class="back-garbage-btn mb-4">
             </a>
         </div>
         <div class="row g-0">
-            {{-- คอลัมน์เมนู (ซ้าย) --}}
+
+            {{-- ✅ เมนูด้านซ้าย --}}
             <nav class="menu-list col-md-3 col-lg-3">
                 <ul>
-                    {{-- <li class="menu-item has-sub">
-                        <a href="#">สำนักปลัด</a>
-                        <ul class="submenu">
-                            <li><a href="#">คำร้องทั่วไป</a></li>
-                            <li><a href="#">คำร้องขอติดตั้งป้ายโฆษณาริมถนนสาธารณะ</a></li>
-                            <li><a href="#">คำร้องเรียนการทุจริตและประพฤติมิชอบของเจ้าหน้าที่</a></li>
-                            <li><a href="#">คำขอเครื่องหมายรับรองผู้ประกอบธุรกิจพาณิชย์อิเล็กทรอนิกส์ (DBD
-                                    Registered)</a></li>
-                            <li><a href="#">คำขอจดทะเบียนพาณิชย์ (ใหม่/เปลี่ยนแปลง/ยกเลิก)</a></li>
-                            <li><a href="#">คำร้องทะเบียนพาณิชย์</a></li>
-                            <li><a href="#">คําขอตรวจค้นเอกสาร/รับรองสําเนาเอกสาร/ใบแทน</a></li>
-                            <li><a href="#">หนังสือมอบอำนาจ</a></li>
-                        </ul>
-                    </li> --}}
-
                     <li class="menu-item has-sub">
                         <a href="#">กองช่าง</a>
                         <ul class="submenu">
-                            <li><a href="#">คำขอต่ออายุใบอนุญาต (ก่อสร้าง , ดัดแปลง , รื้อถอน , เคลื่อนย้ายอาคาร)</a>
+                            <li class="has-sub-sub">
+                                <a href="#">คำขอต่ออายุใบอนุญาตก่อสร้าง ดัดแปลง รื้อถอน หรือเคลื่อนย้ายอาคาร</a>
+                                <ul class="submenu-sub">
+                                    <li><a href="/user/request/renew_license_engineer" class="menu-link"
+                                            data-target="form-trash">แบบฟอร์มคำร้อง</a></li>
+                                    <li><a href="/user/request/history_request/renew-license-engineer" class="menu-link"
+                                            data-target="history-trash">ประวัติการส่งคำร้อง</a></li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
-
-                    {{-- <li class="menu-item has-sub">
-                        <a href="#">กองการศึกษา</a>
-                        <ul class="submenu">
-                            <li><a href="#">ใบสมัครเรียน ศพด.บ้านท่าข้าม</a></li>
-                            <li><a href="#">ใบสมัครเรียน ศพด.บ้านท่าข้าม วัดบางแสม</a></li>
-                            <li><a href="#">ใบสมัครเรียน ศพด.บ้านท่าข้าม วัดคลองพานทอง</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="menu-item has-sub">
-                        <a href="#">กองยุทธศาสตร์และงบประมาณ</a>
-                        <ul class="submenu">
-                            <li><a href="#">คำร้องขอข้อมูลข่าวสาร</a></li>
-                        </ul>
-                    </li> --}}
-
                     <li class="menu-item has-sub">
                         <a href="#">กองสาธารณสุขฯ</a>
                         <ul class="submenu">
-                            <li><a href="/user/request/trash_request">คำร้องขออนุญาตลงถังขยะ</a></li>
-                            <li><a href="#">คำขอรับใบอนุญาตจัดตั้งตลาด</a></li>
-                            <li><a href="/user/request/health_hazard_license">คำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ</a></li>
-                            <li><a href="#">คำร้องขออนุญคำขอรับใบอนุญาตประกอบกิจการรับทำการเก็บ ขน
-                                    หรือกำจัดสิ่งปฏิกูลหรือมูลฝอย</a></li>
+                            <li class="has-sub-sub">
+                                <a href="#">คำร้องขออนุญาตลงถังขยะ</a>
+                                <ul class="submenu-sub">
+                                    <li><a href="/user/request/trash_request" class="menu-link"
+                                            data-target="form-trash">แบบฟอร์มคำร้อง</a></li>
+                                    <li><a href="/user/request/history_request/trash-request" class="menu-link"
+                                            data-target="history-trash">ประวัติการส่งคำร้อง</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub-sub">
+                                <a href="#">คำขอรับใบอนุญาตจัดตั้งตลาด</a>
+                                <ul class="submenu-sub">
+                                    <li><a href="/user/request/market_establishment_license" class="menu-link"
+                                            data-target="form-health">แบบฟอร์มคำร้อง</a></li>
+                                    <li><a href="/user/request/history_request/market-establishment-license" class="menu-link"
+                                            data-target="history-health">ประวัติการส่งคำร้อง</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub-sub">
+                                <a href="#">คำขอรับใบอนุญาตสถานที่จำหน่ายอาหาร</a>
+                                <ul class="submenu-sub">
+                                    <li><a href="/user/request/food_sales_license" class="menu-link"
+                                            data-target="form-health">แบบฟอร์มคำร้อง</a></li>
+                                    <li><a href="/user/request/history_request/food-sales-license" class="menu-link"
+                                            data-target="history-health">ประวัติการส่งคำร้อง</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub-sub">
+                                <a href="#">คำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ</a>
+                                <ul class="submenu-sub">
+                                    <li><a href="/user/request/health_hazard_license" class="menu-link"
+                                            data-target="form-health">แบบฟอร์มคำร้อง</a></li>
+                                    <li><a href="/user/request/history_request/health-hazard-license" class="menu-link"
+                                            data-target="history-health">ประวัติการส่งคำร้อง</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub-sub">
+                                <a href="#">คำขอรับใบอนุญาตประกอบกิจการรับทำการเก็บ ขน
+                                    หรือกำจัดสิ่งปฏิกูลหรือมูลฝอย</a>
+                                <ul class="submenu-sub">
+                                    <li><a href="/user/request/waste_disposal_business_license" class="menu-link"
+                                            data-target="form-health">แบบฟอร์มคำร้อง</a></li>
+                                    <li><a href="/user/request/history_request/waste-disposal-business-license" class="menu-link"
+                                            data-target="history-health">ประวัติการส่งคำร้อง</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
-
-                    {{-- <li class="menu-item has-sub">
-                        <a href="#">กองสวัสดิการสังคม</a>
-                        <ul class="submenu">
-                            <li><a href="#">คำร้องทั่วไปขอรับการช่วยเหลือ</a></li>
-                        </ul>
-                    </li> --}}
                 </ul>
             </nav>
+            {{-- ✅ จบเมนูด้านซ้าย --}}
 
             {{-- คอลัมน์เนื้อหา (ขวา) --}}
-            <div class="col-md-8 col-lg-9 request-content px-5">
-                <img src="{{ asset('img/banner-request/' . $__env->yieldContent('request-header-img') . '.png') }}"
-                    alt="banner-request" class="img-fluid">
-                <div class="form-content mb-3">
-                    <div>
-                        <h4 class="header-form-name my-2 mx-4">
-                            @yield('request-header')
-                        </h4>
+            <div class="col-md-8 col-lg-9 request-content">
+                @if (Request::is('user/request/history_request*'))
+                    <div class="form-content my-3 mx-2">
+                        <div class="p-3 pb-4">
+                            @yield('request-content')
+                        </div>
                     </div>
+                @else
+                    <img src="{{ asset('img/banner-request/' . $__env->yieldContent('request-header-img') . '.png') }}"
+                        alt="banner-request" class="img-fluid mb-3 px-5">
+                    <div class="form-content mb-3 mx-5">
+                        <div>
+                            <h4 class="header-form-name my-2 mx-4">
+                                @yield('request-header')
+                            </h4>
+                        </div>
 
-                    <div class="px-5 pb-4">
-                        @yield('request-content')
+                        <div class="px-5 pb-4">
+                            @yield('request-content')
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
+
+
         </div>
     </div>
+
+    {{-- JS สำหรับเปิด/ปิด submenu แบบสมูท --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.has-sub-sub > a').forEach(menu => {
+                menu.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const submenu = this.nextElementSibling;
+
+                    // ปิด submenu อื่น ๆ
+                    document.querySelectorAll('.submenu-sub').forEach(s => {
+                        if (s !== submenu) s.style.maxHeight = null;
+                    });
+
+                    // toggle submenu ที่คลิก
+                    if (submenu.style.maxHeight) {
+                        submenu.style.maxHeight = null; // ปิด
+                    } else {
+                        submenu.style.maxHeight = submenu.scrollHeight + "px"; // เปิดสมูท
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

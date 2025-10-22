@@ -35,8 +35,7 @@
 .menu-list {
     flex: 1;
     overflow-y: auto;
-        background: #fff;
-
+    background: #fff;
 }
 
 .menu-list ul {
@@ -103,7 +102,6 @@
 
 .header-form-name {
     display: inline-block;
-    /* ทำให้ขนาดพอดีกับข้อความ */
     position: relative;
     font-weight: bold;
     padding: 10px 20px;
@@ -128,9 +126,49 @@
     pointer-events: none;
 }
 
-/* จัด header-form-name ตรงกลาง */
-.form-content > div:first-child {
+.form-content>div:first-child {
     text-align: center;
+}
+
+/* ===== ซ้อนเมนู 3 ชั้น (submenu-sub) ===== */
+.submenu-sub {
+    max-height: 0;
+    overflow: hidden;
+    background: #ececec;
+    border-top: 1px solid #ddd;
+    transition: max-height 0.3s ease;
+}
+
+.submenu-sub li a {
+    padding: 8px 50px;
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+    display: block;
+}
+
+.submenu-sub li a:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* ปุ่มในฟอร์ม */
+.btn-primary {
+    background: linear-gradient(90deg, #134e9e 0%, #082149 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.15);
+}
+
+/* ตารางในประวัติ */
+.table th,
+.table td {
+    text-align: center;
+    vertical-align: middle;
 }
 
 /* ===== Responsive ===== */
@@ -160,5 +198,9 @@
 
     .submenu li a {
         padding: 10px 25px;
+    }
+
+    .submenu-sub li a {
+        padding: 8px 40px;
     }
 }

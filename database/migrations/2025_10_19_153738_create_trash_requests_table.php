@@ -17,22 +17,24 @@ return new class extends Migration {
             $table->string('tel');
             $table->string('fax')->nullable();
             $table->string('house_no');
-            $table->string('village_no');
-            $table->string('alley');
-            $table->string('road');
+            $table->string('village_no')->nullable();
+            $table->string('alley')->nullable();
+            $table->string('road')->nullable();
             $table->string('subdistrict');
             $table->string('district');
             $table->string('province');
             $table->string('place_type')->nullable(); // 1-5 ตาม radio
             $table->decimal('lat', 10, 7)->nullable();
             $table->decimal('lng', 10, 7)->nullable();
-            $table->string('picture_path')->nullable(); // path ของรูป
-            $table->text('add-on')->nullable();
-            
-            // ✅ เพิ่มฟิลด์ใหม่ตามที่คุณต้องการ
+            $table->text('addon')->nullable();
+            $table->string('note')->nullable();
+            $table->text('id_card')->nullable();
             $table->string('status')->default('pending');
             $table->foreignId('receiver_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('creator_id')->nullable()->constrained('users')->nullOnDelete(); // เพิ่ม create_id
             $table->timestamp('received_at')->nullable();
+            $table->datetime('convenient_date')->nullable();
+            $table->datetime('appointment_date')->nullable();
 
             $table->timestamps();
         });

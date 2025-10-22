@@ -239,7 +239,7 @@
                             return;
                         }
 
-                        fetch("{{ route('admin_trash.reply') }}", {
+                        fetch(`/admin/reply/${requestId}`, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -251,7 +251,6 @@
                                     message: message
                                 })
                             })
-
                             .then(res => res.json())
                             .then(data => {
                                 if (data.success) {
@@ -259,6 +258,9 @@
                                     Swal.fire('สำเร็จ!',
                                             'ส่งข้อความตอบกลับเรียบร้อยแล้ว', 'success')
                                         .then(() => location.reload());
+                                } else {
+                                    Swal.fire('ผิดพลาด!', data.message ||
+                                        'ไม่สามารถส่งข้อความได้', 'error');
                                 }
                             })
                             .catch(err => {

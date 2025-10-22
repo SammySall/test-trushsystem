@@ -10,22 +10,21 @@ class TrashRequestHistory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'receiver_name',
-        'status',
-        'file',
-        'reply_message',
-        'reply_date'
+        'trash_request_id',
+        'user_id',
+        'message',
+        'status_after'
     ];
-
 
     public function trashRequest()
     {
-        return $this->belongsTo(TrashRequest::class);
+        return $this->belongsTo(TrashRequest::class, 'trash_request_id');
     }
 
-    public function user()
+    // ✅ เปลี่ยนชื่อให้ชัดเจนว่า user คือ responder
+    public function responder()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
+

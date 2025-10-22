@@ -1,7 +1,7 @@
 @extends('layout.layout-request')
 @section('title', 'คำขอต่ออายุใบอนุญาต')
-@section('request-header-img', 'health-hazard-license')
-@section('request-header', 'คำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ')
+@section('request-header-img', 'market-establishment-license')
+@section('request-header', 'คำขอรับใบอนุญาตจัดตั้งตลาด')
 
 @section('request-content')
     <div class="list-group">
@@ -34,21 +34,17 @@
                     <input type="number" class="form-control" name="field_5" required>
                 </div>
             </div>
+            
 
             {{-- ข้อมูลที่อยู่ --}}
             <div class="col-md-3 " style="display: none">
                 <label class="form-label">ประเภท<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="type" value="health-hazard-license" required>
+                <input type="text" class="form-control" name="type" value="market-establishment-license" required>
             </div>
             <div class="row g-3 align-items-end mt-3">
                 <div class="col-md-3">
-                    <label class="form-label">สัญชาติ<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="field_6" required>
-                </div>
-                <div class="col-md-3">
                     <label for="name" class="form-label">เลขบัตรประชาชน<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="field_16" id="name" pattern="[0-9]{13}"
-                        minlength="11" maxlength="13" required>
+                    <input type="text" class="form-control" name="field_16" id="name" required>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">บ้านเลขที่<span class="text-danger">*</span></label>
@@ -58,13 +54,13 @@
                     <label for="alley" class="form-label">ตรอก/ซอย</label>
                     <input type="text" class="form-control" name="field_14" id="alley">
                 </div>
-            </div>
-
-            <div class="row g-3 mt-3">
                 <div class="col-md-3">
                     <label for="road" class="form-label">ถนน</label>
                     <input type="text" class="form-control" name="field_15" id="road">
                 </div>
+            </div>
+
+            <div class="row g-3 mt-3">
                 <div class="col-md-3">
                     <label class="form-label">หมู่ที่</label>
                     <input type="text" class="form-control" name="field_8">
@@ -92,53 +88,60 @@
             <div class="col-md-12 mt-3">
                 <div class="d-flex flex-wrap align-items-center">
                     <label class="form-label">
-                        ขอยื่นเรื่องต่อเจ้าพนักงานท้องถิ่น เพื่อขอรับ/ ขอต่อใบอนุญาตประกอบกิจการที่เป็นอันตรายต่อสุขภาพ
+                        ขอยื่นคำขอรับใบอนุญาตประกอบกิจการ
                         <span class="text-danger">*</span>
                     </label>
                     <div class="d-flex flex-wrap align-items-center">
                         <div class="form-check me-3">
-                            <input class="form-check-input" type="radio" name="addon[personal]" id="option1"
+                            <input class="form-check-input" type="radio" name="addon[option]" id="option1"
                                 value="individual">
-                            <label class="form-check-label" for="option1">ห้องเช่า</label>
+                            <label class="form-check-label" for="option1">ตลาดที่มีโครงสร้างอาคาร</label>
                         </div>
                         <div class="form-check me-3">
-                            <input class="form-check-input" type="radio" name="addon[personal]" id="option2"
+                            <input class="form-check-input" type="radio" name="addon[option]" id="option2"
                                 value="corporation">
-                            <label class="form-check-label" for="option2">โรงงาน</label>
+                            <label class="form-check-label" for="option2">ตลาดที่ไม่มีโครงสร้างอาคาร</label>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {{-- Individual fields --}}
-            <div id="individual-fields" class="row g-3 mt-2" style="display: none;">
-                <div class="col-md-3">
-                    <label class="form-label">ประเภท<span class="text-danger">*</span></label>
-                    <input type="text" name="addon[individual][type]" class="form-control">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">จำนวนห้องเช่า(ห้อง)<span class="text-danger">*</span></label>
-                    <input type="text" name="addon[individual][room_count]" class="form-control">
-                </div>
+            <div class="row g-3 mt-3">
                 <div class="col-md-4">
-                    <label class="form-label">บ้านเช่า(หลัง) <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="addon[individual][home_rent]">
+                    <label class="form-label">พื้นที่ประกอบการ(ตารางเมตร)</label>
+                    <input type="text" class="form-control" name="addon[area]" required>
                 </div>
-            </div>
-
-            {{-- Corporation fields --}}
-            <div id="corporation-fields" class="row g-3 mt-2" style="display: none;">
-                <div class="col-md-3">
-                    <label class="form-label">ประเภท<span class="text-danger">*</span></label>
-                    <input type="text" name="addon[corporation][type]" class="form-control">
+                <div class="col-md-2">
+                    <label class="form-label">บ้านเลขที่</label>
+                    <input type="text" class="form-control" name="addon[home_no]" required>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">จำนวนคนงาน(คน)<span class="text-danger">*</span></label>
-                    <input type="text" name="addon[corporation][worker_count]" class="form-control">
+                    <label for="alley" class="form-label">ตรอก/ซอย</label>
+                    <input type="text" class="form-control" name="addon[alley]" id="alley">
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">ใช้เครื่องจักรขนาด(แรงม้า) <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="addon[corporation][machine_power]">
+                <div class="col-md-3">
+                    <label for="road" class="form-label">ถนน</label>
+                    <input type="text" class="form-control" name="addon[road]" id="road">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">หมู่ที่</label>
+                    <input type="text" class="form-control" name="addon[village_no]">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">แขวง/ตำบล</label>
+                    <input type="text" class="form-control" name="addon[subdistrict]" value="ท่าข้าม" readonly required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">เขต/อำเภอ</label>
+                    <input type="text" class="form-control" name="addon[district]" value="บางปะกง" readonly required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">จังหวัด</label>
+                    <input type="text" class="form-control" name="addon[province]" value="ฉะเชิงเทรา" readonly required>
+                </div>
+                <div class="col-md-3">
+                    <label for="tel" class="form-label">เบอร์โทร</label>
+                    <input type="tel" class="form-control" name="addon[tel]" id="tel" pattern="[0-9]{10}"
+                        maxlength="10" required>
                 </div>
             </div>
 
@@ -152,7 +155,8 @@
 
                 <div class="form-check mb-2">
                     <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck1">
-                    <label class="form-check-label" for="fileCheck1">สำเนาบัตรประจำตัว</label>
+                    <label class="form-check-label"
+                        for="fileCheck1">สำเนาบัตรประจำตัวประชาชน/ข้าราชการ/พนักงานรัฐวิสาหกิจ</label>
                     <input type="file" name="files1[]" class="form-control file-input" multiple
                         accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
                 </div>
@@ -166,45 +170,31 @@
 
                 <div class="form-check mb-2">
                     <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck3">
-                    <label class="form-check-label" for="fileCheck3">ใบรับรองแพทย์ ไม่เกิน 6 เดือน</label>
+                    <label class="form-check-label" for="fileCheck3">สำเนาใบอนุญาตตามกฎหมายที่เกี่ยวข้อง</label>
                     <input type="file" name="files3[]" class="form-control file-input" multiple
                         accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
                 </div>
                 <div class="form-check mb-2">
                     <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck4">
-                    <label class="form-check-label" for="fileCheck4">หลักฐานการขออนุญาตตามกฎหมายอื่น ที่เกี่ยวเนื่อง
-                        ดังนี้</label>
+                    <label class="form-check-label" for="fileCheck4">สำเนาหนังสือรับรองการจดทะเบียนนิติบุคคล
+                        พร้อมสำเนาบัตรประจำตัวประชาชนของผู้แทนนิติ
+                        บุคคล (ในกรณีที่ผู้ขออนุญาตเป็นนิติบุคคล)</label>
                     <input type="file" name="files4[]" class="form-control file-input" multiple
                         accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
                 </div>
                 <div class="form-check mb-2">
                     <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck5">
-                    <label class="form-check-label" for="fileCheck5">ใบอนุญาตฉบับเก่าที่กำลังจะหมดอายุ หรือที่หมดอายุแล้ว
+                    <label class="form-check-label"
+                        for="fileCheck5">หนังสือมอบอำนาจในกรณีที่เจ้าของกิจการไม่มายื่นขอรับใบอนุญาตด้วยตนเอง
                     </label>
                     <input type="file" name="files5[]" class="form-control file-input" multiple
                         accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
                 </div>
                 <div class="form-check mb-2">
                     <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck6">
-                    <label class="form-check-label" for="fileCheck6">แบบรายการตรวจสอบตามหลักเกณฑ์
-                        และเงื่อนไขที่ผู้ขอออนุญาตจะต้องดำเนินการก่อนการพิจารณาออกใบอนุญาต ตามประกาศกระทรวงสาธารณสุข เรื่อง
-                        กำหนดประเภทหรือขนาดของกิจการและหลักเกณฑ์ วิธีการ และเงื่อนไขที่
-                        ผู้ขออนุญาตจะต้องดำเนินการก่อนการพิจารณาออกใบอนุญาต พ.ศ. 2561 </label>
+                    <label class="form-check-label" for="fileCheck6">อื่น ๆ ตามที่องค์การบริหารส่วนตำบลหนองโพธิ์กำหนด
+                    </label>
                     <input type="file" name="files6[]" class="form-control file-input" multiple
-                        accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck7">
-                    <label class="form-check-label" for="fileCheck7">แบบสรุปผลการรับฟังความคิดเห็นของประชาชนที่เกี่ยวข้อง
-                        ตามประกาศกระทรวงสาธารณสุข เรื่องหลักเกณฑ์ในการรับฟังความคิดเห็นของประชาชนที่เกี่ยวข้อง
-                        พ.ศ.2561</label>
-                    <input type="file" name="files7[]" class="form-control file-input" multiple
-                        accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck8">
-                    <label class="form-check-label" for="fileCheck8">แผนที่ตั้งสถานประกอบกิจการ</label>
-                    <input type="file" name="files8[]" class="form-control file-input" multiple
                         accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
                 </div>
             </div>
@@ -215,8 +205,9 @@
         </form>
     </div>
 
-    {{-- SweetAlert2 --}}
+    {{-- ✅ SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @if (session('success'))
         <script>
             Swal.fire({
@@ -231,43 +222,38 @@
         </script>
     @endif
 
+    {{-- ✅ Checkbox toggle + smooth animation --}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const individualRadio = document.getElementById("option1");
             const corpRadio = document.getElementById("option2");
-            const individualFields = document.getElementById("individual-fields");
-            const corporationFields = document.getElementById("corporation-fields");
 
-            function toggleFields() {
-                if (individualRadio.checked) {
-                    individualFields.style.display = "flex";
-                    corporationFields.style.display = "none";
-                } else if (corpRadio.checked) {
-                    individualFields.style.display = "none";
-                    corporationFields.style.display = "flex";
-                } else {
-                    individualFields.style.display = "none";
-                    corporationFields.style.display = "none";
-                }
-            }
+            // ถ้ามีฟังก์ชัน toggleFields() อยู่แล้ว ก็สามารถคงไว้ตรงนี้
+            function toggleFields() {}
 
-            toggleFields();
-            individualRadio.addEventListener("change", toggleFields);
-            corpRadio.addEventListener("change", toggleFields);
-
-            // Checkbox ไฟล์แนบ
+            // === ฟังก์ชันจัดการ checkbox ไฟล์แนบ ===
             const checkboxes = document.querySelectorAll(".file-checkbox");
             checkboxes.forEach(cb => {
                 cb.addEventListener("change", function() {
-                    const fileInput = this.nextElementSibling.nextElementSibling;
+                    const parent = this.closest(".form-check");
+                    const fileInput = parent.querySelector(".file-input");
+
                     if (this.checked) {
                         fileInput.style.display = "block";
+                        fileInput.style.opacity = 0;
+                        fileInput.style.transition = "opacity 0.3s ease";
+                        requestAnimationFrame(() => fileInput.style.opacity = 1);
                     } else {
-                        fileInput.style.display = "none";
-                        fileInput.value = "";
+                        fileInput.style.opacity = 0;
+                        fileInput.addEventListener("transitionend", function hide() {
+                            fileInput.style.display = "none";
+                            fileInput.value = "";
+                            fileInput.removeEventListener("transitionend", hide);
+                        });
                     }
                 });
             });
         });
     </script>
+
 @endsection
