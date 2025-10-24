@@ -2,95 +2,99 @@
 @section('title', 'ข้อมูลคำขอถังขยะ')
 
 @section('content')
-    <h3 class="text-center px-2">แบบคำขอรับการประเมินค่าธรรมเนียม และขอรับถังขยะมูลฝอยทั่วไป</h3>
-    <h4 class="text-center px-2">ตารางแสดงข้อมูลฟอร์มที่ส่งเข้ามา</h4>
+        <h3 class="text-center px-2">แบบคำขอรับการประเมินค่าธรรมเนียม และขอรับถังขยะมูลฝอยทั่วไป</h3>
+        <h4 class="text-center px-2">ตารางแสดงข้อมูลฟอร์มที่ส่งเข้ามา</h4>
+    <div class="container p-5">
 
-    {{-- ฟิลเตอร์ --}}
-    <div id="data_table_wrapper" class="mt-3">
-        <div class="row mb-2">
-            <div class="col-sm-12 col-md-6">
-                <label class="d-flex align-items-center">
-                    <span class="me-1">แสดง</span>
-                    <select id="data_table_length" class="form-select form-select-sm me-1" style="width:auto;">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="-1">ทั้งหมด</option>
-                    </select>
-                    <span>รายการ</span>
-                </label>
+        {{-- ฟิลเตอร์ --}}
+        <div id="data_table_wrapper" class="mt-3">
+            <div class="row mb-2">
+                <div class="col-sm-12 col-md-6">
+                    <label class="d-flex align-items-center">
+                        <span class="me-1">แสดง</span>
+                        <select id="data_table_length" class="form-select form-select-sm me-1" style="width:auto;">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="-1">ทั้งหมด</option>
+                        </select>
+                        <span>รายการ</span>
+                    </label>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <label class="d-flex align-items-center justify-content-end">
+                        <span class="me-2">ค้นหา :</span>
+                        <input type="search" id="data_table_search" class="form-control form-control-sm"
+                            style="width:auto;">
+                    </label>
+                </div>
             </div>
-            <div class="col-sm-12 col-md-6">
-                <label class="d-flex align-items-center justify-content-end">
-                    <span class="me-2">ค้นหา :</span>
-                    <input type="search" id="data_table_search" class="form-control form-control-sm" style="width:auto;">
-                </label>
-            </div>
-        </div>
 
-        {{-- ตารางข้อมูล --}}
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped text-center align-middle" id="data_table">
-                <thead>
-                    <tr>
-                        <th>วันที่ส่ง</th>
-                        <th>ชื่อผู้ส่งฟอร์ม</th>
-                        <th>ผู้กดรับฟอร์ม</th>
-                        <th>สถานะ</th>
-                        <th>จัดการ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($trashRequests as $item)
+            {{-- ตารางข้อมูล --}}
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped text-center align-middle" id="data_table">
+                    <thead>
                         <tr>
-                            <td>{{ $item->created_at->format('d/m/Y') }}</td>
-                            <td>{{ $item->fullname ?? '-' }}</td>
-                            <td>{{ $item->receiver_name ?? '-' }}</td>
-                            <td>
-                                @if ($item->status === 'done')
-                                    <span style="font-size: 20px; color:blue;"><i class="bi bi-check-circle"></i></span>
-                                @elseif($item->status === 'รอรับเรื่อง')
-                                    <span style="font-size: 20px; color:orange;"><i
-                                            class="bi bi-hourglass-split"></i></span>
-                                @else
-                                    <span style="font-size: 20px; color:gray;"><i class="bi bi-dash-circle"></i></span>
-                                @endif
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-sm view-file"
-                                    data-row='@json($item)'>
-                                    <i class="bi bi-filetype-pdf"></i>
-                                </button>
-                                <button type="button" class="btn btn-success btn-sm reply-btn"
-                                    data-id="{{ $item->id }}" data-name="{{ $item->fullname }}">
-                                    <i class="bi bi-reply"></i>
-                                </button>
-
-                            </td>
+                            <th>วันที่ส่ง</th>
+                            <th>ชื่อผู้ส่งฟอร์ม</th>
+                            <th>ผู้กดรับฟอร์ม</th>
+                            <th>สถานะ</th>
+                            <th>จัดการ</th>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5">ไม่มีข้อมูลฟอร์ม</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @forelse($trashRequests as $item)
+                            <tr>
+                                <td>{{ $item->created_at->format('d/m/Y') }}</td>
+                                <td>{{ $item->fullname ?? '-' }}</td>
+                                <td>{{ $item->receiver_name ?? '-' }}</td>
+                                <td>
+                                    @if ($item->status === 'done')
+                                        <span style="font-size: 20px; color:blue;"><i class="bi bi-check-circle"></i></span>
+                                    @elseif($item->status === 'รอรับเรื่อง')
+                                        <span style="font-size: 20px; color:orange;"><i
+                                                class="bi bi-hourglass-split"></i></span>
+                                    @else
+                                        <span style="font-size: 20px; color:gray;"><i class="bi bi-dash-circle"></i></span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm view-file"
+                                        data-row='@json($item)'>
+                                        <i class="bi bi-filetype-pdf"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-success btn-sm reply-btn"
+                                        data-id="{{ $item->id }}" data-name="{{ $item->fullname }}">
+                                        <i class="bi bi-reply"></i>
+                                    </button>
 
-        {{-- pagination --}}
-        <div class="row">
-            <div class="col-sm-12 col-md-5">
-                <div>แสดง 1 ถึง 2 จาก 2 รายการ</div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5">ไม่มีข้อมูลฟอร์ม</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
-            <div class="col-sm-12 col-md-7 d-flex justify-content-end">
-                <ul class="pagination">
-                    <li class="paginate_button page-item previous disabled"><a class="page-link">ก่อนหน้า</a></li>
-                    <li class="paginate_button page-item active"><a href="#" class="page-link">1</a></li>
-                    <li class="paginate_button page-item next disabled"><a class="page-link">ถัดไป</a></li>
-                </ul>
+
+            {{-- pagination --}}
+            <div class="row">
+                <div class="col-sm-12 col-md-5">
+                    <div>แสดง 1 ถึง 2 จาก 2 รายการ</div>
+                </div>
+                <div class="col-sm-12 col-md-7 d-flex justify-content-end">
+                    <ul class="pagination">
+                        <li class="paginate_button page-item previous disabled"><a class="page-link">ก่อนหน้า</a></li>
+                        <li class="paginate_button page-item active"><a href="#" class="page-link">1</a></li>
+                        <li class="paginate_button page-item next disabled"><a class="page-link">ถัดไป</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
+
 
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -127,14 +131,22 @@
 
                     let fileLinks = '';
                     if (filesArray.length > 0) {
-                        filesArray.forEach(file => {
+                        filesArray.forEach((file, index) => {
                             const fileUrl = `{{ asset('storage') }}/${file}`;
-                            fileLinks +=
-                                `<div>ไฟล์แนบ: <a href="${fileUrl}" target="_blank">${file}</a></div>`;
+                            const fileNumber = index + 1; // เริ่มนับจาก 1
+
+                            if (fileLinks.length === 0) {
+                                fileLinks +=
+                                    `<div>ไฟล์แนบ ${fileNumber}: <a href="${fileUrl}" target="_blank">${file}</a></div>`;
+                            } else {
+                                fileLinks +=
+                                    `<div>${fileNumber}: <a href="${fileUrl}" target="_blank">${file}</a></div>`;
+                            }
                         });
                     } else {
                         fileLinks = '<div>ไม่มีไฟล์แนบ</div>';
                     }
+
 
                     const htmlContent = `
                     <div style="text-align:left; font-size:16px; line-height:1.5;">
@@ -212,7 +224,7 @@
                     const sender = tr.children[1]?.textContent || '';
                     const requestId = btn.dataset.id;
                     const rowData = JSON.parse(tr.querySelector('.view-file').dataset
-                    .row); // หรือใช้ data-row ของปุ่ม PDF
+                        .row); // หรือใช้ data-row ของปุ่ม PDF
                     const replies = rowData.histories ?? [];
 
                     let tableRows = '';

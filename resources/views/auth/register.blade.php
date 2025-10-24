@@ -37,7 +37,7 @@
                     <!-- แถวแรก -->
                     <div class="row">
                         <div class="col-12 col-md-6">
-                            <label for="email" class="form-label">อีเมล</label>
+                            <label for="email" class="form-label">อีเมล(username)</label>
                             <input type="email" name="email" id="email" class="form-control" required>
                         </div>
                         <div class="col-12 col-md-6"></div>

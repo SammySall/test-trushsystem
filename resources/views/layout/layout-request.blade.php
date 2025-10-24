@@ -18,6 +18,15 @@
                         <a href="#">กองช่าง</a>
                         <ul class="submenu">
                             <li class="has-sub-sub">
+                                <a href="#">คำขอใบอนุญาตก่อสร้าง</a>
+                                <ul class="submenu-sub">
+                                    <li><a href="/user/request/new_license_engineer" class="menu-link"
+                                            data-target="form-trash">แบบฟอร์มคำร้อง</a></li>
+                                    <li><a href="/user/request/history_request/new-license-engineer" class="menu-link"
+                                            data-target="history-trash">ประวัติการส่งคำร้อง</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-sub-sub">
                                 <a href="#">คำขอต่ออายุใบอนุญาตก่อสร้าง ดัดแปลง รื้อถอน หรือเคลื่อนย้ายอาคาร</a>
                                 <ul class="submenu-sub">
                                     <li><a href="/user/request/renew_license_engineer" class="menu-link"

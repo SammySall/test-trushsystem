@@ -52,21 +52,39 @@
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-start"
                         data-bs-toggle="collapse" data-bs-target="#engineering-collapse" aria-expanded="false">
+                        คำขอใบอนุญาตก่อสร้าง
+                    </button>
+                    <div class="collapse" id="engineering-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded">รับเรื่อง</a></li>
+                            <li><a href="#" class="link-dark rounded">การนัดหมาย</a></li>
+                            <li><a href="/admin/request/engineering/showdata/new-license-engineer"
+                                    class="link-dark rounded">ออกสำรวจ</a></li>
+                            <li><a href="/admin/request/engineering/showdata/new-license-engineer"
+                                    class="link-dark rounded">ชำระเงิน</a></li>
+                            <li><a href="/admin/request/engineering/showdata/new-license-engineer"
+                                    class="link-dark rounded">ออกใบอนุญาต</a></li>
+                            <li><a href="/admin/request/engineering/showdata/new-license-engineer"
+                                    class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-start"
+                        data-bs-toggle="collapse" data-bs-target="#engineering-collapse" aria-expanded="false">
                         คำขอต่ออายุใบอนุญาตก่อสร้างฯ
                     </button>
                     <div class="collapse" id="engineering-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="#"
-                                    class="link-dark rounded">รับเรื่อง</a></li>
-                            <li><a href="#"
-                                    class="link-dark rounded">การนัดหมาย</a></li>
-                            <li><a href="/user/engineering/history/renew_license_engineer"
+                            <li><a href="#" class="link-dark rounded">รับเรื่อง</a></li>
+                            <li><a href="#" class="link-dark rounded">การนัดหมาย</a></li>
+                            <li><a href="/admin/request/engineering/showdata/renew-licenseengineer"
                                     class="link-dark rounded">ออกสำรวจ</a></li>
-                            <li><a href="/user/engineering/history/renew_license_engineer"
+                            <li><a href="/admin/request/engineering/showdata/renew_license_engineer"
                                     class="link-dark rounded">ชำระเงิน</a></li>
-                            <li><a href="/user/engineering/history/renew_license_engineer"
+                            <li><a href="/admin/request/engineering/showdata/renew_license_engineer"
                                     class="link-dark rounded">ออกใบอนุญาต</a></li>
-                            <li><a href="/user/engineering/history/renew_license_engineer"
+                            <li><a href="/admin/request/engineering/showdata/renew_license_engineer"
                                     class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>
                         </ul>
                     </div>
@@ -112,7 +130,7 @@
                                     class="link-dark rounded">ออกสำรวจ</a></li>
                             <li><a href="/admin/request/public-health/confirm_payment/market-establishment-license"
                                     class="link-dark rounded">ชำระเงิน</a></li>
-                            <li><a href="/user/engineering/history/renew_license_engineer"
+                            <li><a href="//admin/request/public-health/Issue-a-license/market-establishment-license"
                                     class="link-dark rounded">ออกใบอนุญาต</a></li>
                             <li><a href="/user/engineering/history/renew_license_engineer"
                                     class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>
@@ -135,7 +153,7 @@
                                     class="link-dark rounded">ออกสำรวจ</a></li>
                             <li><a href="/admin/request/public-health/confirm_payment/food-sales-license"
                                     class="link-dark rounded">ชำระเงิน</a></li>
-                            <li><a href="/user/engineering/history/renew_license_engineer"
+                            <li><a href="/admin/request/public-health/Issue-a-license/food-sales-license"
                                     class="link-dark rounded">ออกใบอนุญาต</a></li>
                             <li><a href="/user/engineering/history/renew_license_engineer"
                                     class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>
@@ -158,7 +176,7 @@
                                     class="link-dark rounded">ออกสำรวจ</a></li>
                             <li><a href="/admin/request/public-health/confirm_payment/health-hazard-license"
                                     class="link-dark rounded">ชำระเงิน</a></li>
-                            <li><a href="/user/engineering/history/renew_license_engineer"
+                            <li><a href="/admin/request/public-health/Issue-a-license/health-hazard-license"
                                     class="link-dark rounded">ออกใบอนุญาต</a></li>
                             <li><a href="/user/engineering/history/renew_license_engineer"
                                     class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>
@@ -181,7 +199,7 @@
                                     class="link-dark rounded">ออกสำรวจ</a></li>
                             <li><a href="/admin/request/public-health/confirm_payment/disposal-business-license"
                                     class="link-dark rounded">ชำระเงิน</a></li>
-                            <li><a href="/user/engineering/history/renew_license_engineer"
+                            <li><a href="/admin/request/public-health/Issue-a-license/disposal-business-license"
                                     class="link-dark rounded">ออกใบอนุญาต</a></li>
                             <li><a href="/user/engineering/history/renew_license_engineer"
                                     class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>

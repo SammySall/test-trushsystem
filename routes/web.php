@@ -56,6 +56,9 @@ Route::get('/user/request/food_sales_license', function () {
 Route::get('/user/request/waste_disposal_business_license', function () {
     return view('user.form_request.waste-disposal-business-license');
 });
+Route::get('/user/request/new_license_engineer', function () {
+    return view('user.form_request.new-license-engineer');
+});
 
 Route::middleware('auth')->get('/user/request/history_request/{type}', [TrashRequestController::class, 'historyRequest'])
     ->name('user.history-request');
@@ -111,6 +114,8 @@ Route::post('/admin/trash/accept', [TrashRequestController::class, 'accept'])->n
 Route::get('/admin/trash/pdf/{id}', [TrashRequestController::class, 'showPdf'])->name('admin_trash.show_pdf');
 Route::get('/admin/request/public-health/appointment/{type}', [TrashRequestController::class, 'appointmentData'])
     ->name('admin.public-health.appointment');
+Route::get('/admin/request/engineering/appointment/{type}', [TrashRequestController::class, 'appointmentDataEngineer'])
+    ->name('admin.engineer.appointment');
 Route::get('/admin/request/public-health/appointment/{type}/{id}', [TrashRequestController::class, 'appointmentDetail'])
     ->name('admin.public-health.appointment.detail');
 Route::post('/admin/request/public-health/appointment/{id}', [TrashRequestController::class, 'appointmentStore'])
@@ -126,6 +131,12 @@ Route::post('/user/history-request/upload-slip/{id}', [TrashRequestController::c
     ->name('user.history.upload_slip')
     ->middleware('auth');
 
+Route::get('/admin/request/public-health/Issue-a-license/{type}', [TrashRequestController::class, 'issueLicense'])
+    ->name('admin.public-health.issue-license');
+Route::post('/admin/request/public-health/upload-license/{id}', [TrashRequestController::class, 'uploadLicense'])
+    ->name('admin.request.upload_license');
+
+
 Route::get('/admin/request/public-health/confirm_payment/{type}', 
     [TrashRequestController::class, 'confirmPaymentRequest'])
     ->name('admin.public-health.confirm_payment');
@@ -135,6 +146,10 @@ Route::post('/admin/request/public-health/confirm_payment/{id}',
 
 Route::get('/admin/request/public-health/showdata/{type}', [TrashRequestController::class, 'showDataRequestHealth'])->name('admin.public-health.showdata');
 Route::get('/admin/request/public-health/showdata/{type}/{id}', [TrashRequestController::class, 'showDetail'])
+    ->name('admin_request.detail');
+    
+Route::get('/admin/request/engineering/showdata/{type}', [TrashRequestController::class, 'showDataRequestEngineer'])->name('admin.public-health.showdata');
+Route::get('/admin/request/engineering/showdata/{type}/{id}', [TrashRequestController::class, 'showDetail'])
     ->name('admin_request.detail');
 
 Route::get('/admin/trash_can_installation', [TrashLocationController::class, 'index']);

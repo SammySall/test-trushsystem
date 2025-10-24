@@ -1,7 +1,7 @@
 @extends('layout.layout-request')
-@section('title', 'คำขอต่ออายุใบอนุญาต')
+@section('title', 'คำขอใบอนุญาตก่อสร้าง')
 @section('request-header-img', 'renew-license-engineer')
-@section('request-header', 'คำขอต่ออายุใบอนุญาตก่อสร้าง ดัดแปลง รื้อถอน หรือเคลื่อนย้ายอาคาร')
+@section('request-header', 'คำขอใบอนุญาติก่อสร้าง')
 
 @section('request-content')
     <div class="list-group">
@@ -55,7 +55,7 @@
 
                 <div class="col-md-4" id="corporation-fields1" style="display: none;">
                     <div>
-                        <label class="form-label">ประเภท</label>
+                        <label class="form-label">ประเภท<span class="text-danger">*</span></label>
                         <input type="text" name="addon[corporation][type]" class="form-control">
                     </div>
                 </div>
@@ -63,7 +63,7 @@
 
             <div class="col-md-3 " style="display: none">
                 <label class="form-label">ประเภท<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="type" value="renew-license-engineer" required>
+                <input type="text" class="form-control" name="type" value="new-license-engineer" required>
             </div>
 
             {{-- ✅ ถ้าเลือก "นิติบุคคล" --}}

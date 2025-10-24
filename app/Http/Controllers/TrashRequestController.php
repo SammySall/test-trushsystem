@@ -82,14 +82,15 @@ class TrashRequestController extends Controller
 
     public function showData()
     {
-        $trashRequests = TrashRequest::with('receiver:id,name', 'files')
+        $trashRequests = TrashRequest::with(['receiver:id,name', 'files'])
             ->where('type', 'trash-request')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
 
         $histories = TrashRequestHistory::with('responder:id,name')->get();
 
-        $trashRequests->map(function ($request) use ($histories) {
+        // รวมข้อมูลประวัติและรูปภาพ
+        $trashRequests->getCollection()->transform(function ($request) use ($histories) {
             $requestHistories = $histories->where('trash_request_id', $request->id)
                 ->map(function ($item) {
                     return [
@@ -100,6 +101,8 @@ class TrashRequestController extends Controller
                 })->values();
 
             $request->histories = $requestHistories;
+            $request->picture_path = $request->files->pluck('file_path')->toArray();
+
             return $request;
         });
 
@@ -128,6 +131,30 @@ class TrashRequestController extends Controller
             });
 
         return view('admin_request.public-health.showdata', compact('trashRequests', 'histories', 'type'));
+    }
+
+    public function showDataRequestEngineer($type)
+    {
+        $trashRequests = TrashRequest::with('receiver:id,name', 'files')
+            ->where('type', $type)
+            ->where('status', 'รอรับเรื่อง')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $histories = TrashRequestHistory::with('responder:id,name')
+            ->get()
+            ->groupBy('trash_request_id')
+            ->map(function ($items) {
+                return $items->map(function ($item) {
+                    return [
+                        'responder_name' => $item->responder->name ?? '-',
+                        'created_at' => $item->created_at->format('Y-m-d H:i:s'),
+                        'message' => $item->message,
+                    ];
+                });
+            });
+
+        return view('admin_request.engineering.showdata', compact('trashRequests', 'histories', 'type'));
     }
 
     public function reply(Request $request)
@@ -233,7 +260,6 @@ class TrashRequestController extends Controller
     {
         $trashRequest = TrashRequest::findOrFail($id);
         $addon = $trashRequest->addon ? json_decode($trashRequest->addon, true) : null;
-
         // ส่ง $type ไปด้วยสำหรับ view
         return view('admin_request.public-health.detail.' . $type, compact('trashRequest', 'addon', 'type'));
     }
@@ -276,6 +302,31 @@ class TrashRequestController extends Controller
             });
 
         return view('admin_request.public-health.appointment', compact('trashRequests', 'histories', 'type'));
+    }
+
+public function appointmentDataEngineer($type)
+    {
+        // ดึงข้อมูลที่รอการนัดหมาย
+        $trashRequests = TrashRequest::with('receiver:id,name', 'files')
+            ->where('type', $type)
+            ->whereIn('status', ['รอการนัดหมาย', 'รอยืนยันนัดหมาย'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $histories = TrashRequestHistory::with('responder:id,name')
+            ->get()
+            ->groupBy('trash_request_id')
+            ->map(function ($items) {
+                return $items->map(function ($item) {
+                    return [
+                        'responder_name' => $item->responder->name ?? '-',
+                        'created_at' => $item->created_at->format('Y-m-d H:i:s'),
+                        'message' => $item->message,
+                    ];
+                });
+            });
+
+        return view('admin_request.engineering.appointment', compact('trashRequests', 'histories', 'type'));
     }
 
     public function appointmentDetail($type, $id)
@@ -477,6 +528,63 @@ class TrashRequestController extends Controller
         $trashRequest->save();
 
         return response()->json(['success' => true, 'message' => 'อัพเดทสถานะเรียบร้อย']);
+    }
+
+
+    public function issueLicense($type)
+    {
+        // ดึงคำร้องที่ status เป็น 'รอออกใบอนุญาต' หรือ 'เสร็จสิ้น'
+        $trashRequests = TrashRequest::with('receiver:id,name', 'histories')
+            ->where('type', $type)
+            ->whereIn('status', ['รอออกใบอนุญาต', 'เสร็จสิ้น'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // เพิ่ม field วันที่อัปเดตล่าสุดจากประวัติ
+        $trashRequests->transform(function ($request) {
+            $latestHistory = $request->histories->sortByDesc('created_at')->first();
+            $request->latest_update = $latestHistory ? $latestHistory->created_at->format('d/m/Y H:i') : '-';
+            return $request;
+        });
+
+        return view('admin_request.public-health.issue-a-license', compact('trashRequests', 'type'));
+    }
+
+
+    public function uploadLicense(Request $request, $id)
+    {
+        $request->validate([
+            'license_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ]);
+
+        $trashRequest = TrashRequest::findOrFail($id);
+
+        $file = $request->file('license_file');
+        $filename = time().'_'.$file->getClientOriginalName();
+        $path = $file->storeAs('licenses', $filename, 'public');
+
+        // บันทึกไฟล์ลง addon
+        $addon = $trashRequest->addon ? json_decode($trashRequest->addon, true) : [];
+        $addon['license'] = [
+            'file_path' => $path,
+            'uploaded_at' => now(),
+            'uploaded_by' => auth()->id(),
+        ];
+
+        // อัปเดตสถานะคำร้อง
+        $trashRequest->status = 'เสร็จสิ้น';
+        $trashRequest->addon = json_encode($addon, JSON_UNESCAPED_UNICODE);
+        $trashRequest->save();
+
+        // เพิ่มประวัติการอัปเดตสถานะ
+        TrashRequestHistory::create([
+            'trash_request_id' => $trashRequest->id,
+            'user_id' => auth()->id(),
+            'message' => 'ออกใบอนุญาตและอัปโหลดไฟล์เรียบร้อย',
+            'status_after' => $trashRequest->status
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'อัปโหลดใบอนุญาตเรียบร้อย']);
     }
 
 

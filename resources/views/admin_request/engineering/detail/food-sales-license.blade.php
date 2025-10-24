@@ -1,8 +1,8 @@
-@extends('layout.layout-request')
+@extends('layout.layout-admin-request')
 @section('title', 'ใบอนุญาตสถานที่จำหน่ายอาหาร')
 
-@section('request-content')
-    <h4 class="header-form-name my-2 mx-4">
+@section('content')
+    <h4 class="text-center my-2 mx-4">
         รายละเอียดคำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ
     </h4>
 
@@ -137,7 +137,7 @@
                 <label class="form-label">
                     ประเภทใบอนุญาตหรือหนังสือรับรอง
                 </label>
-                <select name="option" id="option" class="form-select" disabled>
+                <select name="option" id="option" class="form-select" readonly>
                     <option {{ ($addon['option'] ?? '') == '1' ? 'checked' : '' }}>ใบอนุญาตจัดตั้งสถานที่จำหน่ายอาหาร
                         (สอ.4)</option>
                     <option {{ ($addon['option'] ?? '') == '2' ? 'checked' : '' }}>ใบอนุญาตจัดตั้งสถานที่สะสมอาหาร (สอ.5)
@@ -296,23 +296,86 @@
                     <span>-</span>
                 @endif
             </div>
-        </div>
+            {{-- แสดงเฉพาะถ้า status = รอรับรอง --}}
+            @if ($trashRequest->status === 'รอรับเรื่อง')
+                <div class="mb-3">
+                    <label class="form-label d-block">ผลการตรวจสอบ</label>
 
-        {{-- ✅ SweetAlert2 --}}
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inspection_result" id="pass"
+                            value="pass">
+                        <label class="form-check-label" for="pass">ผ่าน</label>
+                    </div>
 
-        @if (session('success'))
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inspection_result" id="not-pass"
+                            value="not-pass">
+                        <label class="form-check-label" for="not-pass">ไม่ผ่าน</label>
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="note" class="form-label">หมายเหตุ / ข้อเสนอแนะ</label>
+                        <textarea name="note" id="note" rows="3" class="form-control" placeholder="กรอกหมายเหตุที่นี่..."></textarea>
+                    </div>
+
+                    <div class="mt-3">
+                        <button id="sendReply" class="btn btn-primary">บันทึกข้อมูล</button>
+                    </div>
+                </div>
+            @endif
+
+
+
+            {{-- ใส่ใต้เนื้อหา view ของคุณ --}}
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
             <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'บันทึกสำเร็จ!',
-                    text: 'ทำการร้องขอเสร็จสิ้นเรียบร้อยแล้ว',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#3085d6'
-                }).then(() => {
-                    window.location.href = "{{ url('/') }}";
+                const requestId = {{ $trashRequest->id }};
+                const userId = {{ auth()->user()->id ?? 'null' }};
+
+                document.getElementById('sendReply').addEventListener('click', () => {
+                    const note = document.getElementById('note').value;
+                    const result = document.querySelector('input[name="inspection_result"]:checked');
+
+                    if (!result) {
+                        Swal.fire('แจ้งเตือน', 'กรุณาเลือกผลการตรวจสอบ', 'warning');
+                        return;
+                    }
+
+                    if (result.value === 'not-pass' && note.trim() === '') {
+                        Swal.fire('แจ้งเตือน', 'กรุณากรอกหมายเหตุสำหรับสถานะไม่ผ่าน', 'warning');
+                        return;
+                    }
+
+                    fetch(`{{ route('admin_trash.accept') }}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                request_id: requestId,
+                                user_id: userId,
+                                inspection_result: result.value,
+                                note: note
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('สำเร็จ!', 'บันทึกข้อมูลเรียบร้อยแล้ว', 'success')
+                                    .then(() => {
+                                        const type = "{{ $trashRequest->type }}"; // เอา type จาก request ปัจจุบัน
+                                        window.location.href = `/admin/request/public-health/showdata/${type}`;
+                                    });
+                            } else {
+                                Swal.fire('ผิดพลาด!', data.message || 'ไม่สามารถบันทึกได้', 'error');
+                            }
+                        })
+                        .catch(err => {
+                            Swal.fire('ผิดพลาด!', 'เกิดข้อผิดพลาด กรุณาลองใหม่', 'error');
+                            console.error(err);
+                        });
                 });
             </script>
-        @endif
-
-    @endsection
+        @endsection

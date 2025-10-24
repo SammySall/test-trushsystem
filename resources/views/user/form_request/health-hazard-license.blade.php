@@ -48,7 +48,7 @@
                 <div class="col-md-3">
                     <label for="name" class="form-label">เลขบัตรประชาชน<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="field_16" id="name" pattern="[0-9]{13}"
-                        minlength="11" maxlength="13" required>
+                        minlength="13" maxlength="13" required>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">บ้านเลขที่<span class="text-danger">*</span></label>

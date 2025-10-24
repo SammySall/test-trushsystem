@@ -1,0 +1,57 @@
+.body-bg {
+    background-image: url("../img/trash-system/Body-BG.png");
+    background-size: cover;
+    background-position: bottom;
+    min-height: 185px;
+    display: flex;
+}
+
+.sidebar-bg {
+    background-image: url("../img/trash-system/Sidebar.png");
+}
+
+.content-trash-bg {
+    background-size: cover;
+    background-position: center;
+    min-height: 185px;
+}
+
+.complete-bg-img {
+    background-image: url('../img/trash-system/3.png');
+    padding: 1rem;
+    color: white;
+    height: 40vh; /* ปรับความสูงตามต้องการ */
+    display: flex;
+    flex-direction: column;
+    justify-content: end; /* จัดเนื้อหากลางแนวตั้ง */
+}
+
+.missed-bg-img {
+    background-image: url('../img/trash-system/2.png');
+    padding: 1rem;
+    color: white;
+    height: 40vh; /* ปรับความสูงตามต้องการ */
+    display: flex;
+    flex-direction: column;
+    justify-content: end; /* จัดเนื้อหากลางแนวตั้ง */
+}
+
+.wait-bg-img {
+    background-image: url('../img/trash-system/1.png');
+    padding: 1rem;
+    color: white;
+    height: 40vh; /* ปรับความสูงตามต้องการ */
+    display: flex;
+    flex-direction: column;
+    justify-content: end; /* จัดเนื้อหากลางแนวตั้ง */
+}
+
+.text-title-dashboard-bg{
+    background-color: white;
+    color: black;
+}
+
+.text-number-dashboard{
+    font-size: 4rem;
+}
+

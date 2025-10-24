@@ -28,7 +28,7 @@
                 <div class="mb-3 text-start">
                     <div class="input-group">
                         <label for="username" class="input-group-text "><i class="bi bi-person"></i></label>
-                        <input type="text" name="username" class="form-control" placeholder="ชื่อผู้ใช้งาน"
+                        <input type="text" name="username" class="form-control" placeholder="อีเมล"
                             id='username' required>
                     </div>
                 </div>

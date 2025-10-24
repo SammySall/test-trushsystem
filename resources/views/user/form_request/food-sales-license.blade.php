@@ -91,18 +91,16 @@
                     สถานที่จัดงาน
                 </label>
                 <div class="col-md-3">
-                    <label for="tel" class="form-label"> ประจำปีพ.ศ
-                        <span class="text-danger">*</span></label>
-                    <input type="number" class="form-control" name="addon[year]" placeholder="YYYY" required>
+                    <label for="tel" class="form-label"> ประจำปีพ.ศ</label>
+                    <input type="number" class="form-control" name="addon[year]" placeholder="YYYY">
                 </div>
                 <div class="col-md-3">
-                    <label for="tel" class="form-label"> ใช้ชื่อสถานที่ว่า
-                        <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="addon[name]"required>
+                    <label for="tel" class="form-label"> ใช้ชื่อสถานที่ว่า</label>
+                    <input type="text" class="form-control" name="addon[name]">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">บ้านเลขที่<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="addon[house_no]" required>
+                    <label class="form-label">บ้านเลขที่</label>
+                    <input type="text" class="form-control" name="addon[house_no]">
                 </div>
                 <div class="col-md-3">
                     <label for="alley" class="form-label">ตรอก/ซอย</label>
@@ -117,23 +115,22 @@
                     <input type="text" class="form-control" name="addon[village_no]">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">แขวง/ตำบล<span class="text-danger">*</span></label>
+                    <label class="form-label">แขวง/ตำบล</label>
                     <input type="text" class="form-control" name="addon[subdistrict]" value="ท่าข้าม" readonly
-                        required>
+                        >
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">เขต/อำเภอ<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="addon[district]" value="บางปะกง" readonly required>
+                    <label class="form-label">เขต/อำเภอ</label>
+                    <input type="text" class="form-control" name="addon[district]" value="บางปะกง" readonly >
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">จังหวัด<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="addon[province]" value="ฉะเชิงเทรา" readonly
-                        required>
+                    <label class="form-label">จังหวัด</label>
+                    <input type="text" class="form-control" name="addon[province]" value="ฉะเชิงเทรา" readonly>
                 </div>
                 <div class="col-md-3">
-                    <label for="tel" class="form-label">เบอร์โทร<span class="text-danger">*</span></label>
+                    <label for="tel" class="form-label">เบอร์โทร</label>
                     <input type="tel" class="form-control" name="addon[tel]" id="tel" pattern="[0-9]{10}"
-                        maxlength="10" required>
+                        maxlength="10">
                 </div>
             </div>
 
@@ -149,7 +146,7 @@
                         ประเภทใบอนุญาตหรือหนังสือรับรอง
                         <span class="text-danger">*</span>
                     </label>
-                    <select name="addon[option]" id="option" class="form-select" required>
+                    <select name="addon[option]" id="option" class="form-select">
                         <option value="">-- โปรดเลือกประเภท --</option>
                         <option value="1">ใบอนุญาตจัดตั้งสถานที่จำหน่ายอาหาร (สอ.4)</option>
                         <option value="2">ใบอนุญาตจัดตั้งสถานที่สะสมอาหาร (สอ.5)</option>
@@ -160,7 +157,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">พื้นที่ประกอบการ(ตารางเมตร)</label>
-                    <input type="text" class="form-control" name="addon[area]" required>
+                    <input type="text" class="form-control" name="addon[area]">
                 </div>
             </div>
 

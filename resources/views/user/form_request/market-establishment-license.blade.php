@@ -34,7 +34,7 @@
                     <input type="number" class="form-control" name="field_5" required>
                 </div>
             </div>
-            
+
 
             {{-- ข้อมูลที่อยู่ --}}
             <div class="col-md-3 " style="display: none">
@@ -44,7 +44,8 @@
             <div class="row g-3 align-items-end mt-3">
                 <div class="col-md-3">
                     <label for="name" class="form-label">เลขบัตรประชาชน<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="field_16" id="name" required>
+                    <input type="text" class="form-control" name="field_16" id="name" pattern="[0-9]{13}"
+                        minlength="13" maxlength="13" required>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">บ้านเลขที่<span class="text-danger">*</span></label>
@@ -108,11 +109,11 @@
             <div class="row g-3 mt-3">
                 <div class="col-md-4">
                     <label class="form-label">พื้นที่ประกอบการ(ตารางเมตร)</label>
-                    <input type="text" class="form-control" name="addon[area]" required>
+                    <input type="text" class="form-control" name="addon[area]">
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">บ้านเลขที่</label>
-                    <input type="text" class="form-control" name="addon[home_no]" required>
+                    <input type="text" class="form-control" name="addon[home_no]">
                 </div>
                 <div class="col-md-3">
                     <label for="alley" class="form-label">ตรอก/ซอย</label>
@@ -128,7 +129,8 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">แขวง/ตำบล</label>
-                    <input type="text" class="form-control" name="addon[subdistrict]" value="ท่าข้าม" readonly required>
+                    <input type="text" class="form-control" name="addon[subdistrict]" value="ท่าข้าม" readonly
+                        required>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">เขต/อำเภอ</label>
@@ -136,12 +138,13 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">จังหวัด</label>
-                    <input type="text" class="form-control" name="addon[province]" value="ฉะเชิงเทรา" readonly required>
+                    <input type="text" class="form-control" name="addon[province]" value="ฉะเชิงเทรา" readonly
+                        required>
                 </div>
                 <div class="col-md-3">
                     <label for="tel" class="form-label">เบอร์โทร</label>
                     <input type="tel" class="form-control" name="addon[tel]" id="tel" pattern="[0-9]{10}"
-                        maxlength="10" required>
+                        maxlength="10">
                 </div>
             </div>
 
