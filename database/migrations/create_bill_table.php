@@ -39,7 +39,7 @@ return new class extends Migration
         DB::table('bills')->insert([
             [
                 'trash_location_id' => 1,
-                'user_id' => 3,
+                'user_id' => 5,
                 'amount' => 2000.00,
                 'status' => 'ยังไม่ชำระ',
                 'due_date' => '2025-10-28',

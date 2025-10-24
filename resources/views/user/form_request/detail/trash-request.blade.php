@@ -185,6 +185,32 @@
                 @endif
             </div>
         </div>
+        <div class="mt-4">
+            <h5 class="mb-3">ประวัติการตอบกลับ</h5>
+            <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center">ผู้ตอบกลับ</th>
+                        <th class="text-center">วันที่ตอบกลับ</th>
+                        <th class="text-center">ข้อความที่ตอบกลับ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($trashRequest->histories as $history)
+                        <tr>
+                            <td class="text-center">{{ $history->user->name ?? 'ระบบ' }}</td>
+                            <td class="text-center">{{ $history->created_at->format('d/m/Y H:i') }}</td>
+                            <td>{{ $history->message ?? '-' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">ไม่มีประวัติการตอบกลับ</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
 
     </div>
 
@@ -193,33 +219,33 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
-document.addEventListener("DOMContentLoaded", function() {
-    // กำหนดค่า lat/lng จาก TrashRequest
-    const lat = {{ $trashRequest->lat ?? 13.736717 }};
-    const lng = {{ $trashRequest->lng ?? 100.523186 }};
+        document.addEventListener("DOMContentLoaded", function() {
+            // กำหนดค่า lat/lng จาก TrashRequest
+            const lat = {{ $trashRequest->lat ?? 13.736717 }};
+            const lng = {{ $trashRequest->lng ?? 100.523186 }};
 
-    // สร้าง map
-    const map = L.map('map', {
-        dragging: false,          // ปิดลาก map
-        touchZoom: false,         // ปิด zoom ด้วย touch
-        scrollWheelZoom: false,   // ปิด zoom ด้วย scroll
-        doubleClickZoom: false,   // ปิด zoom ด้วย double click
-        boxZoom: false,           // ปิด zoom แบบ box
-        keyboard: false,          // ปิด keyboard control
-        zoomControl: false,       // ปิดปุ่ม zoom
-        tap: false
-    }).setView([lat, lng], 15);
+            // สร้าง map
+            const map = L.map('map', {
+                dragging: false, // ปิดลาก map
+                touchZoom: false, // ปิด zoom ด้วย touch
+                scrollWheelZoom: false, // ปิด zoom ด้วย scroll
+                doubleClickZoom: false, // ปิด zoom ด้วย double click
+                boxZoom: false, // ปิด zoom แบบ box
+                keyboard: false, // ปิด keyboard control
+                zoomControl: false, // ปิดปุ่ม zoom
+                tap: false
+            }).setView([lat, lng], 15);
 
-    // แผนที่ Google
-    L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-        subdomains: ['mt0','mt1','mt2','mt3'],
-        maxZoom: 20
-    }).addTo(map);
+            // แผนที่ Google
+            L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                maxZoom: 20
+            }).addTo(map);
 
-    // ปักหมุดตำแหน่ง
-    L.marker([lat, lng]).addTo(map)
-        .bindPopup("ตำแหน่งที่บันทึกไว้")
-        .openPopup();
-});
-</script>
+            // ปักหมุดตำแหน่ง
+            L.marker([lat, lng]).addTo(map)
+                .bindPopup("ตำแหน่งที่บันทึกไว้")
+                .openPopup();
+        });
+    </script>
 @endsection

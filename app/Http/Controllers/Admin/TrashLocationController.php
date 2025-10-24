@@ -196,10 +196,23 @@ class TrashLocationController extends Controller
         if ($year) {
             $billsQuery->whereYear('paid_date', $year);
         }
+        $histories = TrashRequestHistory::with('responder:id,name')
+            ->get()
+            ->groupBy('trash_request_id')
+            ->map(function ($items) {
+                return $items->map(function ($item) {
+                    return [
+                        'responder_name' => $item->responder->name ?? '-',
+                        'created_at' => $item->created_at->format('Y-m-d H:i:s'),
+                        'message' => $item->message,
+                    ];
+                });
+            });
+
 
         $bills = $billsQuery->paginate(10);
 
-        return view('admin_trash.payment_history.payment-history-detail', compact('location', 'bills'));
+        return view('admin_trash.payment_history.payment-history-detail', compact('location','histories', 'bills'));
     }
 
     public function verifyPaymentsList(Request $request)
