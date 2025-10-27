@@ -1,81 +1,44 @@
-/* ===== เมนูด้านข้าง ===== */
-.menu-bar {
-    width: 280px;
-    background: #fff;
-    color: #000;
-    display: flex;
-    flex-direction: column;
-    transition: all 0.3s ease;
-    z-index: 10;
-}
-
-.menu-header {
-    text-align: center;
-    padding: 25px 15px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.menu-header h2 {
-    font-size: 18px;
-    margin: 10px 0 5px;
-}
-
-.menu-header p {
-    font-size: 14px;
-    opacity: 0.85;
-}
-
-.menu-logo {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-}
-
 /* ===== เมนูหลัก ===== */
 .menu-list {
-    flex: 1;
-    overflow-y: auto;
     background: #fff;
+    color: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .menu-list ul {
     list-style: none;
-    margin: 0;
     padding: 0;
+    margin: 0;
 }
 
-.menu-item {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.menu-item>a {
+.menu-item > a {
     display: block;
     padding: 14px 20px;
     color: #fff;
     text-decoration: none;
     font-weight: 700;
     background: linear-gradient(90deg, #134e9e 0%, #082149 100%);
-    transition: all 0.3s;
     font-size: 18px;
+    transition: filter 0.3s;
 }
 
-.menu-item>a:hover,
-.menu-item.active>a {
-    filter: brightness(1.15);
+.menu-item > a:hover {
+    filter: brightness(1.2);
 }
 
 /* ===== เมนูย่อย ===== */
 .submenu {
-    display: block;
     background: #f9f9f9;
 }
 
 .submenu li a {
-    padding: 10px 35px;
     display: block;
+    padding: 10px 35px;
     color: #000;
-    text-decoration: none;
     font-size: 15px;
+    text-decoration: none;
     transition: background 0.3s;
 }
 
@@ -83,54 +46,7 @@
     background: rgba(0, 0, 0, 0.05);
 }
 
-/* ===== พื้นหลังเนื้อหา ===== */
-.request-content {
-    background: linear-gradient(to right, #029A94 0%, #004C57 100%);
-    color: #fff;
-    min-height: 100vh;
-}
-
-.ing-banner-request {
-    max-width: 100%;
-}
-
-.form-content {
-    background-color: #ffffff;
-    color: #000000;
-    border-radius: 8px;
-}
-
-.header-form-name {
-    display: inline-block;
-    position: relative;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 30px;
-    background: none;
-    text-align: center;
-    margin: 0 auto;
-}
-
-.header-form-name::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 30px;
-    padding: 2px;
-    background: linear-gradient(to right, #029A94, #004C57);
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-}
-
-.form-content>div:first-child {
-    text-align: center;
-}
-
-/* ===== ซ้อนเมนู 3 ชั้น (submenu-sub) ===== */
+/* ===== เมนูย่อยระดับ 2 ===== */
 .submenu-sub {
     max-height: 0;
     overflow: hidden;
@@ -142,16 +58,47 @@
 .submenu-sub li a {
     padding: 8px 50px;
     font-size: 14px;
+}
+
+/* ===== เนื้อหาหลัก ===== */
+.request-content {
+    background: linear-gradient(to right, #029A94 0%, #004C57 100%);
+    color: #fff;
+    min-height: 100vh;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.form-content {
+    background: #fff;
     color: #000;
-    text-decoration: none;
-    display: block;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.submenu-sub li a:hover {
-    background: rgba(0, 0, 0, 0.05);
+.header-form-name {
+    display: inline-block;
+    position: relative;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 30px;
+    background: none;
+    text-align: center;
 }
 
-/* ปุ่มในฟอร์ม */
+.header-form-name::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 30px;
+    padding: 2px;
+    background: linear-gradient(to right, #029A94, #004C57);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+/* ===== ปุ่ม ===== */
 .btn-primary {
     background: linear-gradient(90deg, #134e9e 0%, #082149 100%);
     border: none;
@@ -164,7 +111,7 @@
     filter: brightness(1.15);
 }
 
-/* ตารางในประวัติ */
+/* ===== ตาราง ===== */
 .table th,
 .table td {
     text-align: center;
@@ -173,27 +120,14 @@
 
 /* ===== Responsive ===== */
 @media (max-width: 992px) {
-    .box-eservice {
-        flex-direction: column;
-    }
-
-    .menu-bar {
-        width: 100%;
-        flex-direction: column;
-    }
-
-    .menu-header {
-        text-align: center;
-    }
-
     .menu-list {
-        max-height: 400px;
-        overflow-y: auto;
+        border-radius: 10px;
+        margin-bottom: 20px;
     }
 
-    .menu-item>a {
+    .menu-item > a {
+        font-size: 16px;
         padding: 12px 15px;
-        font-size: 15px;
     }
 
     .submenu li a {
@@ -201,6 +135,40 @@
     }
 
     .submenu-sub li a {
-        padding: 8px 40px;
+        padding: 8px 35px;
+    }
+
+    .request-content {
+        min-height: auto;
+        padding: 10px;
+    }
+
+    .form-content {
+        margin: 0 10px;
+        padding: 10px;
+    }
+
+    .header-form-name {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 576px) {
+    .menu-item > a {
+        font-size: 14px;
+    }
+
+    .submenu li a,
+    .submenu-sub li a {
+        font-size: 13px;
+    }
+
+    .request-content {
+        padding: 8px;
+    }
+
+    .form-content {
+        margin: 0 5px;
     }
 }

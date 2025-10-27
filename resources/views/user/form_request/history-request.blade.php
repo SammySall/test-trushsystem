@@ -3,103 +3,108 @@
 
 @section('request-content')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/history-request.css') }}">
+@endpush
+
 @switch($type)
+    @case('new-license-engineer')
+        @php $formTitle = 'คำขอใบอนุญาตก่อสร้าง'; @endphp
+    @break
     @case('renew-license-engineer')
         @php $formTitle = 'คำขอต่ออายุใบอนุญาตก่อสร้าง ดัดแปลง รื้อถอน หรือเคลื่อนย้ายอาคาร'; @endphp
     @break
-
     @case('trash-request')
         @php $formTitle = 'คำร้องขออนุญาตลงถังขยะ'; @endphp
     @break
-
     @case('market-establishment-license')
         @php $formTitle = 'คำขอรับใบอนุญาตจัดตั้งตลาด'; @endphp
     @break
-
     @case('food-sales-license')
         @php $formTitle = 'คำขอรับใบอนุญาตสถานที่จำหน่ายอาหาร'; @endphp
     @break
-
     @case('health-hazard-license')
         @php $formTitle = 'คำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ'; @endphp
     @break
-
     @case('waste-disposal-business-license')
         @php $formTitle = 'คำขอรับใบอนุญาตประกอบกิจการรับทำการเก็บ ขน หรือกำจัดสิ่งปฏิกูลหรือมูลฝอย'; @endphp
     @break
-
     @default
         @php $formTitle = 'ไม่พบข้อมูลประเภทใบอนุญาต'; @endphp
 @endswitch
 
 <div class="row mb-3">
-    <div class="col bg-white p-3 shadow-sm rounded">
-        <h5>{{ $formTitle }}</h5>
+    <div class="col bg-white p-3 shadow-sm rounded table-container">
+        <h5 class="fw-bold mb-3">{{ $formTitle }}</h5>
 
-        <table class="table table-bordered table-striped mt-2 text-center align-middle w-100">
-            <thead>
-                <tr>
-                    <th style="width: 15%;">วันที่ส่ง</th>
-                    <th style="width: 20%;">ชื่อผู้ส่ง</th>
-                    <th style="width: 15%;">วันที่นัดหมาย</th>
-                    <th style="width: 15%;">วันที่สะดวก</th>
-                    <th style="width: 15%;">สถานะ</th>
-                    <th style="width: 20%;">จัดการ</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($trashRequests as $request)
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center align-middle w-100 custom-table">
+                <thead class="table-light">
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
-                        <td>{{ $request->prefix }} {{ $request->fullname }}</td>
-                        <td>{{ $request->appointment_date ?? '-' }}</td>
-                        <td>{{ $request->convenient_date ?? '-' }}</td>
-                        <td>{{ $request->status }}</td>
-                        <td>
-                            {{-- ปุ่มรอยืนยันนัดหมาย --}}
-                            @if ($request->status === 'รอยืนยันนัดหมาย')
-                                @php
-                                    $addon = is_array($request->addon)
-                                        ? $request->addon
-                                        : json_decode($request->addon, true);
-                                    $dataTitle = $addon['appointment']['title'] ?? '';
-                                    $appointment = $request->appointment_date
-                                        ? \Carbon\Carbon::parse($request->appointment_date)->format('Y-m-d\TH:i')
-                                        : '';
-                                @endphp
-                                <button class="btn btn-warning btn-sm confirm-appointment" data-id="{{ $request->id }}"
-                                    data-title="{{ $dataTitle }}" data-appointment="{{ $appointment }}">
-                                    <i class="bi bi-calendar-check"></i>
-                                </button>
-                            @endif
-
-                            {{-- ปุ่มรอชำระเงิน (User ส่งสลิป) --}}
-                            @if ($request->status === 'รอชำระเงิน')
-                                <button class="btn btn-warning btn-sm confirm-payment" data-id="{{ $request->id }}">
-                                    <i class="bi bi-wallet"></i>
-                                </button>
-                            @endif
-
-                            {{-- ปุ่ม PDF --}}
-                            <a href="{{ route('admin_trash.show_pdf', $request->id) }}"
-                                class="btn btn-danger btn-sm me-1">
-                                <i class="bi bi-filetype-pdf"></i>
-                            </a>
-
-                            {{-- ปุ่มดูรายละเอียด --}}
-                            <a href="{{ route('user.history-request.detail', ['type' => $request->type, 'id' => $request->id]) }}"
-                                class="btn btn-primary btn-sm">
-                                <i class="bi bi-search"></i>
-                            </a>
-                        </td>
+                        <th>วันที่ส่ง</th>
+                        <th>ชื่อผู้ส่ง</th>
+                        <th>วันที่นัดหมาย</th>
+                        <th>วันที่สะดวก</th>
+                        <th>สถานะ</th>
+                        <th>จัดการ</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="6">ไม่มีข้อมูล</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @forelse ($trashRequests as $request)
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
+                            <td>{{ $request->prefix }} {{ $request->fullname }}</td>
+                            <td>{{ $request->appointment_date ?? '-' }}</td>
+                            <td>{{ $request->convenient_date ?? '-' }}</td>
+                            <td>{{ $request->status }}</td>
+                            <td class="action-buttons">
+                                {{-- ปุ่มรอยืนยันนัดหมาย --}}
+                                @if ($request->status === 'รอยืนยันนัดหมาย')
+                                    @php
+                                        $addon = is_array($request->addon)
+                                            ? $request->addon
+                                            : json_decode($request->addon, true);
+                                        $dataTitle = $addon['appointment']['title'] ?? '';
+                                        $appointment = $request->appointment_date
+                                            ? \Carbon\Carbon::parse($request->appointment_date)->format('Y-m-d\TH:i')
+                                            : '';
+                                    @endphp
+                                    <button class="btn btn-warning btn-sm confirm-appointment"
+                                        data-id="{{ $request->id }}"
+                                        data-title="{{ $dataTitle }}"
+                                        data-appointment="{{ $appointment }}">
+                                        <i class="bi bi-calendar-check"></i>
+                                    </button>
+                                @endif
+
+                                {{-- ปุ่มรอชำระเงิน --}}
+                                @if ($request->status === 'รอชำระเงิน')
+                                    <button class="btn btn-warning btn-sm confirm-payment" data-id="{{ $request->id }}">
+                                        <i class="bi bi-wallet"></i>
+                                    </button>
+                                @endif
+
+                                {{-- ปุ่ม PDF --}}
+                                <a href="{{ route('admin_trash.show_pdf', $request->id) }}"
+                                    class="btn btn-danger btn-sm me-1">
+                                    <i class="bi bi-filetype-pdf"></i>
+                                </a>
+
+                                {{-- ปุ่มดูรายละเอียด --}}
+                                <a href="{{ route('user.history-request.detail', ['type' => $request->type, 'id' => $request->id]) }}"
+                                    class="btn btn-primary btn-sm">
+                                    <i class="bi bi-search"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6">ไม่มีข้อมูล</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -193,7 +198,6 @@
                             Swal.fire('ผิดพลาด!', data.message || 'เกิดข้อผิดพลาด', 'error');
                         }
                     } catch (err) {
-                        console.error(err);
                         Swal.fire('ผิดพลาด!', 'เกิดข้อผิดพลาด', 'error');
                     }
                 }

@@ -51,14 +51,14 @@
             @if ($isEngineering)
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-start"
-                        data-bs-toggle="collapse" data-bs-target="#engineering-collapse" aria-expanded="false">
+                        data-bs-toggle="collapse" data-bs-target="#new-collapse" aria-expanded="false">
                         คำขอใบอนุญาตก่อสร้าง
                     </button>
-                    <div class="collapse" id="engineering-collapse">
+                    <div class="collapse" id="new-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="#" class="link-dark rounded">รับเรื่อง</a></li>
+                            <li><a href="/admin/request/engineering/showdata/new-license-engineer" class="link-dark rounded">รับเรื่อง</a></li>
                             <li><a href="#" class="link-dark rounded">การนัดหมาย</a></li>
-                            <li><a href="/admin/request/engineering/showdata/new-license-engineer"
+                            <li><a href="#"
                                     class="link-dark rounded">ออกสำรวจ</a></li>
                             <li><a href="/admin/request/engineering/showdata/new-license-engineer"
                                     class="link-dark rounded">ชำระเงิน</a></li>
@@ -71,12 +71,12 @@
                 </li>
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-start"
-                        data-bs-toggle="collapse" data-bs-target="#engineering-collapse" aria-expanded="false">
+                        data-bs-toggle="collapse" data-bs-target="#renew-collapse" aria-expanded="false">
                         คำขอต่ออายุใบอนุญาตก่อสร้างฯ
                     </button>
-                    <div class="collapse" id="engineering-collapse">
+                    <div class="collapse" id="renew-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="#" class="link-dark rounded">รับเรื่อง</a></li>
+                            <li><a href="/admin/request/engineering/showdata/renew-license-engineer" class="link-dark rounded">รับเรื่อง</a></li>
                             <li><a href="#" class="link-dark rounded">การนัดหมาย</a></li>
                             <li><a href="/admin/request/engineering/showdata/renew-licenseengineer"
                                     class="link-dark rounded">ออกสำรวจ</a></li>

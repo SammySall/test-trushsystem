@@ -88,7 +88,7 @@
 
             <div class="row g-3 align-items-end mt-3">
                 <label class="form-label">
-                    สถานที่จัดงาน
+                    สถานที่ประกอบการ
                 </label>
                 <div class="col-md-3">
                     <label for="tel" class="form-label"> ประจำปีพ.ศ</label>

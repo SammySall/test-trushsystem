@@ -15,16 +15,14 @@
 <body class="d-flex body-bg">
 
     @php
-        // เก็บ path ปัจจุบัน เช่น 'admin/trash_can_installation'
         $path = request()->path();
     @endphp
 
     <!-- Sidebar -->
-    <div class="d-flex flex-column flex-shrink-0 sidebar-bg p-3" style="width: 250px;">
+    <div class="d-flex flex-column flex-shrink-0 sidebar-bg p-3">
         <img src="{{ url('../img/trash-system/Coin.png') }}" alt="Coin" class="img-fluid logo-img">
         <div class="d-flex flex-column justify-content-center align-items-center mb-3 mb-md-0 text-decoration-none">
-            <div>ระบบจัดการค่าบริการจัดการ
-            </div>
+            <div>ระบบจัดการค่าบริการจัดการ</div>
             <h1>ขยะมูลฝอย</h1>
         </div>
         <hr>
@@ -37,9 +35,7 @@
             </li>
 
             <div class="mt-3 fw-bold">
-                <h4>จัดการ <img src="{{ url('../img/trash-system/Manage-icon.png') }}" alt="Manage-icon"
-                        class="img-fluid logo-img">
-                </h4>
+                <h4>จัดการ <img src="{{ url('../img/trash-system/Manage-icon.png') }}" alt="Manage-icon" class="img-fluid logo-img"></h4>
             </div>
 
             <li>
@@ -66,10 +62,9 @@
             </li>
 
             <div class="mt-3 fw-bold">
-                <h4>รายงาน <img src="{{ url('../img/trash-system/Report-icon.png') }}" alt="Manage-icon"
-                        class="img-fluid logo-img">
-                </h4>
+                <h4>รายงาน <img src="{{ url('../img/trash-system/Report-icon.png') }}" alt="Manage-icon" class="img-fluid logo-img"></h4>
             </div>
+
             <li>
                 <a href="/admin/verify_payment"
                     class="nav-link {{ Str::contains($path, 'verify_payment') ? 'active' : '' }}">
@@ -89,16 +84,22 @@
             <li>
                 <a href="/admin/non_payment"
                     class="nav-link {{ Str::contains($path, 'non_payment') ? 'active' : '' }}">
-                    <img src="{{ url('../img/trash-system/icon-7.png') }}" alt="icon-7" class="img-fluid logo-img">
+                    <img src="{{ url('../img/trash-system/icon-5.png') }}" alt="icon-5" class="img-fluid logo-img">
                     บิลที่รอการชำระเงิน
                 </a>
             </li>
         </ul>
     </div>
 
-    <div class="p-4" style="flex:1;">
-        {{-- search bar --}}
-        <div class="bg-white my-4 p-2 rounded-3 d-flex align-items-end justify-content-end">
+    <!-- Main Content -->
+    <div class="p-4 flex-grow-1">
+
+        {{-- search bar + Hamburger --}}
+        <div class="bg-white my-4 p-2 rounded-3 d-flex align-items-center justify-content-end">
+            <button class="btn btn-outline-secondary d-md-none me-2" id="hamburger-btn">
+                <i class="bi bi-list fs-3"></i>
+            </button>
+
             <div class="nav-item dropdown">
                 <a class="nav-link avatar" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
@@ -112,15 +113,11 @@
                                 true,
                             );
                         @endphp
-                        <!-- บรรทัดแรก: รูป Avatar + ชื่อผู้ใช้งาน -->
                         <li class="dropdown-item-text d-flex align-items-end gap-2">
                             <i class="bi bi-person-circle"></i>
                             <span>{{ $tokenData['name'] }}</span>
                         </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <!-- บรรทัดสอง: Logout -->
+                        <li><hr class="dropdown-divider"></li>
                         <li>
                             <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
                                 @csrf
@@ -133,53 +130,53 @@
                     @endif
                 </ul>
             </div>
-
         </div>
 
-        {{-- content --}}
-        <div class="content-trash-bg px-2 py-4 rounded-3">
-            @yield('content')
+        {{-- Content --}}
+        <!-- Mobile -->
+<div class="mobile-only content-trash-bg rounded-3">
+    <div class="container py-3">
+        <div class="bg-white bg-opacity-75 p-3 rounded-3 shadow-sm">
+            @yield('mobile-content')
         </div>
     </div>
+</div>
+
+<!-- Desktop -->
+<div class="content-trash-bg px-5 py-4 rounded-3">
+    <div class="container p-5">
+        <div class="desktop-only">
+            <div class="bg-white bg-opacity-75 p-4 rounded-3 shadow-sm">
+                @yield('desktop-content')
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+
+    {{-- JS Sidebar Hamburger --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.querySelector('.sidebar-bg');
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+
+            // toggle sidebar
+            hamburgerBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                document.body.classList.toggle('overlay-active');
+            });
+
+            // click outside to close
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768) {
+                    if (!sidebar.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                        sidebar.classList.remove('active');
+                        document.body.classList.remove('overlay-active');
+                    }
+                }
+            });
+        });
+    </script>
 
 </body>
-
 </html>
-
-<style>
-    .search-menu {
-        border: none;
-        outline: none;
-        box-shadow: none;
-        background: transparent;
-    }
-
-    .avatar {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.375rem;
-        height: 2.375rem;
-        cursor: pointer;
-    }
-
-    .avatar i {
-        font-size: 2.375rem;
-    }
-
-    /* สีลิงก์ใน sidebar */
-    .nav-link {
-        color: #333;
-        border-radius: 0.5rem;
-        margin-bottom: 4px;
-    }
-
-    .nav-link:hover {
-        background-color: #f0f0f0;
-    }
-
-    .nav-link.active {
-        background-color: #696cff;
-        color: white !important;
-    }
-</style>

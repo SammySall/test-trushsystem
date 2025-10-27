@@ -84,6 +84,9 @@ Route::post('/user/emergency/submit', [EmergencyController::class, 'store'])->na
 Route::get('/user/waste_payment', function () {
     return view('user.garbage');
 });
+Route::get('/user/request-emergency', function () {
+    return view('user.request-emergency.emergency-menu');
+});
 Route::get('/user/waste_payment/trash-toxic', function () {
     return view('user.trash-toxic');
 });
@@ -107,11 +110,14 @@ Route::get('/admin/waste_payment', [TrashLocationController::class, 'dashboard']
 //     return view('admin_trash.showdata');
 // });
 
+Route::get('bill/{bill}/pdf', [TrashRequestController::class, 'showPdfReceiptBill'])
+    ->name('admin.bill.pdf');
+
 Route::get('/admin/showdata', [TrashRequestController::class, 'showData'])->name('admin.showdata');
 Route::post('/admin/reply/{id}', [TrashRequestController::class, 'reply'])->name('admin.trash.reply');
 Route::middleware('auth')->post('/trash-request/store', [TrashRequestController::class, 'store'])->name('trash-request.store');
 Route::post('/admin/trash/accept', [TrashRequestController::class, 'accept'])->name('admin_trash.accept');
-Route::get('/admin/trash/pdf/{id}', [TrashRequestController::class, 'showPdf'])->name('admin_trash.show_pdf');
+Route::get('/admin/trash/pdf/{id}', [TrashRequestController::class, 'showPdfTrash'])->name('admin_trash.show_pdf');
 Route::get('/admin/request/public-health/appointment/{type}', [TrashRequestController::class, 'appointmentData'])
     ->name('admin.public-health.appointment');
 Route::get('/admin/request/engineering/appointment/{type}', [TrashRequestController::class, 'appointmentDataEngineer'])

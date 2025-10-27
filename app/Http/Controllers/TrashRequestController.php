@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TrashRequest;
 use App\Models\TrashRequestHistory;
 use App\Models\TrashRequestFile;
+use App\Models\TrashLocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -78,19 +79,26 @@ class TrashRequestController extends Controller
         return redirect()->back()->with('success', 'บันทึกคำขอเรียบร้อยแล้ว!');
     }
 
-
-
-    public function showData()
+    public function showData(Request $request)
     {
+        $search = $request->input('search');
+        $perPage = $request->input('data_table_length', 10);
+
         $trashRequests = TrashRequest::with(['receiver:id,name', 'files'])
             ->where('type', 'trash-request')
+            ->when($search, function ($query, $search) {
+                $query->where('fullname', 'LIKE', "%{$search}%")
+                    ->orWhereHas('receiver', function($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    });
+            })
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate($perPage)
+            ->appends(['search' => $search, 'data_table_length' => $perPage]);
 
         $histories = TrashRequestHistory::with('responder:id,name')->get();
 
-        // รวมข้อมูลประวัติและรูปภาพ
-        $trashRequests->getCollection()->transform(function ($request) use ($histories) {
+        $modified = $trashRequests->getCollection()->map(function ($request) use ($histories) {
             $requestHistories = $histories->where('trash_request_id', $request->id)
                 ->map(function ($item) {
                     return [
@@ -100,14 +108,19 @@ class TrashRequestController extends Controller
                     ];
                 })->values();
 
+            $request->fullname = $request->fullname ?? $request->name ?? '-';
+            $request->receiver_name = $request->receiver->name ?? '-';
             $request->histories = $requestHistories;
             $request->picture_path = $request->files->pluck('file_path')->toArray();
 
             return $request;
         });
 
-        return view('admin_trash.showdata', compact('trashRequests'));
+        $trashRequests->setCollection($modified);
+
+        return view('admin_trash.showdata', compact('trashRequests', 'search', 'perPage'));
     }
+
 
     public function showDataRequestHealth($type)
     {
@@ -186,17 +199,31 @@ class TrashRequestController extends Controller
         $user = $request->user_id;
 
         if ($trashRequest->type === 'trash-request') {
+            // อัปเดตสถานะคำขอ
             $trashRequest->status = 'เสร็จสิ้น';
             $trashRequest->receiver_id = $user;
             $trashRequest->received_at = now();
             $trashRequest->save();
 
+            // ✅ เพิ่มข้อมูลในตาราง trash_locations
             $location = new \App\Models\TrashLocation();
             $location->name = $trashRequest->fullname;
-            $location->address = $trashRequest->house_no . ' ' . $trashRequest->subdistrict . ' ' . $trashRequest->district . ' ' . $trashRequest->province;
+            $location->address = trim($trashRequest->house_no . ' ' . $trashRequest->subdistrict . ' ' . $trashRequest->district . ' ' . $trashRequest->province);
             $location->status = 'รออนุมัติเรียกชำระเงิน';
-            $location->tel = $trashRequest->tel ?? '0634461165';
+            $location->tel = $trashRequest->tel ?? null;
             $location->save();
+
+            // ✅ บันทึก id ของ trash_location กลับไปที่ trash_request ในช่อง addon
+            $trashRequest->addon = $location->id;
+            $trashRequest->save();
+
+            $bill = new \App\Models\Bill();
+            $bill->trash_location_id = $location->id;
+            $bill->user_id = $trashRequest->creator_id;
+            $bill->amount = 20;
+            $bill->status = 'ยังไม่ชำระ';
+            $bill->due_date = now()->addDays(7); // กำหนดครบกำหนดอีก 7 วัน
+            $bill->save();
         } else {
             $trashRequest->status = 'รอการนัดหมาย';
             $trashRequest->receiver_id = $user;
@@ -206,8 +233,9 @@ class TrashRequestController extends Controller
 
         return response()->json(['success' => true]);
     }
+
     
-    public function showPdf($id)
+    public function showPdfTrash($id)
     {
         $trashRequest = TrashRequest::with('files')->findOrFail($id);
 
@@ -238,10 +266,14 @@ class TrashRequestController extends Controller
             'field_14' => $trashRequest->road ?? '-',
         ];
 
-        return Pdf::loadView('pdf.trash_request.pdf', compact('fields','day','month','year'))
+        // ✅ ดึงชื่อ field_name ของไฟล์ทั้งหมด
+        $uploadedFiles = $trashRequest->files->pluck('field_name')->toArray();
+
+        return Pdf::loadView('pdf.trash_request.pdf', compact('fields', 'day', 'month', 'year', 'uploadedFiles'))
             ->setPaper('A4', 'portrait')
             ->stream('คำร้องขอลงถังขยะ.pdf');
     }
+
 
     public function historyRequest($type)
     {
@@ -585,6 +617,59 @@ public function appointmentDataEngineer($type)
         ]);
 
         return response()->json(['success' => true, 'message' => 'อัปโหลดใบอนุญาตเรียบร้อย']);
+    }
+
+    public function showPdfReceiptBill($id)
+    {
+        // ดึง TrashRequest พร้อมไฟล์
+        $trashRequest = TrashRequest::with('files')
+            ->where('addon', $id) 
+            ->firstOrFail();
+
+        // ดึง TrashLocation ตาม addon ของ TrashRequest
+        $trashLocation = TrashLocation::where('id', $id)->first();
+        // ดึงใบเสร็จล่าสุดของ TrashLocation
+        $bill = $trashLocation?->bills()->latest()->first();
+
+        // วัน เดือน ปี ภาษาไทย
+        $date = Carbon::parse($trashRequest->created_at ?? now());
+        $day = $date->format('d');
+        $thaiMonths = [
+            1 => 'มกราคม', 2 => 'กุมภาพันธ์', 3 => 'มีนาคม', 4 => 'เมษายน',
+            5 => 'พฤษภาคม', 6 => 'มิถุนายน', 7 => 'กรกฎาคม', 8 => 'สิงหาคม',
+            9 => 'กันยายน', 10 => 'ตุลาคม', 11 => 'พฤศจิกายน', 12 => 'ธันวาคม'
+        ];
+        $month = $thaiMonths[(int)$date->format('m')];
+        $year = $date->format('Y') + 543;
+
+        $amount = number_format($bill?->amount ?? 0, 2, '.', ''); // ให้เป็นรูปแบบ "123.45"
+        [$baht, $satang] = explode('.', $amount); // แยกตรงจุดทศนิยม
+
+
+        // Mapping fields สำหรับ PDF
+        $fields = [
+            'field_1'  => $trashRequest->fullname ?? '-',
+            'field_2'  => $trashRequest->prefix ?? '-',
+            'field_3'  => $month ?? '-',
+            'field_4'  => $baht ?? '-',
+            'field_15'  => $satang ?? '-',
+            'field_5'  => $trashRequest->house_no ?? '-',
+            'field_6'  => $trashRequest->village_no ?? '-',
+            'field_7'  => $trashLocation?->subdistrict ?? '-',
+            'field_8'  => $trashLocation?->district ?? '-',
+            'field_9'  => $trashLocation?->province ?? '-',
+            'field_12' => $trashRequest->place_type ?? '-',
+            'field_13' => $trashRequest->alley ?? '-',
+            'field_14' => $trashRequest->road ?? '-',
+        ];
+
+        // ไฟล์ที่อัพโหลด
+        $uploadedFiles = $trashRequest->files->pluck('field_name')->toArray();
+
+        // สร้าง PDF
+        return Pdf::loadView('pdf.receipt_bill.pdf', compact('fields', 'day', 'month', 'year', 'uploadedFiles'))
+            ->setPaper('A4', 'portrait')
+            ->stream('ใบเสร็จค่ามูลฝอย.pdf');
     }
 
 

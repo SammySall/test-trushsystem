@@ -3,6 +3,7 @@
     background-size: cover;
     background-position: bottom;
     min-height: 185px;
+    width: 100vw;
     color: white;
     display: flex;
     align-items: center;
@@ -76,6 +77,12 @@
     background-size: cover;
     background-position: center;
     min-height: 68vh;
+    width: 100vw;
+
+}
+
+.font-bottom-login {
+    font-size: 16px !important;
 }
 
 @font-face {
@@ -111,6 +118,10 @@ body {
     .title-footer {
         font-size: 32px;
     }
+
+    .font-bottom-login {
+        font-size: 14px !important;
+    }
 }
 
 @media (max-width: 768px) {
@@ -138,11 +149,15 @@ body {
     .title-footer {
         font-size: 24px;
     }
+
+    .font-bottom-login {
+        font-size: 12px !important;
+    }
 }
 
 @media (max-width: 480px) {
     .title-header {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     .sub-title-header {
@@ -164,5 +179,17 @@ body {
 
     .title-footer {
         font-size: 16px;
+    }
+
+    .font-bottom-login {
+        font-size: 12px !important;
+    }
+
+
+    .footer-location img {
+        top: 0px;
+        left: -10px;
+        width: 30px;
+        height: auto;
     }
 }

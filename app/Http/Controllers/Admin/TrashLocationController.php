@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\TrashLocation;
+use App\Models\TrashRequestHistory;
 use App\Models\Bill;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -13,13 +14,23 @@ class TrashLocationController extends Controller
     /**
      * แสดงรายการตำแหน่งติดตั้งถังขยะ พร้อมข้อมูลบิล
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Eager load bills เพื่อลดจำนวน query
-        $locations = TrashLocation::with('bills')->get();
+        $search = $request->input('search'); // ค้นหาจากชื่อหรือที่อยู่
+        $perPage = $request->input('data_table_length', 10); // จำนวนรายการต่อหน้า, default 10
 
-        return view('admin_trash.trash_can_installation.can-install', compact('locations'));
+        $locations = TrashLocation::when($search, function($query, $search){
+                $query->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('address', 'LIKE', "%{$search}%");
+            })
+            ->with('bills')
+            ->orderByDesc('id')
+            ->paginate($perPage)
+            ->appends(['search' => $search, 'data_table_length' => $perPage]);
+
+        return view('admin_trash.trash_can_installation.can-install', compact('locations', 'search', 'perPage'));
     }
+
 
     /**
      * แสดงรายละเอียดการติดตั้งถังขยะ พร้อมรายการบิล
@@ -67,37 +78,69 @@ class TrashLocationController extends Controller
     /**
      * แสดงเฉพาะตำแหน่งติดตั้งที่เสร็จสิ้น พร้อมบิล
      */
-    public function installerTrash()
+    public function installerTrash(Request $request)
     {
+        $search = $request->input('search'); // ค้นหาจากชื่อหรือที่อยู่
+        $perPage = $request->input('data_table_length', 10); // จำนวนรายการต่อหน้า, default 10
+
         $locations = TrashLocation::with('bills')
             ->where('status', 'เสร็จสิ้น')
-            ->get();
+            ->when($search, function($query, $search){
+                $query->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('address', 'LIKE', "%{$search}%");
+            })
+            ->orderByDesc('id')
+            ->paginate($perPage)
+            ->appends(['search' => $search, 'data_table_length' => $perPage]);
 
-        return view('admin_trash.trash_installer.trash-installer', compact('locations'));
+        return view('admin_trash.trash_installer.trash-installer', compact('locations', 'search', 'perPage'));
     }
 
-    public function nonPaymentList(Request $request)
-    {
-        // ดึงพารามิเตอร์เดือนและปี ถ้ามี
-        $month = $request->input('month_filter');
-        $year = $request->input('year_filter');
 
-        $locations = TrashLocation::with(['bills' => function($query) use ($month, $year) {
+    public function nonPaymentList(Request $request)
+{
+    $month = $request->input('month_filter');
+    $year = $request->input('year_filter');
+    $search = $request->input('search'); // ช่องค้นหา
+
+    $locations = TrashLocation::with(['bills' => function ($query) use ($month, $year) {
+        $query->where('status', 'ยังไม่ชำระ');
+
+        if ($month) {
+            $query->whereMonth('due_date', $month);
+        }
+
+        if ($year) {
+            $query->whereYear('due_date', $year);
+        }
+    }])
+        ->whereHas('bills', function ($query) use ($month, $year) {
             $query->where('status', 'ยังไม่ชำระ');
 
-            // ถ้าเลือกเดือน
             if ($month) {
                 $query->whereMonth('due_date', $month);
             }
 
-            // ถ้าเลือกปี
             if ($year) {
                 $query->whereYear('due_date', $year);
             }
-        }])->get();
+        })
+        ->when($search, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('address', 'LIKE', "%{$search}%");
+            });
+        })
+        ->orderByDesc('id')
+        ->paginate(10)
+        ->appends([
+            'search' => $search,
+            'month_filter' => $month,
+            'year_filter' => $year
+        ]);
 
-        return view('admin_trash.non_payment.non-payment', compact('locations'));
-    }
+    return view('admin_trash.non_payment.non-payment', compact('locations', 'search', 'month', 'year'));
+}
+
 
     public function nonPaymentDetail(int $trashLocationId)
     {
@@ -160,25 +203,33 @@ class TrashLocationController extends Controller
 
 
     public function paymentHistoryList(Request $request)
-    {
-        $month = $request->input('month_filter');
-        $year = $request->input('year_filter');
+{
+    $month = $request->input('month_filter');
+    $year = $request->input('year_filter');
+    $search = $request->input('search'); // รับค่าค้นหา
 
-        // ดึง TrashLocation พร้อมบิลที่ชำระแล้ว
-        $locations = TrashLocation::with(['bills' => function($query) use ($month, $year) {
-            // $query->where('status', 'ชำระแล้ว');
+    $locations = TrashLocation::with(['bills' => function ($query) use ($month, $year) {
+        if ($month) {
+            $query->whereMonth('paid_date', $month);
+        }
+        if ($year) {
+            $query->whereYear('paid_date', $year);
+        }
+    }])
+        ->when($search, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('address', 'LIKE', "%{$search}%");
+            });
+        })
+        ->orderByDesc('id')
+        ->paginate(10)
+        ->appends(['search' => $search, 'month_filter' => $month, 'year_filter' => $year]); // คงค่าค้นหาไว้เวลาเปลี่ยนหน้า
 
-            if ($month) {
-                $query->whereMonth('paid_date', $month);
-            }
+    return view('admin_trash.payment_history.payment-history', compact('locations', 'month', 'year', 'search'));
+}
 
-            if ($year) {
-                $query->whereYear('paid_date', $year);
-            }
-        }])->paginate(10); // pagination 10 รายการต่อหน้า
 
-        return view('admin_trash.payment_history.payment-history', compact('locations', 'month', 'year'));
-    }
 
     public function paymentHistoryDetail(int $trashLocationId, Request $request)
     {
@@ -216,18 +267,31 @@ class TrashLocationController extends Controller
     }
 
     public function verifyPaymentsList(Request $request)
-    {
-        $locations = TrashLocation::whereHas('bills', function($query) {
-                $query->where('status', 'รอการตรวจสอบ');
-            })
-            ->with(['bills' => function($query) {
-                $query->where('status', 'รอการตรวจสอบ')
-                    ->orderBy('paid_date', 'desc');
-            }])
-            ->paginate(10);
+{
+    $search = $request->input('search');
+    $perPage = $request->input('data_table_length', 10); // ค่าเริ่มต้น 10
 
-        return view('admin_trash.verify_payment.check-payment', compact('locations'));
-    }
+    $locations = TrashLocation::with(['bills' => function ($query) {
+            $query->where('status', 'รอการตรวจสอบ')
+                  ->orderBy('paid_date', 'desc');
+        }])
+        ->whereHas('bills', function($query) {
+            $query->where('status', 'รอการตรวจสอบ');
+        })
+        ->when($search, function ($query, $search) {
+            $query->where(function($q) use ($search) {
+                $q->where('address', 'LIKE', "%{$search}%");
+            });
+        })
+        ->orderByDesc('id')
+        ->paginate($perPage)
+        ->appends(['search' => $search, 'data_table_length' => $perPage]);
+
+    return view('admin_trash.verify_payment.check-payment', compact('locations', 'search', 'perPage'));
+}
+
+
+
 
     public function dashboard()
     {

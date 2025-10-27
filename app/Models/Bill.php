@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 class Bill extends Model
 {
     use HasFactory;
@@ -16,7 +15,12 @@ class Bill extends Model
         'status',
         'due_date',
         'paid_date',
-        'slip_path', // เพิ่มตรงนี้
+        'slip_path',
+    ];
+
+    protected $casts = [
+        'due_date' => 'datetime',
+        'paid_date' => 'datetime',
     ];
 
     public function trashLocation()

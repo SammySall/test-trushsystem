@@ -32,9 +32,32 @@
             </div>
             {{-- ปุ่มล็อกอินและสมัครสมาชิก --}}
             <div class="d-flex flex-column justify-content-center align-items-center mt-3 mt-lg-0">
+                @php
+                    use Illuminate\Support\Facades\Crypt;
+
+                    $userData = null;
+                    if (session('token')) {
+                        try {
+                            $decoded = json_decode(Crypt::decryptString(session('token')), true);
+                            $userData = $decoded;
+                        } catch (\Exception $e) {
+                            $userData = null;
+                        }
+                    }
+                @endphp
+
+                @if ($userData)
+                    <div class="mb-1 font-bottom-login">
+                        ผู้ใช้งาน : {{ $userData['name'] ?? 'ผู้ใช้งาน' }}
+                    </div>
+                @endif
+
                 <div class="d-flex justify-content-center align-items-center gap-2">
                     @if (session('token'))
                         {{-- Logout --}}
+
+                        <div>
+                        </div>
                         <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
                             @csrf
                             <button type="submit" class="btn p-0 border-0 bg-transparent">
@@ -45,16 +68,17 @@
                     @else
                         {{-- Login / Register --}}
                         <a href="/login" class="text-center me-3">
-                            <img src="../../img/menuuser/Login.png" alt="login" class="img-fluid btn-hover-effect">
+                            <img src="../../../img/menuuser/Login.png" alt="login"
+                                class="img-fluid btn-hover-effect">
                         </a>
                         <a href="/register" class="text-center">
-                            <img src="../../img/menuuser/Register.png" alt="register" class="img-fluid btn-hover-effect"
-                                height="46.13px">
+                            <img src="../../../img/menuuser/Register.png" alt="register"
+                                class="img-fluid btn-hover-effect" height="46.13px">
                         </a>
                     @endif
                 </div>
                 @if (!session('token'))
-                    <div class="text-warn mt-2 text-center">
+                    <div class="text-warn mt-2 text-center font-bottom-login">
                         <strong>*คำแนะนำ*</strong>สมัครสมาชิกเพื่อติดตามสถานะการดำเนินการ
                     </div>
                 @endif

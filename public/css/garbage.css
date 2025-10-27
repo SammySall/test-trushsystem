@@ -10,7 +10,7 @@
 }
 
 .link-garbage-btn {
-    max-width: 18vw;
+    max-width: 100%;
     margin-top: 5%;
     margin-bottom: 29%;
     transition: all 0.3s ease;
@@ -18,7 +18,7 @@
 }
 
 .back-garbage-btn {
-    max-width: 10vw;
+    max-width: 10rem;
     transition: all 0.3s ease;
 }
 
