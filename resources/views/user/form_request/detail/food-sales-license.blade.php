@@ -2,7 +2,7 @@
 @section('title', 'ใบอนุญาตสถานที่จำหน่ายอาหาร')
 
 @section('request-content')
-    <h4 class="header-form-name my-2 mx-4">
+    <h4 class="text-center header-form-name my-2 mx-4">
         รายละเอียดคำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ
     </h4>
 

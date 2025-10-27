@@ -2,9 +2,11 @@
 @section('title', 'รายละเอียดคำขอต่ออายุใบอนุญาต')
 
 @section('request-content')
-    <h4 class="header-form-name my-2 mx-4">
-        รายละเอียดคำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ
-    </h4>
+    <div class="text-center">
+        <h4 class="header-form-name my-2 mx-4">
+            รายละเอียดคำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ
+        </h4>
+    </div>
 
     <div class="list-group text-start">
 

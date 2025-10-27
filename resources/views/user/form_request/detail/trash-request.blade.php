@@ -2,9 +2,11 @@
 @section('title', 'คำร้องขออนุญาตลงถังขยะ')
 
 @section('request-content')
-    <h4 class="header-form-name my-2 mx-4">
-        รายละเอียดคำร้องขออนุญาตลงถังขยะ
-    </h4>
+    <div class="text-center">
+        <h4 class="header-form-name my-2 mx-4">
+            รายละเอียดคำร้องขออนุญาตลงถังขยะ
+        </h4>
+    </div>
 
     <div class="list-group text-start">
         {{-- วันที่ --}}

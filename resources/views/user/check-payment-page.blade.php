@@ -96,9 +96,20 @@
                 const htmlContent = `
             <div style="text-align:left; font-size:16px; width:100%;">
                 <p>ยอดที่ต้องชำระ: <b>${amount}</b> บาท</p>
+
+                <!-- ข้อมูลการชำระเงิน -->
+                <div class="mb-3">
+                    <p><b>โอนเข้าบัญชี:</b>ธนาคาร กรุงไทย เลขที่ 202-1240355</p>
+                    <p><b>QR Code ชำระเงิน:</b></p>
+                    <img src="{{ url('../img/Payment/QR.jpg') }}" alt="QR Code" style="width:100%; max-width:250px; border:1px solid #ccc; padding:5px; display:block;">
+                </div>
+
+                <!-- อัปโหลดสลิป -->
                 <label for='slipFile'>อัปโหลดสลิปการชำระเงิน:</label>
                 <input type="file" id="slipFile" accept="image/*" style="width:100%; padding:5px; margin-bottom:10px;">
                 <img id="slipPreview" style="width:100%; display:none; border:1px solid #ccc; padding:5px;">
+
+                <!-- ปุ่ม -->
                 <div class="d-flex justify-content-end mt-3">
                     <button id="sendSlip" class="btn btn-primary me-2">ยืนยันการชำระเงิน</button>
                     <button id="closeSlip" class="btn btn-secondary">ปิด</button>

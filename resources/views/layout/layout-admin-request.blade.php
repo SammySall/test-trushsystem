@@ -130,7 +130,7 @@
                                     class="link-dark rounded">ออกสำรวจ</a></li>
                             <li><a href="/admin/request/public-health/confirm_payment/market-establishment-license"
                                     class="link-dark rounded">ชำระเงิน</a></li>
-                            <li><a href="//admin/request/public-health/Issue-a-license/market-establishment-license"
+                            <li><a href="/admin/request/public-health/Issue-a-license/market-establishment-license"
                                     class="link-dark rounded">ออกใบอนุญาต</a></li>
                             <li><a href="/user/engineering/history/renew_license_engineer"
                                     class="link-dark rounded">ใบอนุญาตใกล้หมดอายุ</a></li>

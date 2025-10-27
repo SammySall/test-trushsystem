@@ -2,9 +2,12 @@
 @section('title', 'ใบอนุญาตประกอบกิจการรับทำการเก็บ')
 
 @section('request-content')
-    <h4 class="header-form-name my-2 mx-4">
-        รายละเอียดใบอนุญาตประกอบกิจการรับทำการเก็บ ขน หรือกำจัดสิ่งปฏิกูลหรือมูลฝอย
-    </h4>
+    <div class="text-center">
+        <h4 class="header-form-name my-2 mx-4">
+            รายละเอียดใบอนุญาตประกอบกิจการรับทำการเก็บ ขน หรือกำจัดสิ่งปฏิกูลหรือมูลฝอย
+        </h4>
+    </div>
+
 
     <div class="list-group text-start">
         <form action="{{ route('trash-request.store') }}" method="POST" enctype="multipart/form-data">

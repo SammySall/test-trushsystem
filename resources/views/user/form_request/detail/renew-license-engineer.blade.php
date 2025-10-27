@@ -2,9 +2,12 @@
 @section('title', 'คำขอต่อฮายุใบอนุญาตก')
 
 @section('request-content')
-    <h4 class="header-form-name my-2 mx-4">
-        คำขอต่อฮายุใบอนุญาตก่อสร้าง ดัดแปลง รื้อถอน หรือเคลื่อนย้ายอาคาร
-    </h4>
+    <div class="text-center">
+        <h4 class="header-form-name my-2 mx-4">
+            คำขอต่อฮายุใบอนุญาตก่อสร้าง ดัดแปลง รื้อถอน หรือเคลื่อนย้ายอาคาร
+        </h4>
+    </div>
+
 
     @php
         $personalType = $addon['personal'] ?? '';

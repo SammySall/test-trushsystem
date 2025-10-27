@@ -35,7 +35,8 @@
             </li>
 
             <div class="mt-3 fw-bold">
-                <h4>จัดการ <img src="{{ url('../img/trash-system/Manage-icon.png') }}" alt="Manage-icon" class="img-fluid logo-img"></h4>
+                <h4>จัดการ <img src="{{ url('../img/trash-system/Manage-icon.png') }}" alt="Manage-icon"
+                        class="img-fluid logo-img"></h4>
             </div>
 
             <li>
@@ -62,7 +63,8 @@
             </li>
 
             <div class="mt-3 fw-bold">
-                <h4>รายงาน <img src="{{ url('../img/trash-system/Report-icon.png') }}" alt="Manage-icon" class="img-fluid logo-img"></h4>
+                <h4>รายงาน <img src="{{ url('../img/trash-system/Report-icon.png') }}" alt="Manage-icon"
+                        class="img-fluid logo-img"></h4>
             </div>
 
             <li>
@@ -117,7 +119,9 @@
                             <i class="bi bi-person-circle"></i>
                             <span>{{ $tokenData['name'] }}</span>
                         </li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li>
                             <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
                                 @csrf
@@ -134,24 +138,25 @@
 
         {{-- Content --}}
         <!-- Mobile -->
-<div class="mobile-only content-trash-bg rounded-3">
-    <div class="container py-3">
-        <div class="bg-white bg-opacity-75 p-3 rounded-3 shadow-sm">
-            @yield('mobile-content')
-        </div>
-    </div>
-</div>
-
-<!-- Desktop -->
-<div class="content-trash-bg px-5 py-4 rounded-3">
-    <div class="container p-5">
-        <div class="desktop-only">
-            <div class="bg-white bg-opacity-75 p-4 rounded-3 shadow-sm">
-                @yield('desktop-content')
+        <div class="mobile-only content-trash-bg rounded-3">
+            <div class="container py-3">
+                <div class="bg-white bg-opacity-75 p-3 rounded-3 shadow-sm">
+                    @yield('mobile-content')
+                </div>
             </div>
         </div>
-    </div>
-</div>
+
+        <!-- Desktop -->
+        <div class="container-fluid desktop-only">
+            <div class="row">
+                <div class="col-12">
+                    <div class="bg-white bg-opacity-75 p-3 rounded-3 shadow-sm">
+                        @yield('desktop-content')
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     {{-- JS Sidebar Hamburger --}}
@@ -179,4 +184,5 @@
     </script>
 
 </body>
+
 </html>

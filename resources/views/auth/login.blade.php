@@ -44,9 +44,9 @@
                         </button>
                     </div>
                 </div>
-                {{-- ลิงก์ลืมรหัสผ่าน --}}
+                {{-- ยังไม่มีรหัสผ่าน --}}
                 <div class="d-flex justify-content-end text-white-50">
-                    <a href="#" class="text-info text-decoration-none">ลืมรหัสผ่าน</a>
+                    <a href="/register" class="text-info text-decoration-none">สมัครสมาชิก</a>
                 </div>
 
                 {{-- ปุ่มล็อกอิน --}}

@@ -101,9 +101,9 @@
         <span>หมู่ที่</span>
         <span class="dotted-line" style="width: 10%;">{{ $fields['field_8'] ?? '-' }}</span>
         <span>ตรอก/ซอย</span>
-        <span class="dotted-line" style="width: 22%;">{{ $fields['field_9'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 22%;">{{ $fields['field_13'] ?? '-' }}</span>
         <span>ถนน</span>
-        <span class="dotted-line" style="width: 22%;">{{ $fields['field_9'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 22%;">{{ $fields['field_14'] ?? '-' }}</span>
         <span>ตำบล/แขวง</span>
         <span class="dotted-line" style="width: 24%;">{{ $fields['field_9'] ?? '-' }}</span>
         <span>.อำเภอ/เขต</span>
@@ -113,7 +113,7 @@
         <span>เบอร์โทรศัพท์</span>
         <span class="dotted-line" style="width: 25%;">{{ $fields['field_3'] ?? '-' }}</span>
         <span>โทรสาร</span>
-        <span class="dotted-line" style="width: 25%;">{{ $fields['field_3'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 25%;">{{ $fields['field_'] ?? '-' }}</span>
     </div>
 
     <div class="box_text" style="text-align: left; margin-left:5rem;margin-top:10px;">

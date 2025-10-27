@@ -4,9 +4,11 @@
 @section('request-header', 'คำขอรับใบอนุญาตจัดตั้งตลาด')
 
 @section('request-content')
-    <h4 class="header-form-name my-2 mx-4">
-        รายละเอียดคำขอรับใบอนุญาตจัดตั้งตลาด
-    </h4>
+    <div class="text-center">
+        <h4 class="header-form-name my-2 mx-4">
+            รายละเอียดคำขอรับใบอนุญาตจัดตั้งตลาด
+        </h4>
+    </div>
 
     <div class="list-group text-start">
         {{-- วันที่ --}}
@@ -176,7 +178,7 @@
 
             <div class="form-check mb-2">
                 <label class="form-check-label" for="fileCheck2">สำเนาทะเบียนบ้าน</label>
-                 @if ($file3)
+                @if ($file3)
                     <a href="{{ asset('storage/' . $file2->file_path) }}" target="_blank">{{ $file2->file_name }}</a>
                 @else
                     <span>-</span>
@@ -185,7 +187,7 @@
 
             <div class="form-check mb-2">
                 <label class="form-check-label" for="fileCheck3">สำเนาใบอนุญาตตามกฎหมายที่เกี่ยวข้อง</label>
-                 @if ($file3)
+                @if ($file3)
                     <a href="{{ asset('storage/' . $file3->file_path) }}" target="_blank">{{ $file3->file_name }}</a>
                 @else
                     <span>-</span>
@@ -195,7 +197,7 @@
                 <label class="form-check-label" for="fileCheck4">สำเนาหนังสือรับรองการจดทะเบียนนิติบุคคล
                     พร้อมสำเนาบัตรประจำตัวประชาชนของผู้แทนนิติ
                     บุคคล (ในกรณีที่ผู้ขออนุญาตเป็นนิติบุคคล)</label>
-                 @if ($file4)
+                @if ($file4)
                     <a href="{{ asset('storage/' . $file4->file_path) }}" target="_blank">{{ $file4->file_name }}</a>
                 @else
                     <span>-</span>
@@ -205,7 +207,7 @@
                 <label class="form-check-label"
                     for="fileCheck5">หนังสือมอบอำนาจในกรณีที่เจ้าของกิจการไม่มายื่นขอรับใบอนุญาตด้วยตนเอง
                 </label>
-                 @if ($file5)
+                @if ($file5)
                     <a href="{{ asset('storage/' . $file5->file_path) }}" target="_blank">{{ $file5->file_name }}</a>
                 @else
                     <span>-</span>
@@ -214,7 +216,7 @@
             <div class="form-check mb-2">
                 <label class="form-check-label" for="fileCheck6">อื่น ๆ ตามที่องค์การบริหารส่วนตำบลหนองโพธิ์กำหนด
                 </label>
-                 @if ($file6)
+                @if ($file6)
                     <a href="{{ asset('storage/' . $file6->file_path) }}" target="_blank">{{ $file6->file_name }}</a>
                 @else
                     <span>-</span>

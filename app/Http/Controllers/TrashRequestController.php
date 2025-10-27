@@ -264,6 +264,7 @@ class TrashRequestController extends Controller
             'field_12' => $trashRequest->place_type ?? '-',
             'field_13' => $trashRequest->alley ?? '-',
             'field_14' => $trashRequest->road ?? '-',
+            'field_15' => $trashRequest->fax ?? '-',
         ];
 
         // ✅ ดึงชื่อ field_name ของไฟล์ทั้งหมด
@@ -568,7 +569,7 @@ public function appointmentDataEngineer($type)
         // ดึงคำร้องที่ status เป็น 'รอออกใบอนุญาต' หรือ 'เสร็จสิ้น'
         $trashRequests = TrashRequest::with('receiver:id,name', 'histories')
             ->where('type', $type)
-            ->whereIn('status', ['รอออกใบอนุญาต', 'เสร็จสิ้น'])
+            ->whereIn('status', ['รอออกใบอนุญาต', 'ออกใบอนุญาตเสร็จสิ้น'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -670,6 +671,89 @@ public function appointmentDataEngineer($type)
         return Pdf::loadView('pdf.receipt_bill.pdf', compact('fields', 'day', 'month', 'year', 'uploadedFiles'))
             ->setPaper('A4', 'portrait')
             ->stream('ใบเสร็จค่ามูลฝอย.pdf');
+    }
+
+    public function showLicensePdf($type, $id)
+    {
+        // ดึง TrashRequest พร้อมไฟล์
+        $trashRequest = TrashRequest::with('files')->findOrFail($id);
+
+        // วัน เดือน ปี ภาษาไทย
+        $date = \Carbon\Carbon::parse($trashRequest->created_at ?? now());
+        $day = $date->format('d');
+        $thaiMonths = [
+            1 => 'มกราคม', 2 => 'กุมภาพันธ์', 3 => 'มีนาคม', 4 => 'เมษายน',
+            5 => 'พฤษภาคม', 6 => 'มิถุนายน', 7 => 'กรกฎาคม', 8 => 'สิงหาคม',
+            9 => 'กันยายน', 10 => 'ตุลาคม', 11 => 'พฤศจิกายน', 12 => 'ธันวาคม'
+        ];
+        $month = $thaiMonths[(int)$date->format('m')];
+        $year = $date->format('Y') + 543;
+
+        // Mapping fields สำหรับ PDF
+        $fields = [
+            'field_1' => $trashRequest->fullname ?? '-',
+            'field_2' => $trashRequest->prefix ?? '-',
+            'field_3' => $trashRequest->age ?? '-',
+            'field_4' => $trashRequest->nationality ?? '-',
+            'field_5' => $trashRequest->id_card ?? '-',
+            'field_6' => $trashRequest->alley ?? '-',
+            'field_7' => $trashRequest->road ?? '-',
+            'field_8' => $trashRequest->house_no ?? '-',
+            'field_9' => $trashRequest->village_no ?? '-',
+            'field_10' => $trashRequest?->subdistrict ?? '-',
+            'field_11' => $trashRequest?->district ?? '-',
+            'field_12' => $trashRequest?->province ?? '-',
+            'field_13' => $trashRequest?->tel ?? '-',
+            'field_14' => $trashRequest?->fax ?? '-',
+            'field_15' => '00',
+            'field_20' => $trashRequest->id,
+        ];
+
+        // ไฟล์ที่อัพโหลด
+        $uploadedFiles = $trashRequest->files->pluck('field_name')->toArray();
+
+        // สร้างชื่อ view dynamic ตาม type
+        $view = "pdf.license.{$type}-pdf";
+
+        // ตรวจสอบว่า view มีจริงไหม
+        if (!view()->exists($view)) {
+            abort(404, "ไม่พบ template สำหรับประเภท: {$type}");
+        }
+
+        // สร้าง PDF
+        return \Barryvdh\DomPDF\Facade\Pdf::loadView($view, compact('fields', 'day', 'month', 'year', 'uploadedFiles'))
+            ->setPaper('A4', 'portrait')
+            ->stream("ใบอนุญาต_{$type}_{$trashRequest->fullname}.pdf");
+    }
+
+    public function saveLicense($id)
+    {
+        $trashRequest = TrashRequest::findOrFail($id);
+
+        $now = Carbon::now();
+
+        // ตรวจสอบ addon ก่อนใช้งาน
+        $addon = is_array($trashRequest->addon) ? $trashRequest->addon : ($trashRequest->addon ? json_decode($trashRequest->addon, true) : []);
+        if (!is_array($addon)) {
+            $addon = [];
+        }
+
+        // เพิ่มข้อมูลใบอนุญาต
+        $addon['license_issued_at'] = $now->toDateString(); // วันที่ออกใบอนุญาต
+        $addon['license_expire_at'] = $now->copy()->addYear()->toDateString(); // วันหมดอายุ +1 ปี
+        $addon['license_issued_by'] = Auth::id(); // รหัสผู้บันทึก
+
+        $trashRequest->addon = $addon;
+
+        // อัปเดตสถานะ
+        $trashRequest->status = 'ออกใบอนุญาตเสร็จสิ้น';
+
+        $trashRequest->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'บันทึกใบอนุญาตเรียบร้อยแล้ว'
+        ]);
     }
 
 

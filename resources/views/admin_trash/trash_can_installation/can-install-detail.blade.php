@@ -17,10 +17,13 @@
         @endif
     </div>
 
-    <div class="mb-3"> <img src="{{ url('../img/trash-installer/2.png') }}" alt="icon-5" class="img-fluid logo-img">
+    <div class="mb-3">
+        <img src="{{ url('../img/trash-installer/2.png') }}" alt="icon-5" class="img-fluid logo-img">
         <strong>แผนที่ตำแหน่งติดตั้ง:</strong>
     </div>
-    <div id="map" style="height: 400px; border-radius: 15px; overflow: hidden;"></div>
+
+    <!-- Desktop map -->
+    <div id="map-desktop" style="height: 400px; border-radius: 15px; overflow: hidden;"></div>
 
     {{-- โหลด Leaflet --}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -28,45 +31,40 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // รับพิกัดจากฐานข้อมูล (หรือใช้ค่า default ถ้าไม่มี)
             const lat = {{ $location->lat ?? 13.736717 }};
             const lng = {{ $location->lng ?? 100.523186 }};
 
-            // สร้างแผนที่
-            const map = L.map("map").setView([lat, lng], 15);
+            const mapDesktop = L.map("map-desktop").setView([lat, lng], 15);
 
-            // ใช้ tile แบบ Google Maps
             const googleMap = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
                 maxZoom: 20,
                 subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-            }).addTo(map);
+            }).addTo(mapDesktop);
 
-            // ✅ สร้าง icon ใหม่จากรูปภาพของคุณ
             const trashIcon = L.icon({
-                iconUrl: "{{ asset('img/trash-installer/1.png') }}", // ใช้ asset() เพื่อให้ path ถูกต้อง
-                iconSize: [30, 55], // ขนาดไอคอน (ปรับได้)
-                iconAnchor: [22, 45], // จุดยึดของไอคอน (กลางล่าง)
-                popupAnchor: [0, -40] // ตำแหน่ง popup เทียบกับ icon
+                iconUrl: "{{ asset('img/trash-installer/1.png') }}",
+                iconSize: [30, 55],
+                iconAnchor: [22, 45],
+                popupAnchor: [0, -40]
             });
 
-            // ✅ ใช้ icon นี้กับ marker
-            const marker = L.marker([lat, lng], {
-                    icon: trashIcon
-                }).addTo(map)
+            const markerDesktop = L.marker([lat, lng], { icon: trashIcon })
+                .addTo(mapDesktop)
                 .bindPopup("{{ $location->name ?? 'ตำแหน่งติดตั้งถังขยะ' }}")
                 .openPopup();
 
-            // รองรับการคลิกเปลี่ยนหมุดใหม่
-            map.on('click', function(e) {
+            mapDesktop.on('click', function(e) {
                 if (confirm("ต้องการเปลี่ยนตำแหน่งหมุดหรือไม่?")) {
-                    marker.setLatLng(e.latlng)
+                    markerDesktop.setLatLng(e.latlng)
                         .bindPopup("ตำแหน่งใหม่")
                         .openPopup();
                 }
             });
+
+            // รีคำนวณขนาดเมื่อ window resize
+            window.addEventListener('resize', () => mapDesktop.invalidateSize());
         });
     </script>
-
 @endsection
 
 @section('mobile-content')
@@ -85,54 +83,47 @@
         @endif
     </div>
 
-    <div class="mb-3"> <img src="{{ url('../img/trash-installer/2.png') }}" alt="icon-5" class="img-fluid logo-img">
+    <div class="mb-3">
+        <img src="{{ url('../img/trash-installer/2.png') }}" alt="icon-5" class="img-fluid logo-img">
         <strong>แผนที่ตำแหน่งติดตั้ง:</strong>
     </div>
-    <div id="map" style="height: 400px; border-radius: 15px; overflow: hidden;"></div>
 
-    {{-- โหลด Leaflet --}}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Mobile map -->
+    <div id="map-mobile" style="height: 400px; border-radius: 15px; overflow: hidden;"></div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // รับพิกัดจากฐานข้อมูล (หรือใช้ค่า default ถ้าไม่มี)
             const lat = {{ $location->lat ?? 13.736717 }};
             const lng = {{ $location->lng ?? 100.523186 }};
 
-            // สร้างแผนที่
-            const map = L.map("map").setView([lat, lng], 15);
+            const mapMobile = L.map("map-mobile").setView([lat, lng], 15);
 
-            // ใช้ tile แบบ Google Maps
             const googleMap = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
                 maxZoom: 20,
                 subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-            }).addTo(map);
+            }).addTo(mapMobile);
 
-            // ✅ สร้าง icon ใหม่จากรูปภาพของคุณ
             const trashIcon = L.icon({
-                iconUrl: "{{ asset('img/trash-installer/1.png') }}", // ใช้ asset() เพื่อให้ path ถูกต้อง
-                iconSize: [30, 55], // ขนาดไอคอน (ปรับได้)
-                iconAnchor: [22, 45], // จุดยึดของไอคอน (กลางล่าง)
-                popupAnchor: [0, -40] // ตำแหน่ง popup เทียบกับ icon
+                iconUrl: "{{ asset('img/trash-installer/1.png') }}",
+                iconSize: [30, 55],
+                iconAnchor: [22, 45],
+                popupAnchor: [0, -40]
             });
 
-            // ✅ ใช้ icon นี้กับ marker
-            const marker = L.marker([lat, lng], {
-                    icon: trashIcon
-                }).addTo(map)
+            const markerMobile = L.marker([lat, lng], { icon: trashIcon })
+                .addTo(mapMobile)
                 .bindPopup("{{ $location->name ?? 'ตำแหน่งติดตั้งถังขยะ' }}")
                 .openPopup();
 
-            // รองรับการคลิกเปลี่ยนหมุดใหม่
-            map.on('click', function(e) {
+            mapMobile.on('click', function(e) {
                 if (confirm("ต้องการเปลี่ยนตำแหน่งหมุดหรือไม่?")) {
-                    marker.setLatLng(e.latlng)
+                    markerMobile.setLatLng(e.latlng)
                         .bindPopup("ตำแหน่งใหม่")
                         .openPopup();
                 }
             });
+
+            window.addEventListener('resize', () => mapMobile.invalidateSize());
         });
     </script>
-
 @endsection

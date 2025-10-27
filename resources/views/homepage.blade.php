@@ -68,10 +68,10 @@
                             <!-- แถวล่าง 2 ปุ่ม อยู่ตรงกลาง -->
                             <div class="w-100 d-flex justify-content-center gap-2 mt-2">
                                 <a href="/user/emergency/broken-road" class="btn-emergency">
-                                    <img src="../img/homepage/Button-6.png" alt="ถนนเสีย" class="img-fluid">
+                                    <img src="../img/homepage/Button-7.png" alt="ถนนเสีย" class="img-fluid">
                                 </a>
                                 <a href="/user/emergency/elec-broken" class="btn-emergency">
-                                    <img src="../img/homepage/Button-7.png" alt="ไฟเสีย" class="img-fluid">
+                                    <img src="../img/homepage/Button-6.png" alt="ไฟเสีย" class="img-fluid">
                                 </a>
                             </div>
                         </div>

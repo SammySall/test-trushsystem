@@ -116,7 +116,7 @@
                     <label class="form-label">ประเภท<span class="text-danger">*</span></label>
                     <input type="text" name="addon[individual][type]" class="form-control">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label">จำนวนห้องเช่า(ห้อง)<span class="text-danger">*</span></label>
                     <input type="text" name="addon[individual][room_count]" class="form-control">
                 </div>
@@ -132,7 +132,7 @@
                     <label class="form-label">ประเภท<span class="text-danger">*</span></label>
                     <input type="text" name="addon[corporation][type]" class="form-control">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label">จำนวนคนงาน(คน)<span class="text-danger">*</span></label>
                     <input type="text" name="addon[corporation][worker_count]" class="form-control">
                 </div>

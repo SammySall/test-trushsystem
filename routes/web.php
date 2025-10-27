@@ -110,8 +110,11 @@ Route::get('/admin/waste_payment', [TrashLocationController::class, 'dashboard']
 //     return view('admin_trash.showdata');
 // });
 
-Route::get('bill/{bill}/pdf', [TrashRequestController::class, 'showPdfReceiptBill'])
+Route::get('/bill/{bill}/pdf', [TrashRequestController::class, 'showPdfReceiptBill'])
     ->name('admin.bill.pdf');
+Route::get('/license/{type}/pdf/{id}', [TrashRequestController::class, 'showLicensePdf'])
+    ->name('admin_trash.license_pdf');
+
 
 Route::get('/admin/showdata', [TrashRequestController::class, 'showData'])->name('admin.showdata');
 Route::post('/admin/reply/{id}', [TrashRequestController::class, 'reply'])->name('admin.trash.reply');
@@ -141,7 +144,7 @@ Route::get('/admin/request/public-health/Issue-a-license/{type}', [TrashRequestC
     ->name('admin.public-health.issue-license');
 Route::post('/admin/request/public-health/upload-license/{id}', [TrashRequestController::class, 'uploadLicense'])
     ->name('admin.request.upload_license');
-
+Route::post('/admin/request/public-health/save-license/{id}', [TrashRequestController::class, 'saveLicense'])->name('admin_trash.save_license');
 
 Route::get('/admin/request/public-health/confirm_payment/{type}', 
     [TrashRequestController::class, 'confirmPaymentRequest'])
@@ -203,6 +206,10 @@ Route::get('/dev/reset', function () {
     }
 });
 
+Route::get('/link-storage', function () {
+    Artisan::call('storage:link');
+    return 'Storage link created!';
+});
 
 Route::fallback(function(){
     return view('notfound');
