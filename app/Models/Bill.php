@@ -25,9 +25,9 @@ class Bill extends Model
 
     public function trashLocation()
     {
-        return $this->belongsTo(TrashLocation::class, 'trash_location_id');
+        return $this->belongsTo(TrashLocation::class, 'trash_location_id', 'id');
     }
-
+    
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

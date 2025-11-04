@@ -24,16 +24,25 @@
                             <td>{{ $item->fullname ?? '-' }}</td>
                             <td>{{ $item->latest_update }}</td>
                             <td>
-                                <span class="badge rounded-pill text-bg-success">{{ $item->status }}</span>
+                                <img src="{{ url('../img/icon/' . $item->status . '.png') }}" class="img-fluid logo-img"
+                                    alt="{{ $item->status }}">
                             </td>
                             <td>
 
-                                @if ($item->status !== 'เสร็จสิ้น' && $item->status !== 'ออกใบอนุญาตแล้ว')
+                                @if ($item->status !== 'เสร็จสิ้น' && $item->status !== 'ออกใบอนุญาตเสร็จสิ้น')
                                     <!-- ปุ่มออกใบอนุญาต (ถ้าไม่เสร็จสิ้น) -->
                                     <button class="btn btn-primary btn-sm"
-                                        onclick="uploadLicense({{ $item->id }}, '{{ $item->fullname }}', '{{ $item->addon['payment']['slip_path'] ?? '' }}')">
+                                        onclick="uploadLicense({{ $item->id }}, '{{ $item->fullname }}', '{{ $item->addon['payment']['slip_path'] ?? '' }}', '{{ $item->type }}')">
                                         <i class="bi bi-upload"></i>
                                     </button>
+                                @endif
+
+                                @if ($item->status == 'เสร็จสิ้น' || $item->status == 'ออกใบอนุญาตเสร็จสิ้น')
+                                    <!-- ปุ่มดูใบอนุญาต PDF -->
+                                    <a href="{{ url('/license/' . $item->type . '/pdf/' . $item->id) }}" target="_blank"
+                                        class="btn btn-primary btn-sm">
+                                        <i class="bi bi-file-earmark-pdf"></i> ดูใบอนุญาต
+                                    </a>
                                 @endif
 
                                 <a href="{{ route('admin_trash.show_pdf', $item->id) }}" target="_blank"
@@ -60,37 +69,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script>
-        function uploadLicense(requestId, fullname, slipPath = null) {
+        function uploadLicense(requestId, fullname, slipPath = null, type = 'garbage') {
+            const pdfUrl = `/license/${type}/pdf/${requestId}`;
+
             Swal.fire({
-                title: `อัปโหลดใบอนุญาต: ${fullname}`,
-                html: `
-            ${slipPath ? `<div style="margin-bottom:10px;">
-                            <label>รูปใบเสร็จที่แนบไว้:</label><br>
-                            <img src="/storage/${slipPath}" style="max-width:100%; max-height:200px; border:1px solid #ccc; border-radius:5px;">
-                        </div>` : ''}
-            <input type="file" id="license_file" class="swal2-file" accept=".pdf,.jpg,.jpeg,.png">
-        `,
+                title: `ออกใบอนุญาต: ${fullname}`,
+                html: `<div style="margin-bottom:10px;">
+            <label>ใบอนุญาต:</label><br>
+            <a href="${pdfUrl}" target="_blank" style="display:inline-block; padding:5px 10px; background:#4caf50; color:#fff; border-radius:5px; text-decoration:none;">
+                เปิดไฟล์ PDF ใบอนุญาต
+            </a>
+            ${slipPath ? `
+                                    <div style="margin-top:10px;">
+                                        <label>ใบเสร็จแนบ:</label><br>
+                                        <a href="/storage/${slipPath}" target="_blank" style="display:inline-block; padding:5px 10px; background:#2196f3; color:#fff; border-radius:5px; text-decoration:none;">
+                                            เปิดไฟล์ PDF / รูปภาพใบเสร็จ
+                                        </a>
+                                        <div style="margin-top:5px;">
+                                            <img src="/storage/${slipPath}" style="max-width:100%; max-height:200px; border:1px solid #ccc; border-radius:5px;">
+                                        </div>
+                                    </div>
+                                ` : ''}
+        </div>`,
                 showCancelButton: true,
-                confirmButtonText: 'อัปโหลด',
-                preConfirm: () => {
-                    const file = document.getElementById('license_file').files[0];
-                    if (!file) {
-                        Swal.showValidationMessage('กรุณาเลือกไฟล์ใบอนุญาต');
-                    }
-                    return file;
-                }
+                confirmButtonText: 'บันทึก',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const formData = new FormData();
-                    formData.append('license_file', result.value);
-                    formData.append('_token', '{{ csrf_token() }}');
-
                     $.ajax({
-                        url: `/admin/request/public-health/upload-license/${requestId}`,
+                        url: `/admin/request/public-health/save-license/${requestId}`,
                         method: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
                         success: function(response) {
                             if (response.success) {
                                 Swal.fire('สำเร็จ!', response.message, 'success').then(() => {
@@ -101,7 +111,7 @@
                             }
                         },
                         error: function() {
-                            Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถอัปโหลดใบอนุญาตได้', 'error');
+                            Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถบันทึกใบอนุญาตได้', 'error');
                         }
                     });
                 }

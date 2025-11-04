@@ -195,7 +195,7 @@
                 </div>
                 <div class="form-check mb-2">
                     <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck6">
-                    <label class="form-check-label" for="fileCheck6">อื่น ๆ ตามที่องค์การบริหารส่วนตำบลหนองโพธิ์กำหนด
+                    <label class="form-check-label" for="fileCheck6">อื่น ๆ ตามที่องค์การบริหารส่วนตำบลท่าข้ามกำหนด
                     </label>
                     <input type="file" name="files6[]" class="form-control file-input" multiple
                         accept=".jpg,.jpeg,.png,.pdf" style="display:none;">

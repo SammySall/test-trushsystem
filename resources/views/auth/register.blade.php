@@ -37,8 +37,29 @@
                     <!-- แถวแรก -->
                     <div class="row">
                         <div class="col-12 col-md-6">
-                            <label for="email" class="form-label">อีเมล(username)</label>
-                            <input type="email" name="email" id="email" class="form-control" required>
+                            <label class="form-label d-block">ชื่อผู้ใช้</label>
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="form-check me-3">
+                                    <input class="form-check-input" type="radio" name="login_type" id="radio_email"
+                                        value="email" checked>
+                                    <label class="form-check-label" for="radio_email">ใช้อีเมล</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="login_type" id="radio_phone"
+                                        value="phone">
+                                    <label class="form-check-label" for="radio_phone">ใช้เบอร์โทรศัพท์</label>
+                                </div>
+                            </div>
+
+                            <!-- ช่องกรอกอีเมล -->
+                            <small id="email_hint" class="text-danger d-none">example@example.com</small>
+                            <input type="email" name="email" id="input_email" class="form-control mt-1"
+                                placeholder="กรอกอีเมลของคุณ">
+
+                            <!-- ช่องกรอกเบอร์โทร (ซ่อนเริ่มต้น) -->
+                            <input type="tel" id="input_phone" class="form-control mt-2 d-none" pattern="[0-9]{10}"
+                                maxlength="10" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก">
+                            <small class="text-muted">เลือกวิธีเข้าสู่ระบบที่คุณต้องการใช้</small>
                         </div>
                         <div class="col-12 col-md-6"></div>
                     </div>
@@ -81,8 +102,8 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="tel" class="form-label">เบอร์โทรศัพท์</label>
-                            <input type="tel" name="tel" id="tel" class="form-control" pattern="[0-9]{10}"
-                                maxlength="10" required>
+                            <input type="tel" name="tel" id="tel" class="form-control"
+                                pattern="[0-9]{10}" maxlength="10" required>
                         </div>
                     </div>
 
@@ -130,6 +151,43 @@
         </div>
     </div>
 
+    <!-- Script เปลี่ยนช่องตาม radio -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const radioEmail = document.getElementById('radio_email');
+            const radioPhone = document.getElementById('radio_phone');
+            const inputEmail = document.getElementById('input_email');
+            const inputPhone = document.getElementById('input_phone');
+            const emailHint = document.getElementById('email_hint'); // เพิ่มบรรทัดนี้
+
+            function toggleInput() {
+                if (radioEmail.checked) {
+                    inputEmail.classList.remove('d-none');
+                    inputEmail.setAttribute('name', 'email');
+                    inputEmail.required = true;
+                    emailHint.classList.remove('d-none'); // แสดงตัวอย่างเมล
+
+                    inputPhone.classList.add('d-none');
+                    inputPhone.removeAttribute('name');
+                    inputPhone.required = false;
+                } else {
+                    inputPhone.classList.remove('d-none');
+                    inputPhone.setAttribute('name', 'email');
+                    inputPhone.required = true;
+
+                    inputEmail.classList.add('d-none');
+                    inputEmail.removeAttribute('name');
+                    inputEmail.required = false;
+                    emailHint.classList.add('d-none'); // ซ่อนตัวอย่างเมล
+                }
+            }
+
+            radioEmail.addEventListener('change', toggleInput);
+            radioPhone.addEventListener('change', toggleInput);
+            toggleInput();
+        });
+    </script>
+
     <!-- SweetAlert2 Success -->
     @if (session('success'))
         <script>
@@ -144,6 +202,3 @@
             });
         </script>
     @endif
-</body>
-
-</html>

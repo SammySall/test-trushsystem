@@ -42,7 +42,7 @@
 
     <div class="row mb-3">
         <div class="col bg-white p-3 shadow-sm rounded table-container">
-            <h5 class="fw-bold mb-3">{{ $formTitle }}</h5>
+            <h5 class="fw-bold mb-3 text-center">{{ $formTitle }}</h5>
 
             <div class="table-responsive">
                 <table class="table table-bordered table-striped text-center align-middle w-100 custom-table">
@@ -63,7 +63,15 @@
                                 <td>{{ $request->prefix }} {{ $request->fullname }}</td>
                                 <td>{{ $request->appointment_date ?? '-' }}</td>
                                 <td>{{ $request->convenient_date ?? '-' }}</td>
-                                <td>{{ $request->status }}</td>
+                                @if ($request->status === 'รออนุมัติเรียกชำระเงิน')
+                                    @php
+                                        $request->status = 'รอการอนุมัติ';
+                                    @endphp
+                                @endif
+                                <td>
+                                    <img src="{{ url('../img/icon/' . $request->status . '.png') }}"
+                                        class="img-fluid logo-img" alt="{{ $request->status }}">
+                                </td>
                                 <td class="action-buttons">
                                     {{-- ปุ่มรอยืนยันนัดหมาย --}}
                                     @if ($request->status === 'รอยืนยันนัดหมาย')
@@ -106,11 +114,18 @@
                                     </a>
 
                                     {{-- ปุ่มดูใบอนุญาต PDF (ถ้าเสร็จสิ้น) --}}
-                                    @if (($request->status == 'เสร็จสิ้น' || $request->status == 'ออกใบอนุญาตเสร็จสิ้น') && $request->type !== 'trash-request')
+                                    @if (
+                                        ($request->status == 'เสร็จสิ้น' || $request->status == 'ออกใบอนุญาตเสร็จสิ้น') &&
+                                            $request->type !== 'trash-request')
                                         <a href="{{ url('/license/' . $request->type . '/pdf/' . $request->id) }}"
                                             target="_blank" class="btn btn-primary btn-sm mt-1">
                                             <i class="bi bi-file-earmark-pdf"></i> <small>ดูใบอนุญาต</small>
                                         </a>
+                                    @endif
+                                    @if ($request->show_renew_button)
+                                        <button class="btn btn-success btn-sm renew-license" data-id="{{ $request->id }}">
+                                            <i class="bi bi-arrow-repeat"></i> ต่ออายุ
+                                        </button>
                                     @endif
                                 </td>
 
@@ -140,18 +155,39 @@
                 Swal.fire({
                     title: `นัดหมาย: ${title}`,
                     html: `
-                    <p>วันนัดหมาย: ${appointmentDate}</p>
-                    <label>เลือกวันที่สะดวก:</label>
-                    <input type="datetime-local" id="convenient_date" class="swal2-input">
-                `,
+                <p>วันนัดหมาย: ${appointmentDate}</p>
+                <label><input type="radio" name="convenient_option" value="yes" checked> สะดวกในวันที่นัด</label><br>
+                <label><input type="radio" name="convenient_option" value="no"> ไม่สะดวก</label>
+                <input type="datetime-local" id="convenient_date" class="swal2-input" style="display:none; margin-top:10px;">
+            `,
                     showCancelButton: true,
                     confirmButtonText: 'บันทึก',
+                    didOpen: () => {
+                        const radios = Swal.getPopup().querySelectorAll(
+                            'input[name="convenient_option"]');
+                        const datetimeInput = Swal.getPopup().querySelector('#convenient_date');
+
+                        radios.forEach(radio => {
+                            radio.addEventListener('change', () => {
+                                if (radio.value === 'no') {
+                                    datetimeInput.style.display = 'block';
+                                } else {
+                                    datetimeInput.style.display = 'none';
+                                }
+                            });
+                        });
+                    },
                     preConfirm: () => {
-                        const convenientDate = Swal.getPopup().querySelector('#convenient_date')
-                            .value;
-                        if (!convenientDate) Swal.showValidationMessage(
-                            'กรุณาเลือกวันเวลาที่สะดวก');
-                        return convenientDate;
+                        const selectedOption = Swal.getPopup().querySelector(
+                            'input[name="convenient_option"]:checked').value;
+                        if (selectedOption === 'no') {
+                            const convenientDate = Swal.getPopup().querySelector(
+                                '#convenient_date').value;
+                            if (!convenientDate) Swal.showValidationMessage(
+                                'กรุณาเลือกวันเวลาที่สะดวก');
+                            return convenientDate;
+                        }
+                        return appointmentDate; // ใช้วันนัดเดิม
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
@@ -178,6 +214,7 @@
                 });
             });
         });
+
 
         // รอชำระเงิน (User ส่งสลิป)
         document.querySelectorAll('.confirm-payment').forEach(button => {
@@ -233,6 +270,66 @@
                         } catch (err) {
                             Swal.fire('ผิดพลาด!', 'เกิดข้อผิดพลาด', 'error');
                         }
+                    }
+                });
+            });
+        });
+        // ปุ่มต่ออายุใบอนุญาต
+        document.querySelectorAll('.renew-license').forEach(button => {
+            button.addEventListener('click', () => {
+                const requestId = button.dataset.id;
+
+                Swal.fire({
+                    title: 'ขอต่ออายุใบอนุญาต',
+                    html: `
+                <label>หมายเหตุ:</label>
+                <textarea id="remark" class="swal2-textarea" placeholder="ระบุหมายเหตุ"></textarea>
+                <label>ต่ออายุถึงวันที่:</label>
+                <input type="date" id="new_expire_date" class="swal2-input">
+            `,
+                    showCancelButton: true,
+                    confirmButtonText: 'ตกลง',
+                    cancelButtonText: 'ยกเลิก',
+                    preConfirm: () => {
+                        const remark = Swal.getPopup().querySelector('#remark').value;
+                        const newExpireDate = Swal.getPopup().querySelector('#new_expire_date')
+                            .value;
+                        if (!newExpireDate) Swal.showValidationMessage(
+                            'กรุณาเลือกวันที่ต่ออายุ');
+                        return {
+                            remark,
+                            new_expire_date: newExpireDate
+                        };
+                    }
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        const {
+                            remark,
+                            new_expire_date
+                        } = result.value;
+
+                        fetch(`/user/history-request/renew-license/${requestId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({
+                                    remark,
+                                    new_expire_date
+                                })
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire('สำเร็จ!', data.message, 'success').then(() =>
+                                        location.reload());
+                                } else {
+                                    Swal.fire('ผิดพลาด!', data.message, 'error');
+                                }
+                            })
+                            .catch(() => Swal.fire('ผิดพลาด!', 'ไม่สามารถอัปเดตข้อมูลได้',
+                                'error'));
                     }
                 });
             });

@@ -67,9 +67,11 @@
                             <td>{{ $count }}</td>
                             <td>
                                 @if ($hasMissingSlip)
-                                    <span class="text-warning">มีบางรายการยังไม่แนบบิล</span>
+                                    <img src="{{ url('../img/icon/ยังไม่ชำระ.png') }}" class="img-fluid logo-img"
+                                        alt="ยังไม่ชำระ">
                                 @else
-                                    <span class="text-success">ชำระแล้วทั้งหมด</span>
+                                    <img src="{{ url('../img/icon/เสร็จสิ้น.png') }}" class="img-fluid logo-img"
+                                        alt="เสร็จสิ้น">
                                 @endif
                             </td>
                             <td>
@@ -179,9 +181,11 @@
                                 <td>{{ $count }}</td>
                                 <td>
                                     @if ($hasMissingSlip)
-                                        <span class="text-warning">มีบางรายการยังไม่แนบบิล</span>
+                                        <img src="{{ url('../img/icon/ยังไม่ชำระ.png') }}" class="img-fluid logo-img"
+                                            alt="ยังไม่ชำระ">
                                     @else
-                                        <span class="text-success">ชำระแล้วทั้งหมด</span>
+                                        <img src="{{ url('../img/icon/เสร็จสิ้น.png') }}" class="img-fluid logo-img"
+                                            alt="เสร็จสิ้น">
                                     @endif
                                 </td>
                                 <td>

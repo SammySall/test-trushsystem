@@ -1,23 +1,24 @@
 @extends('layout.layout-admin-request')
-@section('title', 'กองช่าง')
+@section('title', 'กองสาธารณสุขฯ')
 
 @section('content')
 
     @switch($type)
-        @case('new-license-engineer')
-            @php $formTitle = 'คำขอใบอนุญาตก่อสร้าง'; @endphp
+        @case('trash-request')
+            @php $formTitle = 'คำร้องขออนุญาตลงถังขยะ'; @endphp
         @break
 
-        @case('renew-license-engineer')
-            @php $formTitle = 'คำขอต่ออายุใบอนุญาตก่อสร้างฯ'; @endphp
+        @case('market-establishment-license')
+            @php $formTitle = 'คำขอรับใบอนุญาตจัดตั้งตลาด'; @endphp
         @break
 
         @case('food-sales-license')
-            @php $formTitle = 'คำขอรับใบอนุญาตสถานที่จำหน่ายอาหาร'; @endphp
+            @php $formTitle = 'คำขอรับใบอนุญาตจัดตั้งสถานที่จำหน่ายอาหาร หรือสะสมอาหาร'; @endphp
         @break
 
         @case('health-hazard-license')
-            @php $formTitle = 'คำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ'; @endphp
+            @php             $formTitle = 'คำขอรับใบอนุญาตประกอบกิจการที่เป็นอันตรายต่อสุขภาพ
+'; @endphp
         @break
 
         @case('waste-disposal-business-license')
@@ -28,11 +29,16 @@
             @php $formTitle = 'ไม่พบข้อมูลประเภทใบอนุญาต'; @endphp
     @endswitch
 
-    <h3 class="text-center px-2">{{ $formTitle }}</h3>
-    <h4 class="text-center px-2">ตารางแสดงข้อมูลฟอร์มที่ส่งเข้ามา</h4>
+    <div class="text-center px-2 d-flex justify-content-center">
+        <h3 class="text-title-show py-2 px-5 rounded-5">
+            {{ $formTitle }}
+        </h3>
+    </div>
+
+    <h4 class="text-subtitle-show text-center px-2">ตารางแสดงข้อมูลฟอร์มที่ส่งเข้ามา</h4>
 
     {{-- ฟิลเตอร์ --}}
-    <div id="data_table_wrapper" class="mt-3">
+    <div id="data_table_wrapper" class="mt-3 bg-white p-5 rounded-5">
         <div class="row mb-2">
             <div class="col-sm-12 col-md-6">
                 <label class="d-flex align-items-center">
@@ -73,7 +79,9 @@
                             <td>{{ $item->fullname ?? '-' }}</td>
                             <td>{{ $item->receiver_name ?? '-' }}</td>
                             <td>
-                                <span class="badge rounded-pill text-bg-primary">รอรับเรื่อง</span>
+                                <img src="{{ url('../img/icon/' . $item->status . '.png') }}" class="img-fluid logo-img"
+                                    alt="{{ $item->status }}">
+                                {{-- <span class="badge rounded-pill text-bg-primary">รอรับเรื่อง</span> --}}
                             </td>
                             {{-- แก้ปุ่ม PDF ใน tbody --}}
                             <td>
@@ -82,7 +90,7 @@
                                     <i class="bi bi-filetype-pdf"></i>
                                 </a>
                                 {{-- ปุ่มค้นหา (ไม่ต้องใช้ SweetAlert) --}}
-                                <a href="{{ route('admin_request.detail', [
+                                <a href="{{ route('admin_request.engineering.detail', [
                                     'type' => $item->type,
                                     'id' => $item->id,
                                 ]) }}"

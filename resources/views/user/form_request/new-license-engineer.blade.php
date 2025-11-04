@@ -1,7 +1,7 @@
 @extends('layout.layout-request')
 @section('title', 'คำขอใบอนุญาตก่อสร้าง')
 @section('request-header-img', 'renew-license-engineer')
-@section('request-header', 'คำขอใบอนุญาติก่อสร้าง')
+@section('request-header', 'คำขอใบอนุญาตก่อสร้าง ดัดแปลง รื้อถอน หรือเคลื่อนย้ายอาคาร')
 
 @section('request-content')
     <div class="list-group">
@@ -73,6 +73,10 @@
                     <input type="date" name="addon[corporation][corp_registered_at]" class="form-control">
                 </div>
                 <div class="col-md-3">
+                    <label class="form-label">เลขทะเบียน </label>
+                    <input type="text" class="form-control" name="addon[corporation][corp_registered_no]">
+                </div>
+                <div class="col-md-3">
                     <label class="form-label">สำนักงานตั้งอยู่เลขที่ </label>
                     <input type="text" class="form-control" name="addon[corporation][corp_home_no]">
                 </div>
@@ -82,7 +86,7 @@
                 </div>
                 <div class="col-md-3">
                     <label for="road" class="form-label">ถนน</label>
-                    <input type="text" class="form-control" name="field_15" id="addon[corporation][road]">
+                    <input type="text" class="form-control" name="addon[corporation][road]" id="addon[corporation][road]">
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">หมู่ที่<span class="text-danger">*</span></label>
@@ -104,6 +108,11 @@
                     <label for="tel" class="form-label">เบอร์โทร<span class="text-danger">*</span></label>
                     <input type="tel" class="form-control" name="addon[corporation][tel]" id="tel"
                         pattern="[0-9]{10}" maxlength="10">
+                </div>
+                <div class="col-md-3">
+                    <label for="tel" class="form-label">รหัสไปรษณีย์</label>
+                    <input type="tel" class="form-control" name="addon[corporation][postcode]" id="postcode"
+                        pattern="[0-9]{10}" maxlength="5">
                 </div>
                 <div class="col-md-3">
                     <label for="fax" class="form-label">โทรสาร</label>
@@ -149,6 +158,11 @@
                     <label for="tel" class="form-label">เบอร์โทร<span class="text-danger">*</span></label>
                     <input type="tel" class="form-control" name="field_3" id="tel" pattern="[0-9]{10}"
                         maxlength="10" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="tel" class="form-label">รหัสไปรษณีย์</label>
+                    <input type="tel" class="form-control" name="addon[postcode]" id="postcode"
+                        pattern="[0-9]{10}" maxlength="5">
                 </div>
                 <div class="col-md-3">
                     <label for="fax" class="form-label">โทรสาร</label>

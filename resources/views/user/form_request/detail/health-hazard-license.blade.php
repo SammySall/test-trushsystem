@@ -4,7 +4,7 @@
 @section('request-content')
     <div class="text-center">
         <h4 class="header-form-name my-2 mx-4">
-            รายละเอียดคำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ
+            รายละเอียดคำขอรับใบอนุญาตประกอบกิจการที่เป็นอันตรายต่อสุขภาพ
         </h4>
     </div>
 

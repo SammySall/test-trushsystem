@@ -10,8 +10,15 @@ return new class extends Migration
 {
     public function up(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        // ✅ ลบตารางเก่าก่อนสร้างใหม่
+        Schema::dropIfExists('trash_locations');
+        Schema::dropIfExists('bills');
         Schema::dropIfExists('users');
 
+        // ✅ เปิดการตรวจสอบกลับคืน
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -19,6 +26,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('address');
+            $table->string('tel', 10)->nullable();
+            $table->string('id_card', 13)->nullable();
             $table->enum('role', ['admin-trash', 'admin-e-service','admin-emergency','admin-engineer','admin-health', 'user','admin-request'])->default('user');
             $table->rememberToken();
             $table->timestamps();
@@ -31,6 +40,8 @@ return new class extends Migration
                 'email' => 'admin0@eservice.go.th',
                 'password' => Hash::make('123456789'),
                 'address' => '123/45',
+                'tel' => '0000000000',
+                'id_card' => '1111111111111',
                 'role' => 'admin-trash',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -40,6 +51,8 @@ return new class extends Migration
                 'email' => 'admin01@eservice.go.th',
                 'password' => Hash::make('123456789'),
                 'address' => '67/78',
+                'tel' => '0000000000',
+                'id_card' => '1111111111111',
                 'role' => 'admin-e-service',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -48,6 +61,8 @@ return new class extends Migration
                 'email' => 'admin05@eservice.go.th',
                 'password' => Hash::make('123456789'),
                 'address' => '67/78',
+                'tel' => '0000000000',
+                'id_card' => '1111111111111',
                 'role' => 'admin-emergency',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -57,6 +72,8 @@ return new class extends Migration
                 'email' => 'admin04@eservice.go.th',
                 'password' => Hash::make('123456789'),
                 'address' => '67/78',
+                'tel' => '0000000000',
+                'id_card' => '1111111111111',
                 'role' => 'admin-health',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -66,6 +83,8 @@ return new class extends Migration
                 'email' => 'users01@example.com',
                 'password' => Hash::make('123456789'),
                 'address' => '123 หมู่ 5',
+                'tel' => '0000000000',
+                'id_card' => '1111111111111',
                 'role' => 'user',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -75,6 +94,8 @@ return new class extends Migration
                 'email' => 'admin03@eservice.go.th',
                 'password' => Hash::make('123456789'),
                 'address' => '123 หมู่ 5',
+                'tel' => '0000000000',
+                'id_card' => '1111111111111',
                 'role' => 'admin-engineer',
                 'created_at' => now(),
                 'updated_at' => now(),

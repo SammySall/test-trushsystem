@@ -52,15 +52,8 @@
                             <td>{{ $item->fullname }}</td>
                             <td>{{ $item->receiver_name }}</td>
                             <td>
-                                @if ($item->status === 'เสร็จสิ้น')
-                                    <img src="{{ url('../img/trash-showdata/1.png') }}" alt="icon-5"
-                                        class="img-fluid logo-img">
-                                @elseif($item->status === 'รอรับเรื่อง')
-                                    <span style="font-size: 20px; color:orange;"><i
-                                            class="bi bi-hourglass-split"></i></span>
-                                @else
-                                    <span style="font-size: 20px; color:gray;"><i class="bi bi-dash-circle"></i></span>
-                                @endif
+                                <img src="{{ url('../img/icon/' . $item->status . '.png') }}" class="img-fluid logo-img"
+                                    alt="{{ $item->status }}">
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger btn-sm view-file"
@@ -390,14 +383,8 @@
                             <td>{{ $item->fullname }}</td>
                             <td>{{ $item->receiver_name }}</td>
                             <td>
-                                @if ($item->status === 'เสร็จสิ้น')
-                                    <img src="{{ url('../img/trash-showdata/1.png') }}" alt="icon-5"
-                                        class="img-fluid logo-img" style="height:24px;">
-                                @elseif($item->status === 'รอรับเรื่อง')
-                                    <i class="bi bi-hourglass-split text-warning" style="font-size:1.2rem;"></i>
-                                @else
-                                    <i class="bi bi-dash-circle text-secondary" style="font-size:1.2rem;"></i>
-                                @endif
+                                <img src="{{ url('../img/icon/' . $item->status . '.png') }}" class="img-fluid logo-img"
+                                    alt="{{ $item->status }}">
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger btn-sm view-file"

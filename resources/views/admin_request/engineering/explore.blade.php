@@ -48,7 +48,9 @@
                             <td>{{ $item->appointment_date ?? '-' }}</td>
                             <td>{{ $item->convenient_date ?? '-' }}</td>
                             <td>
-                                <span class="badge rounded-pill text-bg-success">{{ $item->status }}</span>
+                                <img src="{{ url('../img/icon/' . $item->status . '.png') }}" class="img-fluid logo-img"
+                                    alt="{{ $item->status }}">
+                                {{-- <span class="badge rounded-pill text-bg-success">{{ $item->status }}</span> --}}
                             </td>
                             <td>
                                 <a href="{{ route('admin_trash.show_pdf', $item->id) }}" target="_blank"

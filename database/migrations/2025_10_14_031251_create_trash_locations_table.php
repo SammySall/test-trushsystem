@@ -9,8 +9,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // ✅ ลบตารางเดิมถ้ามี
-        Schema::dropIfExists('trash_locations');
 
         // ✅ สร้างตารางใหม่
         Schema::create('trash_locations', function (Blueprint $table) {
@@ -19,6 +17,9 @@ return new class extends Migration
             $table->text('address');
             $table->enum('status', ['เสร็จสิ้น', 'รออนุมัติเรียกชำระเงิน']);
             $table->string('tel', 10)->default('0634461165');
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete(); 
+            $table->decimal('lat', 10, 7)->nullable();
+            $table->decimal('lng', 10, 7)->nullable();
             $table->timestamps();
         });
 

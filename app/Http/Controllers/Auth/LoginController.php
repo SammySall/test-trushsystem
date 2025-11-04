@@ -58,9 +58,9 @@ class LoginController extends Controller
             } elseif ($user->role === 'admin-emergency') {
                 return redirect('/admin/emergency/dashboard');
             } elseif ($user->role === 'admin-health') {
-                return redirect('/admin/request/public-health/appointment/health_hazard_license');
+                return redirect('/admin/request/public-health/appointment/health-hazard-license');
             } elseif ($user->role === 'admin-engineer') {
-                return redirect('/admin/request/engineering/appointment/health_hazard_license');
+                return redirect('/admin/request/engineering/appointment/new-license-engineer');
             } elseif ($user->role === 'user') {
                 return redirect('/homepage');
             } else {

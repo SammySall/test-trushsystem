@@ -75,8 +75,8 @@
         <div style="text-align: right">แบบ อภ.2<br>
         </div>
     </div>
-    <div style="margin-top: 15%">
-        {{-- <img src="{{ public_path('img/menuuser/LOGO.png') }}" alt="LOGO" style="width:150px; margin-bottom:10px;"> --}}
+    <div style="text-align: center;">
+        <img src="{{ public_path('img/icon/logo.png') }}" alt="LOGO" style="width:100px;">
         <div class="title_doc">ใบอนุญาต<br>
             ประกอบกิจการที่เป็นอันตรายต่อสุขภาพ</div>
     </div>
@@ -84,11 +84,11 @@
     <div class="box_text" style="text-align: left;">
         <span>เล่มที่
             <span class="dotted-line" style="width: 15%; text-align: center;">
-                {{ $fields['field_20'] ?? '-' }}</span>
+                {{ $fields['field_99'] ?? '-' }}</span>
             เลขที่ <span class="dotted-line" style="width: 10%; text-align: center;">
-                {{ $fields['field_20'] ?? '-' }}</span>
+                {{ $fields['field_99'] ?? '-' }}</span>
             ปี <span class="dotted-line" style="width: 10%; text-align: center;">
-                {{ $fields['field_20'] ?? '-' }}</span></span>
+                {{ $year ?? '-' }}</span></span>
     </div>
 
     <div class="box_text" style="text-align: left; margin-left:5rem;">
@@ -137,65 +137,65 @@
     <div class="box_text" style="text-align: left;">
         <span style="margin-left:5rem;">ข้อ 1 ประกอบกิจการที่เป็นอันตรายต่อสุขภาพ ประเภท</span>
         <span class="dotted-line" style="width: 45%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_15'] ?? '-' }}</span>
         <span>ลำดับที่</span>
         <span class="dotted-line" style="width: 20%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_99'] ?? '' }}</span>
         <span>ค่าธรรมเนียม</span>
         <span class="dotted-line" style="width: 20%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_16'] ?? '-' }}</span>
         <span>บาท ใบเสร็จรับเงินเล่มที่</span>
         <span class="dotted-line" style="width: 20%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_99'] ?? '' }}</span>
         <span>เลขที่</span>
         <span class="dotted-line" style="width: 18%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_99'] ?? '' }}</span>
         <span>ลงวันที่</span>
         <span class="dotted-line" style="width: 15%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_17'] ?? '-' }}</span>
         <span>เดือน</span>
         <span class="dotted-line" style="width: 20%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_18'] ?? '-' }}</span>
         <span>พ.ศ.</span>
         <span class="dotted-line" style="width: 15%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_19'] ?? '-' }}</span>
         <span>โดยใช้ชื่อ <br>
             สถานประกอบการว่า</span>
         <span class="dotted-line" style="width: 32%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_99'] ?? '' }}</span>
         <span>พื้นที่ประกอบการ</span>
         <span class="dotted-line" style="width: 24%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_99'] ?? '' }}</span>
         <span> ตารางเมตร</span>
         <br>
         <span> กำลังเครื่องจักร</span>
         <span class="dotted-line" style="width: 25%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_26'] ?? '-' }}</span>
         <span> แรงม้า</span>
         <span> จำนวนคนงาน</span>
         <span class="dotted-line" style="width: 25%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_25'] ?? '-' }}</span>
         <span> คน ตั้งอยู่ ณ เลขที่</span>
         <span class="dotted-line" style="width: 23%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_99'] ?? '-' }}</span>
         <span>หมู่ที่</span>
         <span class="dotted-line" style="width: 10%;">{{ $fields['field_6'] ?? '-' }}</span>
         <span>ครอก/ซอย</span>
         <span class="dotted-line" style="width: 23%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_99'] ?? '-' }}</span>
         <span>ถนน</span>
         <span class="dotted-line" style="width: 23%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_99'] ?? '-' }}</span>
         <span>ตำบล</span>
-        <span class="dotted-line" style="width: 27%;">{{ $fields['field_7'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 27%;">{{ $fields['field_99'] ?? '-' }}</span>
         <span>อำเภอ</span>
-        <span class="dotted-line" style="width: 27%;">{{ $fields['field_8'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 27%;">{{ $fields['field_99'] ?? '-' }}</span>
         <span>จังหวัด</span>
-        <span class="dotted-line" style="width: 27%;">{{ $fields['field_9'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 27%;">{{ $fields['field_99'] ?? '-' }}</span>
         <span>โทรศัพท์</span>
-        <span class="dotted-line" style="width: 25%;">{{ $fields['field_4'] ?? '-' }}</span>
+        <span class="dotted-line" style="width: 25%;">{{ $fields['field_99'] ?? '-' }}</span>
         <span>โทรสาร</span>
-        <span class="dotted-line" style="width: 28%;">{{ $fields['field_15'] ?? '00' }}</span>
+        <span class="dotted-line" style="width: 28%;">{{ $fields['field_99'] ?? '-' }}</span>
     </div>
 
     <div class="box_text" style="text-align: left;">
@@ -203,19 +203,19 @@
         <br>
         <span style="margin-left:7rem;">(1)</span>
         <span class="dotted-line" style="width: 80%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_99'] ?? '-' }}</span>
         <span style="margin-left:7rem;">(2)</span>
         <span class="dotted-line" style="width: 80%; text-align: center;">
-            {{ $fields['field_1'] ?? '-' }}</span>
+            {{ $fields['field_99'] ?? '-' }}</span>
         <span style="margin-left:5rem;">ใบอนุญาตฉบับนี้ให้ใช้ได้จนถึงวันที่</span>
         <span class="dotted-line" style="width: 16%; text-align: center;">
-            {{ $fields['field_24'] ?? '' }}</span>
+            {{ $fields['field_30'] ?? '' }}</span>
         <span>เดือน</span>
         <span class="dotted-line" style="width: 16%; text-align: center;">
-            {{ $fields['field_25'] ?? '' }}</span>
+            {{ $fields['field_31'] ?? '' }}</span>
         <span>พ.ศ.</span>
         <span class="dotted-line" style="width: 16%; text-align: center;">
-            {{ $fields['field_26'] ?? '' }}</span>
+            {{ $fields['field_32'] ?? '' }}</span>
             <br>
         <span style="margin-left:13rem;">ออกให้ ณ วันที่</span>
         <span class="dotted-line" style="width: 15%; text-align: center;">
@@ -234,12 +234,12 @@
         <div class="signature-item" style="text-align: right;">
             <span>(ลายมือชื่อ)</span>
             <span class="dotted-line" style="width: 35%; display: inline-block; text-align: center;">
-                {{ $fields['field_31'] ?? '' }}
+                {{ $fields['field_33'] ?? '' }}
             </span>
             <div>
                 <span>(</span>
                 <span class="dotted-line" style="width: 35%; display: inline-block; text-align: center;">
-                    {{ $fields['field_30'] ?? '' }} {{ $fields['field_31'] ?? '' }}
+                    {{ $fields['field_33'] ?? '' }}
                 </span>
                 <span>)</span>
             </div>

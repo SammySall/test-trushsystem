@@ -29,21 +29,24 @@
                         <td>
                             @if (isset($payment['slip_path']))
                                 <a href="{{ asset('storage/' . $payment['slip_path']) }}" target="_blank"
-                                    class="btn btn-danger btn-sm">
-                                    <i class="bi bi-file-earmark-text"></i> ดูหลักฐาน
-                                </a>
+                                    class="btn btn-sm">
+                                    <img src="{{ url('../img/admin-request/icon-1.png') }}" class="img-fluid logo-img"
+                                        alt="Slip"> </a>
                             @else
                                 -
                             @endif
                         </td>
                         <td>
-                            <span class="badge rounded-pill text-bg-warning">{{ $payment['status'] ?? '-' }}</span>
+                            <img src="{{ url('../img/icon/' . $item->status . '.png') }}" class="img-fluid logo-img"
+                                alt="{{ $item->status }}">
+                            {{-- <span class="badge rounded-pill text-bg-warning">{{ $item->status ?? '-' }}</span> --}}
                         </td>
                         <td>
-                            <button class="btn btn-primary btn-sm"
+                            <button class="btn btn-primary btn-sm" @disabled($item->status !== 'รอตรวจสอบการชำระเงิน')
                                 onclick="openConfirmPayment({{ $item->id }}, '{{ $item->fullname }}')">
                                 <i class="bi bi-check2-circle"></i> ตรวจสอบ
                             </button>
+
                         </td>
                     </tr>
                 @empty

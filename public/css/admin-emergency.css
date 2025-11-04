@@ -1,0 +1,46 @@
+.body-bg {
+    background-image: url("../img/admin-emergency/Table-BG.png");
+    background-size: cover;
+    background-position: bottom;
+}
+
+.header-sidebar {
+    background-color: red;
+    color: white;
+    text-align: center;
+    padding: 0.25rem;
+}
+
+.card-emer-red {
+    background-image: url("../img/admin-emergency/Red.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 160px;
+    border-radius: 15px;
+}
+
+.card-emer-green {
+    background-image: url("../img/admin-emergency/Green.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 160px;
+    border-radius: 15px;
+}
+
+.card-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.card-hover:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.logo-emer-card {
+    height: 3rem;
+    width: auto;
+    object-fit: contain; /* ให้ภาพไม่โดนยืด/บี้ */
+}

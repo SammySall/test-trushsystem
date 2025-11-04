@@ -1,24 +1,23 @@
 @extends('layout.layout-admin-request')
-@section('title', 'กองช่าง')
+@section('title', 'กองสาธารณสุขฯ')
 
 @section('content')
 
     @switch($type)
-        @case('new_license_engineer')
-            @php $formTitle = 'คำขอใบอนุญาตก่อสร้าง'; @endphp
+        @case('trash-request')
+            @php $formTitle = 'คำร้องขออนุญาตลงถังขยะ'; @endphp
         @break
 
-        @case('renew_license_engineer')
-            @php $formTitle = 'คำขอต่ออายุใบอนุญาตก่อสร้างฯ'; @endphp
+        @case('market-establishment-license')
+            @php $formTitle = 'คำขอรับใบอนุญาตจัดตั้งตลาด'; @endphp
         @break
-
 
         @case('food-sales-license')
-            @php $formTitle = 'คำขอรับใบอนุญาตสถานที่จำหน่ายอาหาร'; @endphp
+            @php $formTitle = 'คำขอรับใบอนุญาตจัดตั้งสถานที่จำหน่ายอาหาร หรือสะสมอาหาร'; @endphp
         @break
 
         @case('health-hazard-license')
-            @php $formTitle = 'คำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ'; @endphp
+            @php $formTitle = 'คำขอรับใบอนุญาตประกอบกิจการที่เป็นอันตรายต่อสุขภาพ'; @endphp
         @break
 
         @case('waste-disposal-business-license')
@@ -80,7 +79,7 @@
                             </td>
                             <td>
                                 @if ($item->status !== 'รอยืนยันนัดหมาย')
-                                    <a href="{{ route('admin.public-health.appointment.detail', [
+                                    <a href="{{ route('admin.engineer.appointment.detail', [
                                         'type' => $item->type,
                                         'id' => $item->id,
                                     ]) }}"

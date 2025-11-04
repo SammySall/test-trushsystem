@@ -67,7 +67,7 @@
                                                     <i class="bi bi-cash-stack"></i>
                                                 </button>
                                             @else
-                                                <a href="{{ route('admin.bill.pdf', $bill->trash_location_id) }}"
+                                                <a href="{{ route('admin.bill.pdf', $bill->id) }}"
                                                     target="_blank" class="btn btn-danger btn-sm text-white">
                                                     <i class="bi bi-filetype-pdf"></i>
                                                 </a>

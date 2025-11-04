@@ -32,6 +32,7 @@ return new class extends Migration {
             $table->string('status')->default('pending');
             $table->foreignId('receiver_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('creator_id')->nullable()->constrained('users')->nullOnDelete(); // เพิ่ม create_id
+            $table->foreignId('trash_location_id')->nullable()->constrained('trash_locations')->nullOnDelete(); // เพิ่ม create_i
             $table->timestamp('received_at')->nullable();
             $table->datetime('convenient_date')->nullable();
             $table->datetime('appointment_date')->nullable();

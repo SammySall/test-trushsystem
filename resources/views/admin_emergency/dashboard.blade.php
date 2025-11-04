@@ -10,19 +10,30 @@
                 'fire' => 'เหตุไฟไหม้',
                 'tree-fall' => 'เหตุต้นไม้ล้ม',
                 'broken-road' => 'เหตุถนนเสีย',
-                'elec-broken' => 'เหตุต้นไฟเสีย',
+                'elec-broken' => 'เหตุไฟเสีย',
             ];
         @endphp
 
         @foreach ($types as $typeKey => $typeName)
+            @php
+                $cardClass = in_array($typeKey, ['accident', 'elec-broken']) ? 'card-emer-red' : 'card-emer-green';
+                $url = url('/admin/emergency/' . $typeKey);
+                // ใช้รูปตามลำดับ เช่น 1.png, 2.png, 3.png ...
+                $iconPath = url('../img/admin-emergency/' . ($loop->index + 1) . '.png');
+            @endphp
+
             <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">{{ $typeName }}</h5>
-                        <p class="display-6">{{ $summary[$typeKey] ?? 0 }} เหตุ</p>
-                        <a href="{{ url('/admin/emergency/' . $typeKey) }}" class="btn btn-light btn-sm">ดูรายละเอียด</a>
+                <a href="{{ $url }}" class="text-decoration-none text-white">
+                    <div class="{{ $cardClass }} text-white shadow-sm card-hover rounded-3">
+                        <div class="p-4 text-center">
+                            <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
+                                <img src="{{ $iconPath }}" alt="Icon" class="img-fluid logo-img" >
+                                <h5 class="fw-bold mb-0">{{ $typeName }}</h5>
+                            </div>
+                            <p class="display-6 mb-0">{{ $summary[$typeKey] ?? 0 }} เหตุ</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         @endforeach
     </div>

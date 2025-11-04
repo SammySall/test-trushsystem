@@ -24,7 +24,8 @@
                             <td>{{ $item->fullname ?? '-' }}</td>
                             <td>{{ $item->latest_update }}</td>
                             <td>
-                                <span class="badge rounded-pill text-bg-success">{{ $item->status }}</span>
+                                <img src="{{ url('../img/icon/' . $item->status . '.png') }}" class="img-fluid logo-img"
+                                    alt="{{ $item->status }}">
                             </td>
                             <td>
 
@@ -79,16 +80,16 @@
                 เปิดไฟล์ PDF ใบอนุญาต
             </a>
             ${slipPath ? `
-                                <div style="margin-top:10px;">
-                                    <label>ใบเสร็จแนบ:</label><br>
-                                    <a href="/storage/${slipPath}" target="_blank" style="display:inline-block; padding:5px 10px; background:#2196f3; color:#fff; border-radius:5px; text-decoration:none;">
-                                        เปิดไฟล์ PDF / รูปภาพใบเสร็จ
-                                    </a>
-                                    <div style="margin-top:5px;">
-                                        <img src="/storage/${slipPath}" style="max-width:100%; max-height:200px; border:1px solid #ccc; border-radius:5px;">
+                                    <div style="margin-top:10px;">
+                                        <label>ใบเสร็จแนบ:</label><br>
+                                        <a href="/storage/${slipPath}" target="_blank" style="display:inline-block; padding:5px 10px; background:#2196f3; color:#fff; border-radius:5px; text-decoration:none;">
+                                            เปิดไฟล์ PDF / รูปภาพใบเสร็จ
+                                        </a>
+                                        <div style="margin-top:5px;">
+                                            <img src="/storage/${slipPath}" style="max-width:100%; max-height:200px; border:1px solid #ccc; border-radius:5px;">
+                                        </div>
                                     </div>
-                                </div>
-                            ` : ''}
+                                ` : ''}
         </div>`,
                 showCancelButton: true,
                 confirmButtonText: 'บันทึก',

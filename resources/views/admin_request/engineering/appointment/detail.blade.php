@@ -63,7 +63,7 @@
                         Swal.fire('สำเร็จ!', 'นัดหมายถูกบันทึกเรียบร้อยแล้ว', 'success')
                             .then(() => {
                                 const type = "{{ $trashRequest->type }}";
-                                window.location.href = `/admin/request/public-health/showdata/${type}`;
+                                window.location.href = `/admin/request/engineering/appointment/${type}`;
                             });
                     } else {
                         Swal.fire('ผิดพลาด!', data.message || 'ไม่สามารถบันทึกได้', 'error');

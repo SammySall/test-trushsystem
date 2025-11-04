@@ -125,8 +125,12 @@ Route::get('/admin/request/public-health/appointment/{type}', [TrashRequestContr
     ->name('admin.public-health.appointment');
 Route::get('/admin/request/engineering/appointment/{type}', [TrashRequestController::class, 'appointmentDataEngineer'])
     ->name('admin.engineer.appointment');
+
 Route::get('/admin/request/public-health/appointment/{type}/{id}', [TrashRequestController::class, 'appointmentDetail'])
     ->name('admin.public-health.appointment.detail');
+Route::get('/admin/request/engineering/appointment/{type}/{id}', [TrashRequestController::class, 'appointmentDetailEng'])
+    ->name('admin.engineer.appointment.detail');
+
 Route::post('/admin/request/public-health/appointment/{id}', [TrashRequestController::class, 'appointmentStore'])
     ->name('admin.public-health.appointment.store');
 Route::post('/user/history-request/confirm-appointment/{id}', [TrashRequestController::class, 'confirmAppointmentUser'])
@@ -134,6 +138,9 @@ Route::post('/user/history-request/confirm-appointment/{id}', [TrashRequestContr
 
 Route::get('/admin/request/public-health/explore/{type}', [TrashRequestController::class, 'explore'])
     ->name('admin.public-health.explore');
+Route::get('/admin/request/engineering/explore/{type}', [TrashRequestController::class, 'exploreEng'])
+    ->name('admin.engineer.explore');
+
 Route::post('/admin/request/explore/{id}', [TrashRequestController::class, 'inspectionStore'])
     ->name('admin.request.explore.store');
 Route::post('/user/history-request/upload-slip/{id}', [TrashRequestController::class, 'uploadSlipUser'])
@@ -142,6 +149,9 @@ Route::post('/user/history-request/upload-slip/{id}', [TrashRequestController::c
 
 Route::get('/admin/request/public-health/Issue-a-license/{type}', [TrashRequestController::class, 'issueLicense'])
     ->name('admin.public-health.issue-license');
+Route::get('/admin/request/engineering/Issue-a-license/{type}', [TrashRequestController::class, 'issueLicenseEng'])
+    ->name('admin.engineer.issue-license');
+
 Route::post('/admin/request/public-health/upload-license/{id}', [TrashRequestController::class, 'uploadLicense'])
     ->name('admin.request.upload_license');
 Route::post('/admin/request/public-health/save-license/{id}', [TrashRequestController::class, 'saveLicense'])->name('admin_trash.save_license');
@@ -149,6 +159,10 @@ Route::post('/admin/request/public-health/save-license/{id}', [TrashRequestContr
 Route::get('/admin/request/public-health/confirm_payment/{type}', 
     [TrashRequestController::class, 'confirmPaymentRequest'])
     ->name('admin.public-health.confirm_payment');
+Route::get('/admin/request/engineering/confirm_payment/{type}', 
+    [TrashRequestController::class, 'confirmPaymentRequestEng'])
+    ->name('admin.engineer.confirm_payment');
+
 Route::post('/admin/request/public-health/confirm_payment/{id}', 
     [TrashRequestController::class, 'confirmPaymentRequestStore'])
     ->name('admin.public-health.confirm_payment.store');
@@ -158,8 +172,8 @@ Route::get('/admin/request/public-health/showdata/{type}/{id}', [TrashRequestCon
     ->name('admin_request.detail');
     
 Route::get('/admin/request/engineering/showdata/{type}', [TrashRequestController::class, 'showDataRequestEngineer'])->name('admin.public-health.showdata');
-Route::get('/admin/request/engineering/showdata/{type}/{id}', [TrashRequestController::class, 'showDetail'])
-    ->name('admin_request.detail');
+Route::get('/admin/request/engineering/showdata/{type}/{id}', [TrashRequestController::class, 'showDetailEng'])
+    ->name('admin_request.engineering.detail');
 
 Route::get('/admin/trash_can_installation', [TrashLocationController::class, 'index']);
 Route::get('/admin/trash_can_installation/detail/{id}', [TrashLocationController::class, 'showCanInstallDetail']);
@@ -184,6 +198,10 @@ Route::get('/admin/non_payment/detail/{location}', [TrashLocationController::cla
 Route::get('/admin/non_payment/{trashLocationId}/export', [TrashLocationController::class, 'exportNonPaymentPdf'])
     ->name('admin.non_payment.export');
 Route::post('/admin/non-payment/upload-slip', [TrashLocationController::class, 'uploadSlip'])->name('admin.non_payment.upload_slip');
+
+Route::get('/admin/request/public-health/renew-license/{type}', [TrashRequestController::class, 'renewLicense'])->name('admin_request.public_health.renew_license');
+Route::post('/admin/request/public-health/renew-license/save/{id}', [TrashRequestController::class, 'saveRenewLicense'])->name('admin_request.public_health.renew_license.save');
+Route::post('/user/history-request/renew-license/{id}', [UserRequestController::class, 'userRenewLicense'])->name('user.history-request.renew');
 
 use Illuminate\Support\Facades\Artisan;
 

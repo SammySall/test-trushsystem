@@ -13,11 +13,11 @@
         @break
 
         @case('food-sales-license')
-            @php $formTitle = 'คำขอรับใบอนุญาตสถานที่จำหน่ายอาหาร'; @endphp
+            @php $formTitle = 'คำขอรับใบอนุญาตจัดตั้งสถานที่จำหน่ายอาหาร หรือสะสมอาหาร'; @endphp
         @break
 
         @case('health-hazard-license')
-            @php $formTitle = 'คำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ'; @endphp
+            @php $formTitle = 'คำขอรับใบอนุญาตประกอบกิจการที่เป็นอันตรายต่อสุขภาพ'; @endphp
         @break
 
         @case('waste-disposal-business-license')

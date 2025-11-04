@@ -3,7 +3,7 @@
 
 @section('request-content')
     <h4 class="text-center header-form-name my-2 mx-4">
-        รายละเอียดคำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ
+        รายละเอียดคำขอรับใบอนุญาตจัดตั้งสถานที่จำหน่ายอาหาร หรือสะสมอาหาร
     </h4>
 
     <div class="list-group text-start">

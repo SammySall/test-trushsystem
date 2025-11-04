@@ -1,7 +1,7 @@
 @extends('layout.layout-request')
 @section('title', 'ใบอนุญาตสถานที่จำหน่ายอาหาร')
 @section('request-header-img', 'food-sales-license')
-@section('request-header', 'ใบอนุญาตสถานที่จำหน่ายอาหาร')
+@section('request-header', 'คำขอรับใบอนุญาตจัดตั้งสถานที่จำหน่ายอาหาร หรือสะสมอาหาร')
 
 @section('request-content')
     <div class="list-group">

@@ -58,10 +58,13 @@
                         <td>{{ number_format($totalAmount, 2) }} บาท</td>
                         <td>
                             @if ($unpaidCount > 0)
-                                <span class="text-danger">ยังไม่ชำระ {{ $unpaidCount }} รายการ</span>
+                                <img src="{{ url('../img/icon/ยังไม่ชำระ.png') }}" class="img-fluid logo-img"
+                                    alt="ยังไม่ชำระ">
                             @else
-                                <span class="text-success">ชำระแล้ว</span>
+                                <img src="{{ url('../img/icon/เสร็จสิ้น.png') }}" class="img-fluid logo-img"
+                                    alt="เสร็จสิ้น">
                             @endif
+
                         </td>
                         <td>
                             <a href="{{ route('non_payment.detail', $location->id) }}" class="btn btn-primary btn-sm">
@@ -159,9 +162,11 @@
                             <td>{{ number_format($totalAmount, 2) }} บาท</td>
                             <td>
                                 @if ($unpaidCount > 0)
-                                    <span class="text-danger">ยังไม่ชำระ {{ $unpaidCount }} รายการ</span>
+                                    <img src="{{ url('../img/icon/ยังไม่ชำระ.png') }}" class="img-fluid logo-img"
+                                        alt="ยังไม่ชำระ">
                                 @else
-                                    <span class="text-success">ชำระแล้ว</span>
+                                    <img src="{{ url('../img/icon/เสร็จสิ้น.png') }}" class="img-fluid logo-img"
+                                        alt="เสร็จสิ้น">
                                 @endif
                             </td>
                             <td>

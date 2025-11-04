@@ -18,7 +18,7 @@
                         <option value="-1" {{ $perPage == -1 ? 'selected' : '' }}>ทั้งหมด</option>
                     </select>
                     <input type="hidden" name="search" value="{{ $search }}">
-                                    <span class="me-1">รายการ</span>
+                    <span class="me-1">รายการ</span>
 
                 </form>
             </div>
@@ -52,11 +52,13 @@
                     <td>{{ $location->name }}</td>
                     <td>{{ $location->address }}</td>
                     <td class="text-center status-cell">
-                        @if ($location->status === 'เสร็จสิ้น')
-                            <img src="{{ url('../img/trash-showdata/1.png') }}" alt="icon-5" class="img-fluid logo-img">
-                        @else
-                            <span style="font-size: 20px; color:orange;">รอเรียกชำระเงิน</span>
+                        @if ($location->status === 'รออนุมัติเรียกชำระเงิน')
+                            @php
+                                $location->status = 'รอการอนุมัติ';
+                            @endphp
                         @endif
+                        <img src="{{ url('../img/icon/' . $location->status . '.png') }}" class="img-fluid logo-img"
+                            alt="{{ $location->status }}">
                     </td>
                     <td class="text-center">
                         <a href="trash_can_installation/detail/{{ $location->id }}" class="btn btn-primary btn-sm">
@@ -181,7 +183,7 @@
                         <option value="-1" {{ $perPage == -1 ? 'selected' : '' }}>ทั้งหมด</option>
                     </select>
                     <input type="hidden" name="search" value="{{ $search }}">
-                                    <span class="me-1">รายการ</span>
+                    <span class="me-1">รายการ</span>
 
                 </form>
             </div>
@@ -215,11 +217,13 @@
                     <td>{{ $location->name }}</td>
                     <td>{{ $location->address }}</td>
                     <td class="text-center status-cell">
-                        @if ($location->status === 'เสร็จสิ้น')
-                            <img src="{{ url('../img/trash-showdata/1.png') }}" alt="icon-5" class="img-fluid logo-img">
-                        @else
-                            <span style="font-size: 20px; color:orange;">รอเรียกชำระเงิน</span>
+                        @if ($location->status === 'รออนุมัติเรียกชำระเงิน')
+                            @php
+                                $location->status = 'รอการอนุมัติ';
+                            @endphp
                         @endif
+                        <img src="{{ url('../img/icon/' . $location->status . '.png') }}" class="img-fluid logo-img"
+                            alt="{{ $location->status }}">
                     </td>
                     <td class="text-center">
                         <a href="trash_can_installation/detail/{{ $location->id }}" class="btn btn-primary btn-sm">

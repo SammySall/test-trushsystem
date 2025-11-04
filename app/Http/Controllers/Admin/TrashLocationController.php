@@ -272,20 +272,21 @@ class TrashLocationController extends Controller
     $perPage = $request->input('data_table_length', 10); // ค่าเริ่มต้น 10
 
     $locations = TrashLocation::with(['bills' => function ($query) {
-            $query->where('status', 'รอการตรวจสอบ')
-                  ->orderBy('paid_date', 'desc');
-        }])
-        ->whereHas('bills', function($query) {
-            $query->where('status', 'รอการตรวจสอบ');
-        })
-        ->when($search, function ($query, $search) {
-            $query->where(function($q) use ($search) {
-                $q->where('address', 'LIKE', "%{$search}%");
-            });
-        })
-        ->orderByDesc('id')
-        ->paginate($perPage)
-        ->appends(['search' => $search, 'data_table_length' => $perPage]);
+        $query->where('status', 'รอการตรวจสอบ')
+              ->orderByDesc('id'); // id ของ Bill มาก → น้อย
+    }])
+    ->whereHas('bills', function($query) {
+        $query->where('status', 'รอการตรวจสอบ');
+    })
+    ->when($search, function ($query, $search) {
+        $query->where(function($q) use ($search) {
+            $q->where('address', 'LIKE', "%{$search}%");
+        });
+    })
+    ->orderByDesc('id') // id ของ TrashLocation มาก → น้อย
+    ->paginate($perPage)
+    ->appends(['search' => $search, 'data_table_length' => $perPage]);
+
 
     return view('admin_trash.verify_payment.check-payment', compact('locations', 'search', 'perPage'));
 }

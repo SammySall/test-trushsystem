@@ -1,7 +1,7 @@
 @extends('layout.layout-request')
-@section('title', 'คำขอต่ออายุใบอนุญาต')
+@section('title', 'คำขอใบอนุญาต')
 @section('request-header-img', 'health-hazard-license')
-@section('request-header', 'คำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ')
+@section('request-header', 'คำขอรับใบอนุญาตประกอบกิจการที่เป็นอันตรายต่อสุขภาพ')
 
 @section('request-content')
     <div class="list-group">
@@ -171,11 +171,49 @@
                         accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
                 </div>
                 <div class="form-check mb-2">
-                    <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck4">
-                    <label class="form-check-label" for="fileCheck4">หลักฐานการขออนุญาตตามกฎหมายอื่น ที่เกี่ยวเนื่อง
-                        ดังนี้</label>
-                    <input type="file" name="files4[]" class="form-control file-input" multiple
-                        accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
+                    <!-- เปลี่ยน class เป็น "toggle-subfiles" -->
+                    <input class="form-check-input toggle-subfiles" type="checkbox" id="fileCheck4_main">
+                    <label class="form-check-label" for="fileCheck4_main">
+                        หลักฐานการขออนุญาตตามกฎหมายอื่น ที่เกี่ยวเนื่อง
+                    </label>
+
+                    <div class="subfiles" style="display:none; margin-left: 30px; margin-top: 10px;">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck4_1">
+                            <label class="form-check-label" for="fileCheck4_1">
+                                สำเนาใบอนุญาตประกอบกิจการโรงงานอุตสาหกรรม (รง.4)
+                            </label>
+                            <input type="file" name="files4_1[]" class="form-control file-input" multiple
+                                accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
+                        </div>
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck4_2">
+                            <label class="form-check-label" for="fileCheck4_2">
+                                สำเนาหนังสือรับรองการจดทะเบียนของบริษัทจำกัด หรือห้างหุ้นส่วน
+                            </label>
+                            <input type="file" name="files4_2[]" class="form-control file-input" multiple
+                                accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
+                        </div>
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck4_3">
+                            <label class="form-check-label" for="fileCheck4_3">
+                                หนังสือมอบอำนาจพร้อมติดอากรแสตมป์ 10 บาท (กรณีผู้มีอำนาจลงนามไม่ได้ลงนามเอง)
+                            </label>
+                            <input type="file" name="files4_3[]" class="form-control file-input" multiple
+                                accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
+                        </div>
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck4_4">
+                            <label class="form-check-label" for="fileCheck4_4">
+                                สำเนาบัตรประชาชน และสำเนาทะเบียนบ้านของผู้มีอำนาจลงนาม / ผู้ได้รับมอบอำนาจ
+                            </label>
+                            <input type="file" name="files4_4[]" class="form-control file-input" multiple
+                                accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
+                        </div>
+                    </div>
                 </div>
                 <div class="form-check mb-2">
                     <input class="form-check-input file-checkbox" type="checkbox" id="fileCheck5">
@@ -235,39 +273,87 @@
         document.addEventListener("DOMContentLoaded", function() {
             const individualRadio = document.getElementById("option1");
             const corpRadio = document.getElementById("option2");
-            const individualFields = document.getElementById("individual-fields");
-            const corporationFields = document.getElementById("corporation-fields");
 
-            function toggleFields() {
-                if (individualRadio.checked) {
-                    individualFields.style.display = "flex";
-                    corporationFields.style.display = "none";
-                } else if (corpRadio.checked) {
-                    individualFields.style.display = "none";
-                    corporationFields.style.display = "flex";
-                } else {
-                    individualFields.style.display = "none";
-                    corporationFields.style.display = "none";
-                }
-            }
+            // ถ้ามีฟังก์ชัน toggleFields() อยู่แล้ว ก็สามารถคงไว้ตรงนี้
+            function toggleFields() {}
 
-            toggleFields();
-            individualRadio.addEventListener("change", toggleFields);
-            corpRadio.addEventListener("change", toggleFields);
-
-            // Checkbox ไฟล์แนบ
+            // === ฟังก์ชันจัดการ checkbox ไฟล์แนบ ===
             const checkboxes = document.querySelectorAll(".file-checkbox");
             checkboxes.forEach(cb => {
                 cb.addEventListener("change", function() {
-                    const fileInput = this.nextElementSibling.nextElementSibling;
+                    const parent = this.closest(".form-check");
+                    const fileInput = parent.querySelector(".file-input");
+
                     if (this.checked) {
                         fileInput.style.display = "block";
+                        fileInput.style.opacity = 0;
+                        fileInput.style.transition = "opacity 0.3s ease";
+                        requestAnimationFrame(() => fileInput.style.opacity = 1);
                     } else {
-                        fileInput.style.display = "none";
-                        fileInput.value = "";
+                        fileInput.style.opacity = 0;
+                        fileInput.addEventListener("transitionend", function hide() {
+                            fileInput.style.display = "none";
+                            fileInput.value = "";
+                            fileInput.removeEventListener("transitionend", hide);
+                        });
                     }
                 });
             });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // --- จัดการ toggle ช่องแนบไฟล์ (.file-checkbox) ---
+            const checkboxes = document.querySelectorAll(".file-checkbox");
+            checkboxes.forEach(cb => {
+                cb.addEventListener("change", function() {
+                    const parent = this.closest(".form-check");
+                    const fileInput = parent.querySelector(".file-input");
+                    if (fileInput) {
+                        if (this.checked) {
+                            fileInput.style.display = "block";
+                            fileInput.style.opacity = 0;
+                            fileInput.style.transition = "opacity 0.3s ease";
+                            requestAnimationFrame(() => fileInput.style.opacity = 1);
+                        } else {
+                            fileInput.style.opacity = 0;
+                            fileInput.addEventListener("transitionend", function hide() {
+                                fileInput.style.display = "none";
+                                fileInput.value = "";
+                                fileInput.removeEventListener("transitionend", hide);
+                            });
+                        }
+                    }
+                });
+            });
+
+            // --- toggle div ย่อยของ "หลักฐานการขออนุญาตตามกฎหมายอื่นฯ" ---
+            const mainToggle = document.querySelector(".toggle-subfiles");
+            const subSection = document.querySelector(".subfiles");
+
+            if (mainToggle && subSection) {
+                mainToggle.addEventListener("change", function() {
+                    if (this.checked) {
+                        subSection.style.display = "block";
+                        subSection.style.opacity = 0;
+                        subSection.style.transition = "opacity 0.3s ease";
+                        requestAnimationFrame(() => subSection.style.opacity = 1);
+                    } else {
+                        subSection.style.opacity = 0;
+                        subSection.addEventListener("transitionend", function hide() {
+                            subSection.style.display = "none";
+                            subSection.removeEventListener("transitionend", hide);
+                            // reset ย่อยทั้งหมด
+                            subSection.querySelectorAll("input[type='checkbox']").forEach(cb => cb
+                                .checked = false);
+                            subSection.querySelectorAll("input[type='file']").forEach(f => {
+                                f.value = "";
+                                f.style.display = "none";
+                            });
+                        });
+                    }
+                });
+            }
         });
     </script>
 @endsection

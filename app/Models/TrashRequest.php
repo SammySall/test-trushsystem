@@ -45,16 +45,18 @@ class TrashRequest extends Model
         return $this->belongsTo(TrashLocation::class, 'trash_location_id', 'id');
     }
 
+
     public function bill()
-{
-    return $this->hasOneThrough(
-        Bill::class,          // Model ปลายทาง
-        TrashLocation::class, // Model กลาง
-        'id',                 // Local key ของ TrashLocation ที่ TrashRequest ใช้เชื่อม = trash_location_id? (ต้องตรวจสอบ)
-        'trash_location_id',  // Foreign key ของ Bill ที่เชื่อม TrashLocation
-        'trash_location_id',  // Local key ของ TrashRequest
-        'id'                  // Local key ของ TrashLocation
-    );
-}
+    {
+        return $this->hasOneThrough(
+            Bill::class,          // ปลายทาง
+            TrashLocation::class, // ตัวกลาง
+            'id',                 // TrashLocation.id ← key ที่ TrashRequest ใช้เชื่อม (trash_location_id)
+            'trash_location_id',  // Bill.trash_location_id ← FK ไป TrashLocation
+            'trash_location_id',  // TrashRequest.trash_location_id ← FK ไป TrashLocation
+            'id'                  // TrashLocation.id ← PK
+        );
+    }
+
 
 }

@@ -1,19 +1,69 @@
+.body-bg {
+    background-image: url("../img/admin-request/BG.png");
+    background-size: cover;
+    background-position: bottom;
+    min-height: 185px;
+    display: flex;
+}
+
+.content-bg {
+    background-image: url("../img/admin-request/Table-BG.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.sidebar-bg {
+    background-image: url("../img/admin-request/Side menu -BG.png");
+}
+
+.header-sidebar {
+    background: linear-gradient(to bottom, #88dad5 0%, #5fcec8 100%);
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+}
+
 .btn-toggle {
     background: transparent;
     font-weight: 500;
     color: #333;
     padding: 0.5rem 0;
 }
+
 .btn-toggle:hover {
     color: #696cff;
 }
+
 .btn-toggle-nav a {
     display: block;
-    padding: 0.2rem 0 0.2rem 1.5rem;
+    padding: 0.2rem 0.2rem 0.2rem 1.5rem;
     color: #555;
     text-decoration: none;
 }
+
 .btn-toggle-nav a:hover {
     color: #696cff;
     background-color: #f8f9fa;
+}
+
+.active-submenu {
+    background: linear-gradient(to bottom, #88dad5 90%, #5fcec8 0%);
+    color: #000 !important;
+    font-weight: 500;
+    border-top-left-radius: 50px !important;
+    border-bottom-left-radius: 50px !important;
+}
+
+
+.collapsed {
+    font-weight: bold;
+}
+
+.text-subtitle-show {
+    color: #5fcec8 !important;
+}
+
+.text-title-show {
+    background-color: #5fcec8 !important;
+    color: white;
 }

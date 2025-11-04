@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Jobs\GenerateMonthlyBillJob;
 
 class Kernel extends ConsoleKernel
 {
@@ -12,7 +13,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // สำหรับทดสอบ: รันทุกนาที
+        // $schedule->call(function () {
+        //     GenerateMonthlyBillJob::dispatch();
+        // })->everyMinute();
+
+        // สำหรับใช้งานจริง: รันเดือนละครั้ง วันที่ 1 เวลา 00:01
+        $schedule->call(function () {
+            GenerateMonthlyBillJob::dispatch();
+        })->monthlyOn(1, '00:01');
     }
 
     /**
@@ -20,7 +29,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

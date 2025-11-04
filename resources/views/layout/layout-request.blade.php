@@ -20,14 +20,14 @@
                         <a href="#">กองช่าง</a>
                         <ul class="submenu">
                             <li class="has-sub-sub">
-                                <a href="#">คำขอใบอนุญาตก่อสร้าง</a>
+                                <a href="#">คำขอใบอนุญาตก่อสร้าง ดัดแปลง รื้อถอน หรือเคลื่อนย้ายอาคาร</a>
                                 <ul class="submenu-sub">
                                     <li><a href="/user/request/new_license_engineer">แบบฟอร์มคำร้อง</a></li>
                                     <li><a href="/user/request/history_request/new-license-engineer">ประวัติการส่งคำร้อง</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li class="has-sub-sub">
+                            {{-- <li class="has-sub-sub">
                                 <a href="#">คำขอต่ออายุใบอนุญาตก่อสร้าง ดัดแปลง รื้อถอน หรือเคลื่อนย้ายอาคาร</a>
                                 <ul class="submenu-sub">
                                     <li><a href="/user/request/renew_license_engineer">แบบฟอร์มคำร้อง</a></li>
@@ -35,7 +35,7 @@
                                             href="/user/request/history_request/renew-license-engineer">ประวัติการส่งคำร้อง</a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
 
@@ -59,7 +59,7 @@
                                 </ul>
                             </li>
                             <li class="has-sub-sub">
-                                <a href="#">คำขอรับใบอนุญาตสถานที่จำหน่ายอาหาร</a>
+                                <a href="#">คำขอรับใบอนุญาตจัดตั้งสถานที่จำหน่ายอาหาร หรือสะสมอาหาร</a>
                                 <ul class="submenu-sub">
                                     <li><a href="/user/request/food_sales_license">แบบฟอร์มคำร้อง</a></li>
                                     <li><a href="/user/request/history_request/food-sales-license">ประวัติการส่งคำร้อง</a>
@@ -67,7 +67,7 @@
                                 </ul>
                             </li>
                             <li class="has-sub-sub">
-                                <a href="#">คำขอรับใบอนุญาตกิจการอันตรายต่อสุขภาพ</a>
+                                <a href="#">คำขอรับใบอนุญาตประกอบกิจการที่เป็นอันตรายต่อสุขภาพ</a>
                                 <ul class="submenu-sub">
                                     <li><a href="/user/request/health_hazard_license">แบบฟอร์มคำร้อง</a></li>
                                     <li><a

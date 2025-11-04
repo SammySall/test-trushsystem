@@ -57,7 +57,7 @@
                         <td>{{ $location->name }}</td>
                         <td>{{ $location->address }}</td>
                         <td class="text-center text-success fw-bold">
-                            <img src="{{ url('../img/trash-showdata/1.png') }}" alt="icon-5" class="img-fluid logo-img">
+                            <img src="{{ url('../img/icon/เสร็จสิ้น.png') }}" alt="icon-5" class="img-fluid logo-img">
                         </td>
                         <td class="text-center fw-bold">{{ $unpaidCount }} ใบเสร็จ</td>
                         <td class="text-center">
@@ -156,13 +156,12 @@
                             <td>{{ $location->name }}</td>
                             <td>{{ $location->address }}</td>
                             <td class="text-center text-success fw-bold">
-                                <img src="{{ url('../img/trash-showdata/1.png') }}" alt="icon-5"
+                                <img src="{{ url('../img/icon/เสร็จสิ้น.png') }}" alt="icon-5"
                                     class="img-fluid logo-img">
                             </td>
                             <td class="text-center fw-bold">{{ $unpaidCount }} ใบเสร็จ</td>
                             <td class="text-center">
-                                <a href="/admin/trash_installer/detail/{{ $location->id }}"
-                                    class="btn btn-primary btn-sm">
+                                <a href="/admin/trash_installer/detail/{{ $location->id }}" class="btn btn-primary btn-sm">
                                     <i class="bi bi-search"></i>
                                 </a>
                             </td>

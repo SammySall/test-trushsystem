@@ -95,15 +95,13 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($bill->status === 'ยังไม่ชำระ')
-                                    <span class="text-warning">รอแนบบิล</span>
-                                @elseif ($bill->status === 'รอการตรวจสอบ')
-                                    <span class="text-warning">รอการตรวจสอบ</span>
-                                @elseif ($bill->status === 'ชำระแล้ว')
-                                    <span class="text-success">ชำระแล้ว</span>
-                                @else
-                                    <span class="text-secondary">{{ $bill->status }}</span>
+                                @if ($bill->status === 'รอการตรวจสอบ')
+                                    @php
+                                        $bill->status = 'รอตรวจสอบการชำระเงิน';
+                                    @endphp
                                 @endif
+                                <img src="{{ url('../img/icon/' . $bill->status . '.png') }}" class="img-fluid logo-img"
+                                    alt="{{ $bill->status }}">
                             </td>
 
                             <td class="text-center">
@@ -311,6 +309,8 @@
                                     @else
                                         <span class="text-secondary">{{ $bill->status }}</span>
                                     @endif
+                                    <img src="{{ url('../img/icon/' . $bill->status . '.png') }}"
+                                        class="img-fluid logo-img" alt="{{ $bill->status }}">
                                 </td>
 
                                 <td class="text-center">
