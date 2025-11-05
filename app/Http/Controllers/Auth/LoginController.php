@@ -38,6 +38,7 @@ class LoginController extends Controller
                 'userId' => $user->id,
                 'name' => $user->name,
                 'role' => $user->role,
+                'position' => $user->user_position,
                 'address' => $user->address,
                 'session_key' => $sessionKey,
                 'login_at' => now()->toDateTimeString(),
@@ -51,9 +52,12 @@ class LoginController extends Controller
 
             // ✅ เก็บ token ใน session → จะไม่หายเวลารีเฟรชหน้า
             session(['token' => $encryptedToken]);
+            // dd($user->user_position);
 
             // redirect ตาม role
-            if ($user->role === 'admin-trash') {
+            if ($user->role === 'admin-e-service' && $user->user_position !== ' ') {
+                return redirect()->away("https://eservice-thakam.sosmartsolution.com/loginother/user/{$user->email}/pass/{$request->password}/");
+            }elseif($user->role === 'admin-trash') {
                 return redirect('/admin/waste_payment');
             } elseif ($user->role === 'admin-emergency') {
                 return redirect('/admin/emergency/dashboard');
