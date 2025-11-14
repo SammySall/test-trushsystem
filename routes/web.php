@@ -6,9 +6,9 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\EmergencyController;
 use App\Http\Controllers\GarbageController;
 use App\Http\Controllers\TrashRequestController;
+use App\Http\Controllers\ToxicTrashController;
 use App\Http\Controllers\Auth\RegisterController;
 use Barryvdh\DomPDF\Facade\Pdf;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -87,9 +87,11 @@ Route::get('/user/waste_payment', function () {
 Route::get('/user/request-emergency', function () {
     return view('user.request-emergency.emergency-menu');
 });
-Route::get('/user/waste_payment/trash-toxic', function () {
-    return view('user.trash-toxic');
-});
+Route::get('/user/waste_payment/trash-toxic', [ToxicTrashController::class, 'index']);
+
+// Route::get('/user/waste_payment/trash-toxic', function () {
+//     return view('user.trash-toxic');
+// });
 // Route::get('/user/waste_payment/check-payment', function () {
 //     return view('user.check-payment-page');
 // });

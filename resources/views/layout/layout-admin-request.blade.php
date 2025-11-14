@@ -54,7 +54,7 @@
                 @php
                     $menus = [
                         'new' => 'new-license-engineer',
-                        // 'renew' => 'renew-license-engineer',
+                        'renew' => 'renew-license-engineer',
                     ];
                 @endphp
 

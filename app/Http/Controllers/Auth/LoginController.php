@@ -55,7 +55,7 @@ class LoginController extends Controller
             // dd($user->user_position);
 
             // redirect ตาม role
-            if ($user->role === 'admin-e-service' && $user->user_position !== ' ') {
+            if ($user->role === 'admin-e-service' ) {
                 return redirect()->away("https://eservice-thakam.sosmartsolution.com/loginother/user/{$user->email}/pass/{$request->password}/");
             }elseif($user->role === 'admin-trash') {
                 return redirect('/admin/waste_payment');
