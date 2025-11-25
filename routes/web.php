@@ -226,6 +226,10 @@ Route::get('/dev/reset', function () {
     }
 });
 
+use App\Http\Controllers\LineMessagingController;
+
+Route::post('/line/webhook', [LineMessagingController::class, 'webhook']);
+
 Route::get('/link-storage', function () {
     Artisan::call('storage:link');
     return 'Storage link created!';

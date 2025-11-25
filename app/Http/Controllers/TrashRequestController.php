@@ -13,9 +13,12 @@ use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
+use App\Http\Controllers\LineMessagingController;
 
 class TrashRequestController extends Controller
 {
+    protected $lineUserId = 'Ub91fe7b9c20a526daf3e7e4d94e75816'; // User ID
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -28,7 +31,6 @@ class TrashRequestController extends Controller
             'field_11' => 'required|string',
         ]);
 
-        // เก็บข้อมูลหลัก TrashRequest
         $requestData = [
             'prefix' => $validated['field_1'],
             'fullname' => $validated['field_2'],
@@ -54,12 +56,10 @@ class TrashRequestController extends Controller
             $requestData['addon'] = json_encode($request->addon, JSON_UNESCAPED_UNICODE);
         }
 
-        // สร้าง TrashRequest
         $trashRequest = TrashRequest::create($requestData);
 
-        // เก็บไฟล์แยกใน trash_request_files
+        // เก็บไฟล์เหมือนเดิม
         $fileInputs = ['files1','files2','files3','files4','files4_1','files4_2','files4_3','files4_4','files4_5','files5','files6','files7','files8'];
-
         foreach ($fileInputs as $field) {
             if ($request->hasFile($field)) {
                 foreach ($request->file($field) as $file) {
@@ -78,7 +78,18 @@ class TrashRequestController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'บันทึกคำขอเรียบร้อยแล้ว!');
+        // ส่ง LINE ให้เฉพาะผู้ใช้งานปัจจุบันที่มี line_user_id
+        $user = auth()->user();
+        if ($user && $user->line_user_id) {
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+
+            $lineMessage = "คำร้องของคุณถูกสร้างเรียบร้อย\nประเภท: {$typeTitle}\nสถานะ: {$trashRequest->status}\nดูรายละเอียด: " . url("user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
+
+            $lineController = new LineMessagingController();
+            $lineController->pushMessage($user->line_user_id, $lineMessage);
+        }
+
+        return redirect()->back()->with('success', 'บันทึกคำขอเรียบร้อยแล้วและส่ง LINE เรียบร้อยแล้ว!');
     }
 
     public function showData(Request $request)
@@ -185,7 +196,16 @@ class TrashRequestController extends Controller
             'user_id' => $request->user_id,
             'message' => $request->message,
         ]);
+        
+        // ส่ง LINE แจ้งผู้สร้างคำขอ
+        $trashRequest = TrashRequest::find($request->request_id);
+        if ($trashRequest && $trashRequest->creator && $trashRequest->creator->line_user_id) {
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+            $lineMessage = "มีข้อความตอบกลับคำร้องของคุณ\nประเภท: {$typeTitle}\nข้อความ: {$request->message}\nดูรายละเอียด: " . url("/user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
 
+            $lineController = new LineMessagingController();
+            $lineController->pushMessage($trashRequest->creator->line_user_id, $lineMessage);
+        }
         return response()->json(['success' => true]);
     }
 
@@ -233,6 +253,16 @@ class TrashRequestController extends Controller
             $trashRequest->received_at = now();
             $trashRequest->save();
         }
+
+        // ส่ง LINE แจ้งผู้สร้างคำขอ
+        if ($trashRequest->creator && $trashRequest->creator->line_user_id) {
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+            $lineMessage = "คำร้องของคุณถูกอัปเดตเรียบร้อย\nประเภท: {$typeTitle}\nสถานะ: {$trashRequest->status}\nดูรายละเอียด: " . url("/user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
+
+            $lineController = new LineMessagingController();
+            $lineController->pushMessage($trashRequest->creator->line_user_id, $lineMessage);
+        }
+
 
         return response()->json(['success' => true]);
     }
@@ -532,7 +562,7 @@ class TrashRequestController extends Controller
         return view('admin_request.public-health.appointment', compact('trashRequests', 'histories', 'type'));
     }
 
-public function appointmentDataEngineer($type)
+    public function appointmentDataEngineer($type)
     {
         // ดึงข้อมูลที่รอการนัดหมาย
         $trashRequests = TrashRequest::with('receiver:id,name', 'files')
@@ -600,6 +630,19 @@ public function appointmentDataEngineer($type)
 
             $trashRequest->save();
 
+            // -------------------------
+            // ส่ง LINE แจ้งผู้สร้างคำขอ
+            // -------------------------
+            if ($trashRequest->creator && $trashRequest->creator->line_user_id) {
+                $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+                $url = url("user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
+
+                $lineMessage = "นัดหมายของคุณถูกอัปเดตเรียบร้อย\nประเภท: {$typeTitle}\nสถานะ: {$trashRequest->status}\nดูรายละเอียด: {$url}";
+
+                $lineController = new LineMessagingController();
+                $lineController->pushMessage($trashRequest->creator->line_user_id, $lineMessage);
+            }
+
             return response()->json(['success' => true]);
         } catch (\Throwable $e) {
             return response()->json([
@@ -609,7 +652,6 @@ public function appointmentDataEngineer($type)
             ]);
         }
     }
-
 
     public function confirmAppointmentUser(Request $request, $id)
     {
@@ -718,6 +760,19 @@ public function appointmentDataEngineer($type)
         $trashRequest->addon = json_encode($addon, JSON_UNESCAPED_UNICODE);
         $trashRequest->save();
 
+        // -------------------------
+        // ส่ง LINE แจ้งผู้สร้างคำขอ
+        // -------------------------
+        if ($trashRequest->creator && $trashRequest->creator->line_user_id) {
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+            $url = url("user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
+
+            $lineMessage = "ผลการตรวจสอบคำร้องของคุณถูกบันทึกเรียบร้อย\nประเภท: {$typeTitle}\nผล: {$request->inspection_result}\nสถานะ: {$trashRequest->status}\nดูรายละเอียด: {$url}";
+
+            $lineController = new LineMessagingController();
+            $lineController->pushMessage($trashRequest->creator->line_user_id, $lineMessage);
+        }
+
 
         return response()->json([
             'success' => true,
@@ -766,7 +821,7 @@ public function appointmentDataEngineer($type)
         return view('admin_request.public-health.confirmpayment', compact('trashRequests', 'type'));
     }
 
-public function confirmPaymentRequestEng($type)
+    public function confirmPaymentRequestEng($type)
     {
         $trashRequests = TrashRequest::where('type', $type)
             ->whereIn('status', ['รอตรวจสอบการชำระเงิน','รอชำระเงิน'])
@@ -801,6 +856,21 @@ public function confirmPaymentRequestEng($type)
 
         $trashRequest->addon = json_encode($addon, JSON_UNESCAPED_UNICODE);
         $trashRequest->save();
+
+        // -------------------------
+        // ส่ง LINE แจ้งผู้สร้างคำขอ
+        // -------------------------
+        if ($trashRequest->creator && $trashRequest->creator->line_user_id) {
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+            $url = url("user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
+
+            $statusText = $request->action === 'approve' ? 'ชำระเงินเรียบร้อย' : 'ไม่อนุมัติ';
+
+            $lineMessage = "สถานะการชำระเงินคำร้องของคุณถูกอัปเดต\nประเภท: {$typeTitle}\nสถานะ: {$trashRequest->status}\nผล: {$statusText}\nดูรายละเอียด: {$url}";
+
+            $lineController = new LineMessagingController();
+            $lineController->pushMessage($trashRequest->creator->line_user_id, $lineMessage);
+        }
 
         return response()->json(['success' => true, 'message' => 'อัพเดทสถานะเรียบร้อย']);
     }
@@ -1141,7 +1211,7 @@ public function confirmPaymentRequestEng($type)
 
     public function saveLicense($id)
     {
-        $trashRequest = TrashRequest::findOrFail($id);
+        $trashRequest = TrashRequest::with('creator')->findOrFail($id);
 
         $now = Carbon::now();
 
@@ -1164,6 +1234,18 @@ public function confirmPaymentRequestEng($type)
 
         $trashRequest->save();
 
+        
+        // -------------------------
+        // ส่ง LINE แจ้งผู้สร้างคำขอ
+        // -------------------------
+        if ($trashRequest->creator && $trashRequest->creator->line_user_id) {
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+            $lineMessage = "ใบอนุญาตของคุณถูกออกเรียบร้อยแล้ว ✅\nประเภท: {$typeTitle}\nสถานะ: {$trashRequest->status}\nดูรายละเอียด: " . url("/user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
+
+            $lineController = new LineMessagingController();
+            $lineController->pushMessage($trashRequest->creator->line_user_id, $lineMessage);
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'บันทึกใบอนุญาตเรียบร้อยแล้ว'
@@ -1171,35 +1253,34 @@ public function confirmPaymentRequestEng($type)
     }
 
     public function renewLicense($type)
-{
-    $trashRequests = \App\Models\TrashRequest::with(['receiver:id,name', 'histories'])
-        ->where('type', $type)
-        ->whereIn('status', ['ออกใบอนุญาตเสร็จสิ้น','รอต่ออายุใบอนุญาต', 'ต่ออายุเสร็จสิ้น'])
-        ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(addon, '$.license_expire_at')) < ?", [now()->addMonth()->toDateString()])
-        ->orderBy('created_at', 'desc')
-        ->get();
-    // dd($trashRequests);
+    {
+        $trashRequests = \App\Models\TrashRequest::with(['receiver:id,name', 'histories'])
+            ->where('type', $type)
+            ->whereIn('status', ['ออกใบอนุญาตเสร็จสิ้น','รอต่ออายุใบอนุญาต', 'ต่ออายุเสร็จสิ้น'])
+            ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(addon, '$.license_expire_at')) < ?", [now()->addMonth()->toDateString()])
+            ->orderBy('created_at', 'desc')
+            ->get();
+        // dd($trashRequests);
 
-    $trashRequests->transform(function ($request) {
-        $latestHistory = $request->histories->sortByDesc('created_at')->first();
-        $request->latest_update = $latestHistory ? $latestHistory->created_at->format('d/m/Y H:i') : '-';
+        $trashRequests->transform(function ($request) {
+            $latestHistory = $request->histories->sortByDesc('created_at')->first();
+            $request->latest_update = $latestHistory ? $latestHistory->created_at->format('d/m/Y H:i') : '-';
 
-        // แปลงวันที่จาก addon JSON
-        $addon = json_decode($request->addon, true);
-        $request->license_expire_at = isset($addon['license_expire_at'])
-            ? \Carbon\Carbon::parse($addon['license_expire_at'])->format('d/m/Y')
-            : '-';
+            // แปลงวันที่จาก addon JSON
+            $addon = json_decode($request->addon, true);
+            $request->license_expire_at = isset($addon['license_expire_at'])
+                ? \Carbon\Carbon::parse($addon['license_expire_at'])->format('d/m/Y')
+                : '-';
 
-        return $request;
-    });
+            return $request;
+        });
 
-    return view('admin_request.public-health.renew-license', compact('trashRequests', 'type'));
-}
-
+        return view('admin_request.public-health.renew-license', compact('trashRequests', 'type'));
+    }
 
     public function saveRenewLicense($id)
     {
-        $trashRequest = \App\Models\TrashRequest::findOrFail($id);
+    $trashRequest = \App\Models\TrashRequest::with('creator')->findOrFail($id); 
         $addon = $trashRequest->addon ? json_decode($trashRequest->addon, true) : [];
 
         $addon['renew'] = [
@@ -1218,8 +1299,17 @@ public function confirmPaymentRequestEng($type)
             'status_after' => $trashRequest->status
         ]);
 
+         // -------------------------
+        // ส่ง LINE แจ้งผู้สร้างคำขอ
+        // -------------------------
+        if ($trashRequest->creator && $trashRequest->creator->line_user_id) {
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+            $lineMessage = "ใบอนุญาตของคุณถูกต่ออายุเรียบร้อย ✅\nประเภท: {$typeTitle}\nสถานะ: {$trashRequest->status}\nดูรายละเอียด: " . url("/user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
+
+            $lineController = new LineMessagingController();
+            $lineController->pushMessage($trashRequest->creator->line_user_id, $lineMessage);
+        }
+
         return response()->json(['success' => true, 'message' => 'บันทึกการต่ออายุเรียบร้อย']);
     }
-
-
 }

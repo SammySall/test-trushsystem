@@ -22,7 +22,7 @@
                         <tr>
                             <td>{{ $item->created_at->format('d/m/Y') }}</td>
                             <td>{{ $item->fullname ?? '-' }}</td>
-                            <td>{{ $item->latest_update }}</td>
+                            <td>{{ $item->updated_at }}</td>
                             <td>
                                 <img src="{{ url('../img/icon/' . $item->status . '.png') }}" class="img-fluid logo-img"
                                     alt="{{ $item->status }}">
