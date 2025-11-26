@@ -61,7 +61,7 @@ class LineMessagingController extends Controller
     {
         $events = $request->input('events', []);
 
-        // ตอบกลับ LINE ทันที ป้องกัน timeout / 419
+        // ตอบกลับ LINE ทันที ป้องกัน timeout
         response()->json(['status' => 'ok'], 200)->send();
         if (function_exists('fastcgi_finish_request')) {
             fastcgi_finish_request();
@@ -77,26 +77,27 @@ class LineMessagingController extends Controller
 
             $replyToken = $event['replyToken'];
             $userId     = $event['source']['userId'];
-            $message    = $event['message']['text'];
+            $message    = trim($event['message']['text']);
 
-            // ตรวจสอบสถานะของผู้ใช้ใน cache
+            // ตรวจสอบสถานะของผู้ใช้
             $cacheKey = "line_step_" . $userId;
-            $step = cache()->get($cacheKey, 'ask_account_status'); // ขั้นตอนเริ่มต้นเป็น 'ask_account_status'
+            $step = cache()->get($cacheKey, 'ask_account_status');
 
-            // ตรวจสอบว่า user มีบัญชีแล้วหรือยัง
             $user = User::where('line_user_id', $userId)->first();
 
-            // หากผู้ใช้มีบัญชีแล้ว
+            // หากมีบัญชีแล้ว
             if ($user) {
-                // ถามว่า "สวัสดีค่ะ, มีอะไรให้ช่วยไหม?"
-            $this->replyMessage($replyToken, "คุณมีบัญชีผู้ใช้งานแล้ว 😊\nหากต้องการร้องขอบริการต่างๆ\nกรุณาเข้าไปที่นี่เพื่อดูข้อมูลเพิ่มเติม:\n " . url("/profile"));
-                                
-                return;  // ไม่ต้องทำอะไรต่อหลังจากนี้
+                $this->replyMessage($replyToken, 
+                    "คุณมีบัญชีผู้ใช้งานแล้ว 😊\nสามารถดูข้อมูลเพิ่มเติมได้ที่นี่:\n" . url("/profile")
+                );
+                return;
             }
 
-            // หากยังไม่มีบัญชี
+            // 🔵 ขั้นตอนแรก — ถามก่อนว่ามีบัญชีหรือยัง
             if ($step === 'ask_account_status') {
-                cache()->put($cacheKey, 'wait_account_status', 300); // กำหนดเวลาให้ถามอีกครั้งหลัง 5 นาที
+
+                cache()->put($cacheKey, 'wait_account_status', 300);
+
                 $quickReplies = [
                     [
                         "type" => "action",
@@ -108,78 +109,100 @@ class LineMessagingController extends Controller
                     ]
                 ];
 
-                $this->replyMessage($replyToken, "คุณยังไม่มีบัญชีใช่ไหม? หากยัง กรุณากรอกอีเมลเพื่อสมัครสมาชิก", $quickReplies);
+                $this->replyMessage(
+                    $replyToken, 
+                    "คุณยังไม่มีบัญชีใช่ไหมคะ?\nหากยัง กรุณาเลือก “ยัง” เพื่อสมัครสมาชิก",
+                    $quickReplies
+                );
+
+                return;
             }
 
-            // ขั้นตอนที่ผู้ใช้ตอบว่า "ยัง"
-            switch ($step) {
-                case 'wait_account_status':
-                    if ($message == 'ยัง') {
-                        // ถ้าผู้ใช้ตอบว่า "ยัง" ส่งลิงก์สมัครสมาชิก
+            // 🟦 ขั้นตอนตอบว่า “ยัง”
+            if ($step === 'wait_account_status') {
+
+                if ($message === "ยัง") {
+
+                    // เปลี่ยนไปขั้นตอนกรอกอีเมล
+                    cache()->put($cacheKey, 'wait_email', 300);
+
+                    $this->replyMessage(
+                        $replyToken,
+                        "กรุณากรอกอีเมลที่ต้องการใช้สมัครสมาชิกค่ะ 😊"
+                    );
+
+                    return;
+                }
+
+                // หากตอบอย่างอื่น
+                $this->replyMessage($replyToken, "หากคุณยังไม่มีบัญชี กรุณาพิมพ์ “ยัง” ค่ะ");
+                return;
+            }
+
+            // 🟩 ขั้นตอนกรอกอีเมล
+            if ($step === 'wait_email') {
+
+                $email = $message;
+
+                $userCheck = User::where('email', $email)->first();
+                $attemptKey = "email_attempts_" . $userId;
+                $attempts = cache()->get($attemptKey, 0);
+
+                if (!$userCheck) {
+                    $attempts++;
+                    cache()->put($attemptKey, $attempts, 300);
+
+                    if ($attempts >= 3) {
+
                         $this->replyMessage(
-                            $replyToken, 
-                            "กรุณาสมัครสมาชิกที่นี่: " . url("/register")
+                            $replyToken,
+                            "ไม่พบอีเมลนี้ในระบบ\nกรุณาลงทะเบียนที่ลิงก์นี้ค่ะ:\n" . url("/register")
                         );
-                        break;
-                    }
-                    break;
 
-                // ขั้นตอนเมื่อผู้ใช้กรอก email
-                case 'wait_email':
-                    $email = $message;
-                    $userCheck = User::where('email', $email)->first();
-
-                    // เก็บจำนวนการพยายามกรอก email
-                    $attempts = cache()->get("email_attempts_" . $userId, 0);
-
-                    if (!$userCheck) {
-                        $attempts++;
-                        cache()->put("email_attempts_" . $userId, $attempts, 300); // เก็บจำนวนการพยายาม
-
-                        if ($attempts >= 3) {
-                            $this->replyMessage(
-                                $replyToken, 
-                                "กรุณากรอกอีเมลใหม่หรือลงทะเบียนที่นี่: " . url("/register")
-                            );
-                            cache()->forget("email_attempts_" . $userId); // ล้างการพยายามเมื่อเกิน 3 ครั้ง
-                        } else {
-                            $this->replyMessage(
-                                $replyToken, 
-                                "ไม่พบ Email นี้ในระบบค่ะ 🙁\nคุณมีอีก " . (3 - $attempts) . " ครั้งในการกรอก Email"
-                            );
-                        }
-                        break;
-                    }
-
-                    // ถ้าเจอ Email ในระบบ, ให้ข้ามไปถามชื่อ-นามสกุล
-                    cache()->put("line_email_" . $userId, $email, 300);
-                    cache()->put($cacheKey, 'wait_name', 300);
-
-                    $this->replyMessage($replyToken, "กรุณาพิมพ์ ชื่อ - นามสกุล");
-                    break;
-
-                // ขั้นตอนสุดท้ายเมื่อกรอกชื่อ-นามสกุล
-                case 'wait_name':
-                    $email = cache()->get("line_email_" . $userId);
-                    $userModel = User::where('email', $email)->first();
-
-                    if ($userModel) {
-                        $userModel->line_user_id = $userId;
-                        $userModel->name = $message;
-                        $userModel->save();
-
-                        // ล้างค่าใน cache
+                        cache()->forget($attemptKey);
                         cache()->forget($cacheKey);
-                        cache()->forget("line_email_" . $userId);
-                        cache()->forget("email_attempts_" . $userId); // ล้างการพยายามกรอก email
-
-                        $this->replyMessage($replyToken, "ลงทะเบียนสำเร็จแล้ว 😊");
+                        return;
                     }
-                    break;
+
+                    $this->replyMessage(
+                        $replyToken,
+                        "ไม่พบอีเมลนี้ในระบบค่ะ 🙁\nคุณมีโอกาสอีก " . (3 - $attempts) . " ครั้ง"
+                    );
+
+                    return;
+                }
+
+                // เจออีเมล → ไปขั้นตอนกรอกชื่อ
+                cache()->put("line_email_" . $userId, $email, 300);
+                cache()->put($cacheKey, 'wait_name', 300);
+
+                $this->replyMessage($replyToken, "กรุณาพิมพ์ ชื่อ - นามสกุล ค่ะ");
+                return;
+            }
+
+            // 🟨 ขั้นตอนกรอกชื่อ-นามสกุล
+            if ($step === 'wait_name') {
+
+                $email = cache()->get("line_email_" . $userId);
+                $userModel = User::where('email', $email)->first();
+
+                if ($userModel) {
+                    $userModel->line_user_id = $userId;
+                    $userModel->name = $message;
+                    $userModel->save();
+
+                    cache()->forget($cacheKey);
+                    cache()->forget("line_email_" . $userId);
+                    cache()->forget("email_attempts_" . $userId);
+
+                    $this->replyMessage($replyToken, "ลงทะเบียนสำเร็จแล้วค่ะ 🎉");
+                    return;
+                }
+
+                $this->replyMessage($replyToken, "เกิดข้อผิดพลาด ไม่พบข้อมูลผู้ใช้ค่ะ");
+                return;
             }
         }
-
-        return;
     }
 
 }
