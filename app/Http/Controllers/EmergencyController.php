@@ -41,6 +41,40 @@ class EmergencyController extends Controller
             'lng' => $request->lng,
         ]);
 
+        
+        // ========================================
+        // 🔔 ส่ง LINE ให้ admin ตามประเภทคำร้อง
+        // ========================================
+        $emergencyNames = [
+            'accident' => 'อุบัติเหตุ',
+            'fire' => 'ไฟไหม้',
+            'tree-fall' => 'ต้นไม้ล้ม',
+            'broken-road' => 'ถนนเสีย',
+            'elec-broken' => 'ไฟเสีย',
+        ];
+        $typeTitle = $emergencyNames($trashRequest->type);
+
+        $lineController = new LineMessagingController();
+            // ▶ admin-trash
+            $admins = User::where('role', 'admin-trash')
+                ->whereNotNull('line_user_id')
+                ->get();
+            $url = '//admin/emergency/'.$trashRequest->type;
+
+
+        $adminMessage = "📢 มีการแจ้ง {$typeTitle}\n"
+            . "จาก {$trashRequest->fullname}\n"
+            . "กรุณาตรวจสอบ\n"
+            . "ดูรายละเอียด: "
+            . url($url);
+
+        // -------------------------
+        // ส่ง LINE
+        // -------------------------
+        foreach ($admins as $admin) {
+            $lineController->pushMessage($admin->line_user_id, $adminMessage);
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'ส่งไปยังหน่วยงานที่เกี่ยวข้องเรียบร้อยแล้ว'

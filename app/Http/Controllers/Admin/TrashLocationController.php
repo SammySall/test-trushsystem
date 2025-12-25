@@ -195,6 +195,33 @@ class TrashLocationController extends Controller
             $bill->paid_date = now();
             $bill->save();
 
+
+        // ========================================
+        // 🔔 ส่ง LINE ให้ admin ตามประเภทคำร้อง
+        // ========================================
+        $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+
+        $lineController = new LineMessagingController();
+            // ▶ admin-trash
+            $admins = User::where('role', 'admin-trash')
+                ->whereNotNull('line_user_id')
+                ->get();
+            $url = '/admin/verify_payment';
+
+
+        $adminMessage = "📢 มีการชำระเงินค่าขนะเข้ามา\n"
+            . "จาก {$trashRequest->fullname}\n"
+            . "กรุณาตรวจสอบ\n"
+            . "ดูรายละเอียด: "
+            . url($url);
+
+        // -------------------------
+        // ส่ง LINE
+        // -------------------------
+        foreach ($admins as $admin) {
+            $lineController->pushMessage($admin->line_user_id, $adminMessage);
+        }
+
             return response()->json(['success' => true, 'message' => 'บันทึกสลิปเรียบร้อยแล้ว']);
         }
 
@@ -314,6 +341,16 @@ class TrashLocationController extends Controller
             $bill = Bill::findOrFail($request->bill_id);
             $bill->status = 'ชำระแล้ว';
             $bill->save();
+            // ส่ง LINE ให้เฉพาะผู้ใช้งานปัจจุบันที่มี line_user_id
+        $user = auth()->user();
+        if ($user && $user->line_user_id) {
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+
+            $lineMessage = "คำร้องการจ่ายเงินคุณผ่านการอนุมัติแล้ว\nดูรายละเอียด: " . url("user/waste_payment/check-payment");
+
+            $lineController = new LineMessagingController();
+            $lineController->pushMessage($user->line_user_id, $lineMessage);
+        }
 
             return response()->json([
                 'success' => true,
