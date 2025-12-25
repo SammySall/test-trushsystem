@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 use App\Http\Controllers\LineMessagingController;
@@ -87,6 +88,51 @@ class TrashRequestController extends Controller
 
             $lineController = new LineMessagingController();
             $lineController->pushMessage($user->line_user_id, $lineMessage);
+        }
+
+        // ========================================
+        // 🔔 ส่ง LINE ให้ admin ตามประเภทคำร้อง
+        // ========================================
+        $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+
+        $adminMessage = "📢 มีคำร้องขอ {$typeTitle} เข้ามา\n"
+            . "จาก {$trashRequest->fullname}\n"
+            . "กรุณาตรวจสอบ\n"
+            . "ดูรายละเอียด: "
+            . url("admin/request/{$trashRequest->type}/{$trashRequest->id}");
+
+        $lineController = new LineMessagingController();
+
+        // -------------------------
+        // ตรวจสอบ type เพื่อเลือก admin
+        // -------------------------
+        if (Str::contains($trashRequest->type, 'engineer')) {
+
+            // ▶ admin-engineer
+            $admins = User::where('role', 'admin-engineer')
+                ->whereNotNull('line_user_id')
+                ->get();
+
+        } elseif ($trashRequest->type === 'trash-request') {
+
+            // ▶ admin-trash
+            $admins = User::where('role', 'admin-trash')
+                ->whereNotNull('line_user_id')
+                ->get();
+
+        } else {
+
+            // ▶ admin-health
+            $admins = User::where('role', 'admin-health')
+                ->whereNotNull('line_user_id')
+                ->get();
+        }
+
+        // -------------------------
+        // ส่ง LINE
+        // -------------------------
+        foreach ($admins as $admin) {
+            $lineController->pushMessage($admin->line_user_id, $adminMessage);
         }
 
         return redirect()->back()->with('success', 'บันทึกคำขอเรียบร้อยแล้วและส่ง LINE เรียบร้อยแล้ว!');
