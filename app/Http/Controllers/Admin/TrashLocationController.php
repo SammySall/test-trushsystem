@@ -199,8 +199,6 @@ class TrashLocationController extends Controller
         // ========================================
         // 🔔 ส่ง LINE ให้ admin ตามประเภทคำร้อง
         // ========================================
-        $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
-
         $lineController = new LineMessagingController();
             // ▶ admin-trash
             $admins = User::where('role', 'admin-trash')
@@ -210,7 +208,6 @@ class TrashLocationController extends Controller
 
 
         $adminMessage = "📢 มีการชำระเงินค่าขนะเข้ามา\n"
-            . "จาก {$trashRequest->fullname}\n"
             . "กรุณาตรวจสอบ\n"
             . "ดูรายละเอียด: "
             . url($url);

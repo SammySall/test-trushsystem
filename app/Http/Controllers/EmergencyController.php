@@ -52,18 +52,18 @@ class EmergencyController extends Controller
             'broken-road' => 'ถนนเสีย',
             'elec-broken' => 'ไฟเสีย',
         ];
-        $typeTitle = $emergencyNames($trashRequest->type);
+        $typeTitle = $emergencyNames($request->salutation);
 
         $lineController = new LineMessagingController();
             // ▶ admin-trash
             $admins = User::where('role', 'admin-trash')
                 ->whereNotNull('line_user_id')
                 ->get();
-            $url = '//admin/emergency/'.$trashRequest->type;
+            $url = '/admin/emergency/'.$request->salutation;
 
 
         $adminMessage = "📢 มีการแจ้ง {$typeTitle}\n"
-            . "จาก {$trashRequest->fullname}\n"
+            . "จาก {$request->name}\n"
             . "กรุณาตรวจสอบ\n"
             . "ดูรายละเอียด: "
             . url($url);
