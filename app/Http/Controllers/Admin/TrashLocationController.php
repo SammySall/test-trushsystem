@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TrashLocation;
 use App\Models\TrashRequestHistory;
 use App\Models\Bill;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\LineMessagingController;

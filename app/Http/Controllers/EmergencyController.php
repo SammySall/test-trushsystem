@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Emergency;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\LineMessagingController;
 
@@ -58,7 +59,7 @@ class EmergencyController extends Controller
 
         $lineController = new LineMessagingController();
             // ▶ admin-trash
-            $admins = User::where('role', 'admin-trash')
+            $admins = User::where('role', 'admin-emergency')
                 ->whereNotNull('line_user_id')
                 ->get();
             $url = '/admin/emergency/'.$request->salutation;
