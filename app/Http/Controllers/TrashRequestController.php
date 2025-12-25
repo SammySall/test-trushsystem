@@ -349,7 +349,7 @@ class TrashRequestController extends Controller
         // ส่ง LINE แจ้งผู้สร้างคำขอ
         if ($trashRequest->creator && $trashRequest->creator->line_user_id) {
             $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
-            $lineMessage = "คำร้องของคุณถูกอัปเดตเรียบร้อย\nประเภท: {$typeTitle}\nสถานะ: {$trashRequest->status}\nดูรายละเอียด: " . url("/user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
+            $lineMessage = "คำร้องของคุณถูกอัปเดตเรียบร้อย\nประเภท: {$typeTitle}\nสถานะ: {$trashRequest->status}\nดูรายละเอียด: " . url("/user/request/history_request/{$trashRequest->type}/");
 
             $lineController = new LineMessagingController();
             $lineController->pushMessage($trashRequest->creator->line_user_id, $lineMessage);
@@ -727,7 +727,7 @@ class TrashRequestController extends Controller
             // -------------------------
             if ($trashRequest->creator && $trashRequest->creator->line_user_id) {
                 $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
-                $url = url("user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
+                $url = url("user/request/history_request/{$trashRequest->type}/");
 
                 $lineMessage = "นัดหมายของคุณถูกอัปเดตเรียบร้อย\nประเภท: {$typeTitle}\nสถานะ: {$trashRequest->status}\nดูรายละเอียด: {$url}";
 
@@ -981,7 +981,7 @@ class TrashRequestController extends Controller
         // -------------------------
         if ($trashRequest->creator && $trashRequest->creator->line_user_id) {
             $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
-            $url = url("user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
+            $url = url("user/request/history_request/{$trashRequest->type}/");
 
             $lineMessage = "ผลการตรวจสอบคำร้องของคุณถูกบันทึกเรียบร้อย\nประเภท: {$typeTitle}\nผล: {$request->inspection_result}\nสถานะ: {$trashRequest->status}\nดูรายละเอียด: {$url}";
 
@@ -1120,7 +1120,7 @@ class TrashRequestController extends Controller
         // -------------------------
         if ($trashRequest->creator && $trashRequest->creator->line_user_id) {
             $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
-            $url = url("user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
+            $url = url("user/request/history_request/{$trashRequest->type}/");
 
             $statusText = $request->action === 'approve' ? 'ชำระเงินเรียบร้อย' : 'ไม่อนุมัติ';
 
@@ -1562,7 +1562,7 @@ class TrashRequestController extends Controller
         // -------------------------
         if ($trashRequest->creator && $trashRequest->creator->line_user_id) {
             $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
-            $lineMessage = "ใบอนุญาตของคุณถูกต่ออายุเรียบร้อย ✅\nประเภท: {$typeTitle}\nสถานะ: {$trashRequest->status}\nดูรายละเอียด: " . url("/user/request/history_request/{$trashRequest->type}/{$trashRequest->id}");
+            $lineMessage = "ใบอนุญาตของคุณถูกต่ออายุเรียบร้อย ✅\nประเภท: {$typeTitle}\nสถานะ: {$trashRequest->status}\nดูรายละเอียด: " . url("/user/request/history_request/{$trashRequest->type}/");
 
             $lineController = new LineMessagingController();
             $lineController->pushMessage($trashRequest->creator->line_user_id, $lineMessage);
