@@ -90,16 +90,12 @@ class TrashRequestController extends Controller
             $lineController->pushMessage($user->line_user_id, $lineMessage);
         }
 
+        $url ='';
+
         // ========================================
         // 🔔 ส่ง LINE ให้ admin ตามประเภทคำร้อง
         // ========================================
         $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
-
-        $adminMessage = "📢 มีคำร้องขอ {$typeTitle} เข้ามา\n"
-            . "จาก {$trashRequest->fullname}\n"
-            . "กรุณาตรวจสอบ\n"
-            . "ดูรายละเอียด: "
-            . url("admin/request/{$trashRequest->type}/{$trashRequest->id}");
 
         $lineController = new LineMessagingController();
 
@@ -112,6 +108,7 @@ class TrashRequestController extends Controller
             $admins = User::where('role', 'admin-engineer')
                 ->whereNotNull('line_user_id')
                 ->get();
+            $url = '/admin/request/engineering/showdata/' + $type;
 
         } elseif ($trashRequest->type === 'trash-request') {
 
@@ -119,6 +116,7 @@ class TrashRequestController extends Controller
             $admins = User::where('role', 'admin-trash')
                 ->whereNotNull('line_user_id')
                 ->get();
+            $url = '/admin/showdata';
 
         } else {
 
@@ -126,7 +124,15 @@ class TrashRequestController extends Controller
             $admins = User::where('role', 'admin-health')
                 ->whereNotNull('line_user_id')
                 ->get();
+            $url = '/admin/request/public-health/showdata/'+ $type;
+
         }
+
+        $adminMessage = "📢 มีคำร้องขอ {$typeTitle} เข้ามา\n"
+            . "จาก {$trashRequest->fullname}\n"
+            . "กรุณาตรวจสอบ\n"
+            . "ดูรายละเอียด: "
+            . url($url);
 
         // -------------------------
         // ส่ง LINE
