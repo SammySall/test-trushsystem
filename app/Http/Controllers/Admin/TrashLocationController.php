@@ -8,6 +8,7 @@ use App\Models\TrashRequestHistory;
 use App\Models\Bill;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Controllers\LineMessagingController;
 
 class TrashLocationController extends Controller
 {

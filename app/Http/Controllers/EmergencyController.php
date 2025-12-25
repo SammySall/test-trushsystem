@@ -54,7 +54,7 @@ class EmergencyController extends Controller
             'broken-road' => 'ถนนเสีย',
             'elec-broken' => 'ไฟเสีย',
         ];
-        $typeTitle = $emergencyNames($request->salutation);
+        $typeTitle = $emergencyNames[$request->salutation];
 
         $lineController = new LineMessagingController();
             // ▶ admin-trash
