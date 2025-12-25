@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Emergency;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\LineMessagingController;
+
 
 class EmergencyController extends Controller
 {
