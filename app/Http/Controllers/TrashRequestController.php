@@ -303,6 +303,47 @@ class TrashRequestController extends Controller
             $trashRequest->receiver_id = $user;
             $trashRequest->received_at = now();
             $trashRequest->save();
+            $url ='';
+
+            // ========================================
+            // 🔔 ส่ง LINE ให้ admin ตามประเภทคำร้อง
+            // ========================================
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+
+            $lineController = new LineMessagingController();
+
+            // -------------------------
+            // ตรวจสอบ type เพื่อเลือก admin
+            // -------------------------
+            if (Str::contains($trashRequest->type, 'engineer')) {
+
+                // ▶ admin-engineer
+                $admins = User::where('role', 'admin-engineer')
+                    ->whereNotNull('line_user_id')
+                    ->get();
+                $url = '/admin/request/engineering/appointment/' . $trashRequest->type;
+
+            } else {
+
+                // ▶ admin-health
+                $admins = User::where('role', 'admin-health')
+                    ->whereNotNull('line_user_id')
+                    ->get();
+                $url = '/admin/request/public-health/appointment/'. $trashRequest->type;
+            }
+
+            $adminMessage = "📢 มีคำร้องขอ {$typeTitle} รอการนัดหมาย\n"
+                . "จาก {$trashRequest->fullname}\n"
+                . "กรุณาตรวจสอบ\n"
+                . "ดูรายละเอียด: "
+                . url($url);
+
+            // -------------------------
+            // ส่ง LINE
+            // -------------------------
+            foreach ($admins as $admin) {
+                $lineController->pushMessage($admin->line_user_id, $adminMessage);
+            }
         }
 
         // ส่ง LINE แจ้งผู้สร้างคำขอ
@@ -718,8 +759,90 @@ class TrashRequestController extends Controller
         // ตรวจสอบว่าผู้ใช้สะดวกในวันนัดเดิมหรือไม่
         if ($convenientDate === $appointmentDate) {
             $trashRequest->status = 'รอออกสำรวจ'; // ใช้วันนัดเดิม
+            $url ='';
+
+            // ========================================
+            // 🔔 ส่ง LINE ให้ admin ตามประเภทคำร้อง
+            // ========================================
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+
+            $lineController = new LineMessagingController();
+
+            // -------------------------
+            // ตรวจสอบ type เพื่อเลือก admin
+            // -------------------------
+            if (Str::contains($trashRequest->type, 'engineer')) {
+
+                // ▶ admin-engineer
+                $admins = User::where('role', 'admin-engineer')
+                    ->whereNotNull('line_user_id')
+                    ->get();
+                $url = '/admin/request/engineering/explore/' . $trashRequest->type;
+
+            } else {
+
+                // ▶ admin-health
+                $admins = User::where('role', 'admin-health')
+                    ->whereNotNull('line_user_id')
+                    ->get();
+                $url = '/admin/request/public-health/explore/'. $trashRequest->type;
+            }
+
+            $adminMessage = "📢 มีคำร้องขอ {$typeTitle} รอการจัดการการสำรวจ\n"
+                . "จาก {$trashRequest->fullname}\n"
+                . "กรุณาตรวจสอบ\n"
+                . "ดูรายละเอียด: "
+                . url($url);
+
+            // -------------------------
+            // ส่ง LINE
+            // -------------------------
+            foreach ($admins as $admin) {
+                $lineController->pushMessage($admin->line_user_id, $adminMessage);
+            }
         } else {
             $trashRequest->status = 'รอการนัดหมาย'; // เลือกวันใหม่
+            $url ='';
+
+            // ========================================
+            // 🔔 ส่ง LINE ให้ admin ตามประเภทคำร้อง
+            // ========================================
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+
+            $lineController = new LineMessagingController();
+
+            // -------------------------
+            // ตรวจสอบ type เพื่อเลือก admin
+            // -------------------------
+            if (Str::contains($trashRequest->type, 'engineer')) {
+
+                // ▶ admin-engineer
+                $admins = User::where('role', 'admin-engineer')
+                    ->whereNotNull('line_user_id')
+                    ->get();
+                $url = '/admin/request/engineering/appointment/' . $trashRequest->type;
+
+            } else {
+
+                // ▶ admin-health
+                $admins = User::where('role', 'admin-health')
+                    ->whereNotNull('line_user_id')
+                    ->get();
+                $url = '/admin/request/public-health/appointment/'. $trashRequest->type;
+            }
+
+            $adminMessage = "📢 มีคำร้องขอ {$typeTitle} รอการนัดหมายใหม่\n"
+                . "จาก {$trashRequest->fullname}\n"
+                . "กรุณาตรวจสอบ\n"
+                . "ดูรายละเอียด: "
+                . url($url);
+
+            // -------------------------
+            // ส่ง LINE
+            // -------------------------
+            foreach ($admins as $admin) {
+                $lineController->pushMessage($admin->line_user_id, $adminMessage);
+            }
         }
 
         $trashRequest->save();
@@ -804,8 +927,50 @@ class TrashRequestController extends Controller
 
         if ($request->inspection_result === 'ผ่าน') {
             $trashRequest->status = 'รอชำระเงิน';
+            
         } elseif ($request->inspection_result === 'ไม่ผ่าน') {
             $trashRequest->status = 'รอการนัดหมาย'; // ให้กลับไปนัดสำรวจใหม่
+            $url ='';
+
+            // ========================================
+            // 🔔 ส่ง LINE ให้ admin ตามประเภทคำร้อง
+            // ========================================
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+
+            $lineController = new LineMessagingController();
+
+            // -------------------------
+            // ตรวจสอบ type เพื่อเลือก admin
+            // -------------------------
+            if (Str::contains($trashRequest->type, 'engineer')) {
+
+                // ▶ admin-engineer
+                $admins = User::where('role', 'admin-engineer')
+                    ->whereNotNull('line_user_id')
+                    ->get();
+                $url = '/admin/request/engineering/appointment/' . $trashRequest->type;
+
+            } else {
+
+                // ▶ admin-health
+                $admins = User::where('role', 'admin-health')
+                    ->whereNotNull('line_user_id')
+                    ->get();
+                $url = '/admin/request/public-health/appointment/'. $trashRequest->type;
+            }
+
+            $adminMessage = "📢 มีคำร้องขอ {$typeTitle} รอการนัดหมายใหม่\n"
+                . "จาก {$trashRequest->fullname}\n"
+                . "กรุณาตรวจสอบ\n"
+                . "ดูรายละเอียด: "
+                . url($url);
+
+            // -------------------------
+            // ส่ง LINE
+            // -------------------------
+            foreach ($admins as $admin) {
+                $lineController->pushMessage($admin->line_user_id, $adminMessage);
+            }
         }
 
         $trashRequest->addon = json_encode($addon, JSON_UNESCAPED_UNICODE);
@@ -855,6 +1020,48 @@ class TrashRequestController extends Controller
         $trashRequest->addon = json_encode($addon, JSON_UNESCAPED_UNICODE);
         $trashRequest->status = 'รอตรวจสอบการชำระเงิน';
         $trashRequest->save();
+
+        $url ='';
+
+            // ========================================
+            // 🔔 ส่ง LINE ให้ admin ตามประเภทคำร้อง
+            // ========================================
+            $typeTitle = getTrashRequestTypeTitle($trashRequest->type);
+
+            $lineController = new LineMessagingController();
+
+            // -------------------------
+            // ตรวจสอบ type เพื่อเลือก admin
+            // -------------------------
+            if (Str::contains($trashRequest->type, 'engineer')) {
+
+                // ▶ admin-engineer
+                $admins = User::where('role', 'admin-engineer')
+                    ->whereNotNull('line_user_id')
+                    ->get();
+                $url = '/admin/request/engineering/confirm_payment/' . $trashRequest->type;
+
+            } else {
+
+                // ▶ admin-health
+                $admins = User::where('role', 'admin-health')
+                    ->whereNotNull('line_user_id')
+                    ->get();
+                $url = '/admin/request/public-health/confirm_payment/'. $trashRequest->type;
+            }
+
+            $adminMessage = "📢 มีคำร้องขอ {$typeTitle} รอการตรวจสอบการชำระเงิน\n"
+                . "จาก {$trashRequest->fullname}\n"
+                . "กรุณาตรวจสอบ\n"
+                . "ดูรายละเอียด: "
+                . url($url);
+
+            // -------------------------
+            // ส่ง LINE
+            // -------------------------
+            foreach ($admins as $admin) {
+                $lineController->pushMessage($admin->line_user_id, $adminMessage);
+            }
 
         return response()->json([
             'success' => true,
