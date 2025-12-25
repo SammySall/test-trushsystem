@@ -108,7 +108,7 @@ class TrashRequestController extends Controller
             $admins = User::where('role', 'admin-engineer')
                 ->whereNotNull('line_user_id')
                 ->get();
-            $url = '/admin/request/engineering/showdata/' + $type;
+            $url = '/admin/request/engineering/showdata/' + $trashRequest->type;
 
         } elseif ($trashRequest->type === 'trash-request') {
 
@@ -124,7 +124,7 @@ class TrashRequestController extends Controller
             $admins = User::where('role', 'admin-health')
                 ->whereNotNull('line_user_id')
                 ->get();
-            $url = '/admin/request/public-health/showdata/'+ $type;
+            $url = '/admin/request/public-health/showdata/'+ $trashRequest->type;
 
         }
 
